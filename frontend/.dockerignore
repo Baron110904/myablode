@@ -1,0 +1,29 @@
+# Ce que Docker ne doit pas envoyer dans le contexte de construction.
+#
+# Sans ce fichier, `node_modules` et `.next` partent avec le reste : plus de
+# 130 Mo transférés à chaque build, pour des dossiers que l'image reconstruit
+# de toute façon depuis les manifestes.
+
+node_modules
+.next
+out
+coverage
+
+.env
+.env.*
+!.env.example
+
+.git
+.gitignore
+Dockerfile
+.dockerignore
+
+npm-debug.log*
+*.tsbuildinfo
+.DS_Store
+
+# Tests : ils tournent avant le déploiement, pas dedans.
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx

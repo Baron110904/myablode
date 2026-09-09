@@ -1,0 +1,83 @@
+# Déploiement de l'API sur Render.
+#
+# À placer à la racine du dépôt. Render le détecte à la création d'un
+# « Blueprint » et propose les services décrits ici.
+#
+# Le site vitrine et le back-office ne sont pas dans ce fichier : ils vont
+# sur Vercel, qui sert nativement Next.js. La base va sur Neon.
+
+services:
+  - type: web
+    name: myablode-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    region: frankfurt
+    # Le palier gratuit endort le service après quinze minutes. Notre API met
+    # déjà vingt à quatre-vingt-dix secondes à charger ses modules : cumulé au
+    # réveil, une partie prenante attendrait près de deux minutes devant une
+    # page vide. « starter » supprime la mise en veille.
+    plan: starter
+
+    healthCheckPath: /api/health
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+
+      # ─── Base Neon ───────────────────────────────────────────────────────
+      # Coller la chaîne fournie par Neon, sans le suffixe `?sslmode=require` :
+      # le chiffrement est activé par DB_SSL ci-dessous.
+      - key: DATABASE_URL
+        sync: false
+      - key: DB_SSL
+        value: 'true'
+
+      # ─── Session ─────────────────────────────────────────────────────────
+      # Le site est sur Vercel, l'API ici : deux domaines distincts. Sans
+      # `none`, le navigateur retient le cookie et l'administrateur est
+      # déconnecté au premier rechargement, sans message d'erreur.
+      - key: COOKIE_SAMESITE
+        value: none
+      - key: COOKIE_SECURE
+        value: 'true'
+
+      # Deux secrets distincts, générés par Render.
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+
+      # ─── Origine autorisée ───────────────────────────────────────────────
+      # L'adresse exacte du site sur Vercel, sans barre oblique finale.
+      # À renseigner après le premier déploiement du front.
+      - key: CORS_ORIGINS
+        sync: false
+
+      # ─── Envoi de courriels ──────────────────────────────────────────────
+      # Facultatif : sans serveur, l'application démarre et les envois
+      # échouent en étant journalisés.
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: SMTP_FROM
+        value: ABLODE <contact@ablode.bj>
+
+      # ─── Jeu de démonstration ────────────────────────────────────────────
+      - key: SEED_DEMO_DATA
+        value: 'true'
+      - key: SEED_ADMIN_EMAIL
+        value: admin@ablode.bj
+      - key: SEED_ADMIN_PASSWORD
+        sync: false
+
+# Redis n'est pas déclaré : le service de cache retombe sur la base quand il
+# est absent, avec un simple avertissement au démarrage. À ajouter plus tard
+# si la charge le justifie.

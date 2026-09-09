@@ -1,0 +1,434 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-ablode-papier text-ablode-encre antialiased;
+    font-feature-settings: 'kern' 1;
+  }
+
+  /* Cible de focus visible au clavier, sans halo à la souris. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ablode-vert ring-offset-2 ring-offset-white;
+  }
+
+  ::selection {
+    @apply bg-ablode-vert-clair text-ablode-encre;
+  }
+}
+
+@layer components {
+  /* ─── Éléments partagés ─────────────────────────────────────────────── */
+
+  /*
+   * Intertitre en capitales espacées. Il passe de la monospace à la famille
+   * de texte : sur les maquettes, « Associer les colonnes » et les en-têtes
+   * de tableau sont dans la géométrique, pas dans une machine à écrire.
+   */
+  .etiquette {
+    @apply text-etiquette font-semibold uppercase text-ablode-gris;
+  }
+
+  /* Libellé de champ ou de chiffre, en casse normale. */
+  .etiquette-douce {
+    @apply text-[0.8125rem] font-medium text-ablode-gris;
+  }
+
+  .conteneur {
+    @apply mx-auto w-full max-w-contenu px-5 sm:px-8;
+  }
+
+  /* ─── Site vitrine ──────────────────────────────────────────────────── */
+
+  /*
+   * Boutons en pilule. Le libellé garde la casse écrite dans le code : la
+   * refonte abandonne les capitales sur les actions.
+   */
+  .bouton-principal {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ablode-nuit
+           px-7 py-3.5 text-[0.9375rem] font-semibold text-white transition-all
+           duration-200 hover:-translate-y-0.5 hover:shadow-relief active:translate-y-0
+           disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0
+           disabled:hover:shadow-none motion-reduce:hover:translate-y-0;
+  }
+
+  .bouton-secondaire {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border
+           border-ablode-trait bg-white px-7 py-3.5 text-[0.9375rem] font-semibold
+           text-ablode-encre transition-all duration-200 hover:-translate-y-0.5
+           hover:border-ablode-encre hover:shadow-carte active:translate-y-0
+           disabled:cursor-not-allowed disabled:opacity-50
+           motion-reduce:hover:translate-y-0;
+  }
+
+  .champ {
+    @apply w-full rounded-full border border-ablode-trait bg-white px-5 py-3
+           text-[0.95rem] text-ablode-encre transition-all duration-200
+           placeholder:text-ablode-gris hover:border-ablode-gris/60
+           focus:border-ablode-vert focus:outline-none focus:ring-1 focus:ring-ablode-vert;
+  }
+
+  /*
+   * Zone de texte : même habillage, mais rectangulaire. La pilule convient à
+   * une ligne ; sur quatre, elle dessine une ellipse autour du texte.
+   */
+  .champ-multiligne {
+    @apply w-full rounded-carte border border-ablode-trait bg-white px-5 py-3.5
+           text-[0.95rem] leading-relaxed text-ablode-encre transition-all
+           duration-200 placeholder:text-ablode-gris hover:border-ablode-gris/60
+           focus:border-ablode-vert focus:outline-none focus:ring-1 focus:ring-ablode-vert;
+  }
+
+  /* Zone de texte : la pilule ne convient pas sur plusieurs lignes. */
+  .champ-multiligne {
+    @apply w-full rounded-carte border border-ablode-trait bg-white px-5 py-3.5
+           text-[0.95rem] text-ablode-encre transition-all duration-200
+           placeholder:text-ablode-gris hover:border-ablode-gris/60
+           focus:border-ablode-vert focus:outline-none focus:ring-1 focus:ring-ablode-vert;
+  }
+
+  /* Bloc gris pulsé pendant un chargement : occupe la place du contenu à
+     venir, ce qu'un simple texte « Chargement… » ne fait pas. */
+  .squelette {
+    @apply animate-pulsation rounded-lg bg-ablode-trait/70;
+  }
+
+  .admin-squelette {
+    @apply animate-pulsation rounded-lg bg-admin-trait;
+  }
+
+  .champ-erreur {
+    @apply border-ablode-alerte focus:border-ablode-alerte focus:ring-ablode-alerte;
+  }
+
+  /*
+   * `min-h-[38px]` garde la puce assez haute pour être touchée sans viser :
+   * le padding seul donnait des cibles de 28 px, en dessous du confortable
+   * sur mobile.
+   */
+  .puce-filtre {
+    @apply inline-flex min-h-[38px] items-center rounded-full border
+           border-ablode-trait bg-white px-4 py-2 text-[0.8125rem] font-medium
+           text-ablode-encre transition-all duration-150 hover:border-ablode-encre
+           hover:bg-ablode-voile active:scale-95 motion-reduce:active:scale-100;
+  }
+
+  .puce-filtre-active {
+    @apply border-ablode-nuit bg-ablode-nuit text-white hover:bg-ablode-nuit
+           hover:text-white;
+  }
+
+  /* Carte de contenu du site vitrine : actualités, encarts. */
+  .carte-contenu {
+    @apply overflow-hidden rounded-carte border border-ablode-trait bg-white
+           shadow-carte transition-all duration-300;
+  }
+
+  /* Pastille de catégorie éditoriale. */
+  .pastille-categorie {
+    @apply inline-flex items-center rounded-full bg-ablode-vert-voile px-3 py-1
+           text-[0.75rem] font-semibold text-ablode-vert-sombre;
+  }
+
+  /* ─── Back-office ───────────────────────────────────────────────────── */
+
+  .admin-panneau {
+    @apply rounded-carte border border-admin-trait bg-admin-panneau shadow-carte;
+  }
+
+  .admin-bouton {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-admin-nuit
+           px-5 py-2.5 text-[0.875rem] font-semibold text-white transition-all
+           duration-150 hover:shadow-relief active:scale-[0.98]
+           disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100
+           motion-reduce:active:scale-100;
+  }
+
+  .admin-bouton-clair {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border
+           border-admin-trait bg-white px-5 py-2.5 text-[0.875rem] font-semibold
+           text-admin-encre transition-all duration-150 hover:border-admin-encre
+           hover:bg-admin-fond active:scale-[0.98] disabled:cursor-not-allowed
+           disabled:opacity-50 disabled:active:scale-100 motion-reduce:active:scale-100;
+  }
+
+  .admin-champ {
+    @apply w-full rounded-full border border-admin-trait bg-white px-4 py-2.5
+           text-sm text-admin-encre transition-all duration-150
+           placeholder:text-admin-gris hover:border-admin-gris/50
+           focus:border-admin-vert focus:outline-none focus:ring-1 focus:ring-admin-vert;
+  }
+
+  .admin-champ-multiligne {
+    @apply w-full rounded-carte border border-admin-trait bg-white px-4 py-3 text-sm
+           text-admin-encre transition-all duration-150 placeholder:text-admin-gris
+           hover:border-admin-gris/50 focus:border-admin-vert focus:outline-none
+           focus:ring-1 focus:ring-admin-vert;
+  }
+
+  .admin-th {
+    @apply px-5 py-3.5 text-left text-etiquette font-semibold uppercase text-admin-gris;
+  }
+
+  .admin-td {
+    @apply px-5 py-4 text-sm text-admin-encre;
+  }
+
+  /* Item de la barre latérale sombre. */
+  .admin-lien-nav {
+    @apply flex items-center gap-3 rounded-full px-4 py-2.5 text-[0.9375rem]
+           font-medium text-white/70 transition-colors duration-150
+           hover:bg-white/5 hover:text-white;
+  }
+
+  .admin-lien-nav-actif {
+    @apply bg-admin-nuit-actif text-white;
+  }
+
+  /* Pastilles de résultat clinique — mêmes couleurs partout dans l'app. */
+  .pastille {
+    @apply inline-flex items-center whitespace-nowrap rounded-full px-3 py-1
+           text-[0.75rem] font-semibold;
+  }
+
+  .pastille-normal {
+    @apply bg-ablode-vert-voile text-ablode-vert-sombre;
+  }
+
+  .pastille-attention {
+    @apply bg-ablode-ambre-voile text-ablode-ambre;
+  }
+
+  .pastille-alerte {
+    @apply bg-ablode-alerte-voile text-ablode-alerte;
+  }
+
+  .pastille-obesite {
+    @apply bg-ablode-violet-voile text-ablode-violet;
+  }
+
+  .pastille-neutre {
+    @apply bg-admin-fond text-admin-gris;
+  }
+
+  /* ─── Suivi en direct ───────────────────────────────────────────────── */
+
+  /*
+   * Le suivi en direct garde une identité de terminal : monospace, capitales,
+   * fond sombre. Le contraste avec le reste est voulu — on regarde un flux,
+   * pas une page.
+   */
+  .direct-etiquette {
+    @apply font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-white/45;
+  }
+
+  .direct-valeur {
+    @apply font-mono tabular-nums text-white;
+  }
+
+  .direct-point {
+    @apply inline-block h-2 w-2 animate-battement rounded-full bg-ablode-vert-clair;
+  }
+}
+
+@layer utilities {
+  .titre-affiche {
+    @apply text-[2.75rem] font-extrabold leading-[1.06] tracking-[-0.035em] sm:text-[3.5rem];
+  }
+
+  .titre-section {
+    @apply text-[1.75rem] font-bold leading-tight tracking-[-0.025em];
+  }
+
+  .chiffre-cle {
+    @apply text-[2.25rem] font-extrabold leading-none tracking-[-0.03em] sm:text-[2.75rem];
+  }
+}
+
+/*
+ * Point clignotant d'un territoire en activité. L'animation est portée par la
+ * classe CSS plutôt que par Leaflet : le SVG se redessine à chaque
+ * rafraîchissement, une animation JavaScript repartirait de zéro.
+ */
+/*
+ * Halo d'une commune en activité : il respire au lieu de clignoter. Même
+ * vocabulaire que les ondes d'arrivée, en boucle lente.
+ */
+.halo-actif {
+  animation: respiration 2.4s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes respiration {
+  0%,
+  100% {
+    transform: scale(0.55);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 0.12;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .halo-actif {
+    animation: none;
+    opacity: 0.3;
+  }
+}
+
+/* ─── Leaflet ─────────────────────────────────────────────────────────── */
+
+/*
+ * `!important` assumé : la feuille de Leaflet est empaquetée après celle-ci
+ * et impose un fond #ddd, visible dès qu'on retire les tuiles.
+ */
+.leaflet-container {
+  background: transparent !important;
+  font-family: inherit;
+}
+
+/* Les contrôles par défaut jurent avec la charte : on les redessine. */
+.leaflet-control-zoom {
+  @apply !overflow-hidden !rounded-full !border !border-ablode-trait !shadow-carte;
+}
+
+.leaflet-control-zoom a {
+  @apply !border-ablode-trait !bg-white !text-ablode-encre transition-colors;
+}
+
+.leaflet-control-zoom a:hover {
+  @apply !bg-ablode-voile !text-ablode-vert-sombre;
+}
+
+/* Les tuiles arrivent en fondu plutôt que par à-coups. */
+.leaflet-tile {
+  transition: opacity 0.35s ease-in-out;
+}
+
+/* Les communes réagissent au survol sans repeindre toute la couche. */
+.leaflet-interactive {
+  transition:
+    fill-opacity 0.2s ease,
+    stroke-width 0.15s ease;
+}
+
+.leaflet-control-attribution {
+  @apply !bg-white/80 !text-[10px] !text-ablode-gris;
+}
+
+.leaflet-popup-content-wrapper {
+  @apply !rounded-carte !border !border-ablode-trait !shadow-relief;
+}
+
+.leaflet-popup-tip {
+  @apply !border !border-ablode-trait;
+}
+
+.leaflet-popup-content {
+  @apply !m-0 !w-auto;
+}
+
+/*
+ * Onde émise par une commune qui reçoit un dépistage. Le cercle Leaflet est
+ * un élément SVG : on anime son rayon et son opacité, pas une transformation
+ * — un `scale` sur un `<path>` SVG partirait du coin du calque, pas du point.
+ */
+.onde-depistage {
+  animation: onde-svg 1.8s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes onde-svg {
+  0% {
+    transform: scale(0.25);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .onde-depistage {
+    animation: none;
+    opacity: 0.35;
+  }
+}
+
+/* Infobulle : même langage arrondi que les cartes. */
+.leaflet-tooltip {
+  @apply !rounded-xl !border-ablode-trait !px-3 !py-2 !shadow-relief;
+}
+
+/* ─── Contenu éditorial (articles) ────────────────────────────────────── */
+
+.article-contenu {
+  @apply text-[1.0625rem] leading-[1.75] text-ablode-encre;
+}
+
+.article-contenu > * + * {
+  @apply mt-5;
+}
+
+.article-contenu h2,
+.article-contenu h3,
+.article-contenu h4 {
+  @apply mt-10 font-bold leading-snug tracking-[-0.02em];
+}
+
+.article-contenu h2 {
+  @apply text-2xl;
+}
+
+.article-contenu h3 {
+  @apply text-xl;
+}
+
+.article-contenu ul,
+.article-contenu ol {
+  @apply space-y-2 pl-6;
+}
+
+.article-contenu ul {
+  @apply list-disc;
+}
+
+.article-contenu ol {
+  @apply list-decimal;
+}
+
+.article-contenu a {
+  @apply text-ablode-vert underline underline-offset-2 hover:text-ablode-vert-sombre;
+}
+
+.article-contenu blockquote {
+  @apply border-l-2 border-ablode-vert pl-5 italic text-ablode-gris;
+}
+
+.article-contenu img {
+  @apply h-auto w-full rounded-carte;
+}
+
+.article-contenu code {
+  @apply rounded bg-ablode-voile px-1.5 py-0.5 font-mono text-[0.9em];
+}
+
+@media print {
+  .sans-impression {
+    display: none !important;
+  }
+}

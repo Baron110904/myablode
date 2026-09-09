@@ -1,0 +1,75 @@
+# ─── Secrets ───────────────────────────────────────────────────────────────
+# Le seul fichier d'environnement qui part sur GitHub est le modèle, sans
+# valeur réelle. `backend/.env` contient le jeton de l'API Kobo, les secrets
+# de session et les mots de passe SMTP et base : il ne doit jamais sortir.
+.env
+.env.*
+!.env.production.exemple
+!.env.example
+
+# ─── Sauvegardes de la base ────────────────────────────────────────────────
+# Elles contiennent les données nominatives des personnes dépistées. Un dépôt
+# GitHub, même privé, n'est pas le bon endroit.
+sauvegardes/
+*.sql
+*.sql.gz
+*.dump
+
+# ─── Dépendances et sorties de construction ────────────────────────────────
+node_modules/
+dist/
+build/
+.next/
+out/
+*.tsbuildinfo
+
+# ─── Rapports de tests et d'audit ──────────────────────────────────────────
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+# Sorties de `npm audit --json` et compagnie : elles se régénèrent.
+ba.json
+audit*.json
+
+# ─── Hébergeurs ────────────────────────────────────────────────────────────
+.vercel/
+.render/
+
+# ─── Journaux ──────────────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ─── Maquettes ─────────────────────────────────────────────────────────────
+# Volumineuses et sans usage à la construction. À conserver hors dépôt, dans
+# l'espace partagé de l'association.
+design/
+design.zip
+
+# ─── Outillage local ───────────────────────────────────────────────────────
+.claude/
+CLAUDE.md
+
+# ─── Éditeurs et systèmes ──────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── À NE PAS AJOUTER ICI ──────────────────────────────────────────────────
+# Les éléments suivants doivent partir sur GitHub, le déploiement en dépend :
+#
+#   backend/data/            contours des 77 communes et populations ; sans
+#                            eux le seed s'arrête net
+#   frontend/src/polices/    les .woff2 servis localement ; sans eux la
+#                            construction retélécharge chez Google et échoue
+#                            derrière un réseau filtré
+#   .env.production.exemple  le modèle à recopier
+#   render.yaml              la description du service Render
+#   sauvegarder.sh           le script de sauvegarde
+DEPLOIEMENT.md           
+#   docker-compose*.yml      et les Dockerfile

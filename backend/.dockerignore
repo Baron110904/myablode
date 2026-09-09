@@ -1,0 +1,25 @@
+# Ce que Docker ne doit pas envoyer dans le contexte de construction.
+#
+# `dist` est notamment exclu : l'image le recompile. L'y envoyer risquerait
+# de servir une version antérieure si la copie précédait la compilation.
+
+node_modules
+dist
+coverage
+
+.env
+.env.*
+!.env.example
+
+.git
+.gitignore
+Dockerfile
+.dockerignore
+
+npm-debug.log*
+*.tsbuildinfo
+.DS_Store
+
+# Tests : ils tournent avant le déploiement, pas dedans.
+**/*.spec.ts
+**/*.e2e-spec.ts

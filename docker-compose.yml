@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgis/postgis:15-3.4
+    container_name: ablode_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-ablode}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ablode}
+      POSTGRES_DB: ${POSTGRES_DB:-ablode}
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ablode} -d ${POSTGRES_DB:-ablode}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    container_name: ablode_redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6380}:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # Serveur d'envoi de développement : capture tous les emails au lieu de les
+  # livrer, et les présente dans une interface web. Aucun message ne peut
+  # partir par erreur vers une vraie adresse pendant les essais.
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: ablode_mailpit
+    restart: unless-stopped
+    ports:
+      - "${MAILPIT_SMTP_PORT:-1025}:1025"
+      - "${MAILPIT_WEB_PORT:-8025}:8025"
+    environment:
+      MP_MAX_MESSAGES: 500
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
+volumes:
+  pgdata:
+  redisdata:

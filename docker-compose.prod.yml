@@ -1,0 +1,113 @@
+# Déploiement de la version de test de MyABLODE.
+#
+# À la différence de `docker-compose.yml`, qui ne lance que les services
+# d'appui pour développer, ce fichier construit et sert l'application entière.
+#
+#   docker compose -f docker-compose.prod.yml --env-file .env.production up -d --build
+#
+# Les ports de la base et du cache ne sont volontairement pas publiés : ils ne
+# sont joignables que depuis le réseau interne. Exposer PostgreSQL sur
+# l'internet est la première cause de compromission d'un déploiement pressé.
+
+services:
+  postgres:
+    image: postgis/postgis:15-3.4
+    container_name: ablode_prod_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Sauvegardes déposées ici par sauvegarder.sh.
+      - ./sauvegardes:/sauvegardes
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER} -d ${DB_NAME}']
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    networks: [interne]
+
+  redis:
+    image: redis:7-alpine
+    container_name: ablode_prod_redis
+    restart: unless-stopped
+    # Mot de passe obligatoire : sans lui, tout conteneur du réseau lit le cache.
+    command: ['redis-server', '--requirepass', '${REDIS_PASSWORD}']
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', '-a', '${REDIS_PASSWORD}', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    networks: [interne]
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ablode_prod_api
+    restart: unless-stopped
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      # Origines autorisées : l'adresse publique du site, et rien d'autre.
+      CORS_ORIGINS: ${SITE_URL}
+      COOKIE_SECURE: ${COOKIE_SECURE:-true}
+      COOKIE_SAMESITE: ${COOKIE_SAMESITE:-lax}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_FROM: ${SMTP_FROM}
+      # Autorise `db:seed:prod` à créer les 11 732 dépistages de
+      # démonstration. À passer à `false` avant une mise en service réelle :
+      # le seed refuserait alors de fabriquer de fausses données.
+      SEED_DEMO_DATA: ${SEED_DEMO_DATA:-true}
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@ablode.bj}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-Ablode2026!}
+    ports:
+      - '${API_PORT:-4000}:4000'
+    networks: [interne]
+
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # Inscrite dans le JavaScript du navigateur : la modifier impose de
+        # reconstruire l'image, pas seulement de redémarrer le conteneur.
+        NEXT_PUBLIC_API_URL: ${API_URL}
+    container_name: ablode_prod_web
+    restart: unless-stopped
+    depends_on:
+      api: { condition: service_started }
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: ${API_URL}
+    ports:
+      - '${WEB_PORT:-3000}:3000'
+    networks: [interne]
+
+volumes:
+  pgdata:
+  redisdata:
+
+networks:
+  interne:
+    driver: bridge
