@@ -1,4 +1,8 @@
 # ─── Secrets ───────────────────────────────────────────────────────────────
+# Notes contenant des chaînes de connexion recopiées à la main.
+neon.txt
+*.secret.txt
+connexion*.txt
 # Le seul fichier d'environnement qui part sur GitHub est le modèle, sans
 # valeur réelle. `backend/.env` contient le jeton de l'API Kobo, les secrets
 # de session et les mots de passe SMTP et base : il ne doit jamais sortir.
@@ -51,6 +55,7 @@ design.zip
 # ─── Outillage local ───────────────────────────────────────────────────────
 .claude/
 CLAUDE.md
+neon.txt
 
 # ─── Éditeurs et systèmes ──────────────────────────────────────────────────
 .vscode/
@@ -71,5 +76,6 @@ desktop.ini
 #   .env.production.exemple  le modèle à recopier
 #   render.yaml              la description du service Render
 #   sauvegarder.sh           le script de sauvegarde
-DEPLOIEMENT.md           
+#   DEPLOIEMENT.md           la notice
 #   docker-compose*.yml      et les Dockerfile
+

@@ -13,11 +13,20 @@ services:
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
     region: frankfurt
-    # Le palier gratuit endort le service après quinze minutes. Notre API met
-    # déjà vingt à quatre-vingt-dix secondes à charger ses modules : cumulé au
-    # réveil, une partie prenante attendrait près de deux minutes devant une
-    # page vide. « starter » supprime la mise en veille.
-    plan: starter
+    # Palier gratuit : pas de carte bancaire demandée, 512 Mo de mémoire, et
+    # mise en veille après quinze minutes sans visite. Le réveil, cumulé au
+    # chargement des modules, fait attendre une à deux minutes au premier
+    # visiteur — voir la section « Garder le service éveillé » de
+    # DEPLOIEMENT.md.
+    #
+    # Mesures relevées sur la version actuelle :
+    #   démarrage et navigation      114 Mo
+    #   export CSV de 11 732 lignes  283 Mo
+    #   export Excel de 11 732 ligne 596 Mo  ← dépasse la limite
+    #
+    # Passez à « starter » (7 $/mois) si l'export Excel complet doit
+    # fonctionner, ou filtrez les exports.
+    plan: free
 
     healthCheckPath: /api/health
 
