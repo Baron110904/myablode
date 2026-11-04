@@ -14,8 +14,8 @@ export default function LayoutApplicationAdmin({
   return (
     <Garde>
       <div className="flex min-h-screen">
-        <aside className="hidden w-[264px] shrink-0 lg:block">
-          <div className="fixed inset-y-0 w-[264px]">
+        <aside className="hidden w-[288px] shrink-0 lg:block">
+          <div className="fixed inset-y-0 w-[288px]">
             <BarreLaterale />
           </div>
         </aside>
@@ -29,7 +29,7 @@ export default function LayoutApplicationAdmin({
               onClick={() => setMenuOuvert(false)}
               className="absolute inset-0 bg-black/40"
             />
-            <div className="absolute inset-y-0 left-0 w-[264px] animate-apparition">
+            <div className="absolute inset-y-0 left-0 w-[288px] animate-apparition">
               <BarreLaterale onNavigation={() => setMenuOuvert(false)} />
             </div>
           </div>

@@ -60,7 +60,7 @@ export function ChampFormulaire({
           {...proprietesCommunes}
           onChange={(e) => onChange(e.target.value)}
         >
-          <option value="">—</option>
+          <option value="">-</option>
           {options.map((option) => (
             <option key={option.valeur} value={option.valeur}>
               {option.libelle}

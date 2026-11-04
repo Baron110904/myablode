@@ -7,6 +7,10 @@ node_modules
 dist
 coverage
 
+# Vidéos déposées en local : elles appartiennent au disque du serveur, pas à
+# l'image. Les y copier gonflerait chaque build de leur poids cumulé.
+uploads
+
 .env
 .env.*
 !.env.example

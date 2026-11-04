@@ -39,7 +39,7 @@ export function PyramideAgeSexe({ donnees }: { donnees: RepartitionAgeSexe[] }) 
             key={ligne.tranche}
             className="group grid grid-cols-[52px_1fr_1fr] items-center gap-2"
           >
-            <span className="font-mono text-[0.6875rem] text-ablode-gris transition-colors group-hover:text-ablode-encre">
+            <span className="text-[0.6875rem] text-ablode-gris transition-colors group-hover:text-ablode-encre">
               {ligne.tranche}
             </span>
 
@@ -63,13 +63,13 @@ export function PyramideAgeSexe({ donnees }: { donnees: RepartitionAgeSexe[] }) 
       <div className="mt-6 flex items-center justify-center gap-6">
         <span className="flex items-center gap-2">
           <span aria-hidden className="inline-block h-2.5 w-2.5 bg-ablode-encre" />
-          <span className="font-mono text-etiquette uppercase text-ablode-gris">
+          <span className="text-etiquette uppercase text-ablode-gris">
             {t('hommes')}
           </span>
         </span>
         <span className="flex items-center gap-2">
           <span aria-hidden className="inline-block h-2.5 w-2.5 bg-ablode-vert-clair" />
-          <span className="font-mono text-etiquette uppercase text-ablode-gris">
+          <span className="text-etiquette uppercase text-ablode-gris">
             {t('femmes')}
           </span>
         </span>

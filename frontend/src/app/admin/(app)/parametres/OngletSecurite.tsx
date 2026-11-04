@@ -108,19 +108,19 @@ export function OngletSecurite() {
           <div>
             <dt className="etiquette">Nom</dt>
             <dd className="mt-2 text-sm font-bold">
-              {utilisateur ? `${utilisateur.prenom} ${utilisateur.nom}` : '—'}
+              {utilisateur ? `${utilisateur.prenom} ${utilisateur.nom}` : '-'}
             </dd>
           </div>
           <div>
             <dt className="etiquette">Rôle</dt>
             <dd className="mt-2 text-sm">
-              {utilisateur ? LIBELLES_ROLE[utilisateur.role] : '—'}
+              {utilisateur ? LIBELLES_ROLE[utilisateur.role] : '-'}
             </dd>
           </div>
           <div>
             <dt className="etiquette">Dernière connexion</dt>
-            <dd className="mt-2 font-mono text-[0.8125rem]">
-              {utilisateur?.last_login ? dateHeure(utilisateur.last_login) : '—'}
+            <dd className="mt-2 text-[0.8125rem]">
+              {utilisateur?.last_login ? dateHeure(utilisateur.last_login) : '-'}
             </dd>
           </div>
         </dl>
@@ -214,12 +214,12 @@ export function OngletSecurite() {
                 <p className="etiquette mb-2">
                   1 · Ajoutez ce compte dans votre application
                 </p>
-                <p className="select-all break-all border border-admin-trait bg-admin-fond px-4 py-3 font-mono text-[0.8125rem]">
+                <p className="select-all break-all border border-admin-trait bg-admin-fond px-4 py-3 text-[0.8125rem]">
                   {setup2fa.otpauthUrl}
                 </p>
                 <p className="mt-2 text-[0.75rem] leading-relaxed text-admin-gris">
                   Saisie manuelle possible avec la clé :{' '}
-                  <span className="select-all font-mono">{setup2fa.secret}</span>
+                  <span className="select-all">{setup2fa.secret}</span>
                 </p>
               </div>
 
@@ -233,7 +233,7 @@ export function OngletSecurite() {
                   maxLength={6}
                   value={code2fa}
                   onChange={(e) => setCode2fa(e.target.value.replace(/\D/g, ''))}
-                  className="admin-champ max-w-[180px] font-mono tracking-[0.3em]"
+                  className="admin-champ max-w-[180px] tracking-[0.3em]"
                   placeholder="000000"
                 />
               </div>

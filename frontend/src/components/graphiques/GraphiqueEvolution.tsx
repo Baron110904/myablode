@@ -97,7 +97,7 @@ function EtatVide({ hauteur }: { hauteur: number }) {
       className="flex items-center justify-center bg-ablode-voile"
       style={{ height: hauteur }}
     >
-      <span className="font-mono text-etiquette uppercase text-ablode-gris">
+      <span className="text-etiquette uppercase text-ablode-gris">
         {t('aucuneDonnee')}
       </span>
     </div>

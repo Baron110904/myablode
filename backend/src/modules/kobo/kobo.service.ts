@@ -437,7 +437,7 @@ export class KoboService {
         normaliserTexte(valeurs.code_unique, 50) ??
         (await genererCodeDepistage(this.dataSource, dateDepistage)),
       nom,
-      prenom: prenom ?? '—',
+      prenom: prenom ?? '-',
       date_naissance: dateNaissance,
       sexe,
       telephone: normaliserTexte(valeurs.telephone, 20),

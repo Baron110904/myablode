@@ -117,7 +117,7 @@ export function EquipeCampagne({
                   {LIBELLES_ROLE_TERRAIN[agent.role_terrain]}
                 </span>
                 {agent.code_kobo && (
-                  <span className="font-mono text-[0.75rem] text-admin-gris">
+                  <span className="text-[0.75rem] text-admin-gris">
                     {agent.code_kobo}
                   </span>
                 )}

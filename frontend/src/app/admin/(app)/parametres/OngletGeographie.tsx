@@ -70,7 +70,7 @@ export function OngletGeographie() {
             <>
               {' '}
               {resultat.ignorees.length} entrée(s) du fichier n’ont pas été reconnues :{' '}
-              <span className="font-mono text-[0.8125rem]">
+              <span className="text-[0.8125rem]">
                 {resultat.ignorees.slice(0, 10).join(', ')}
                 {resultat.ignorees.length > 10 && '…'}
               </span>
@@ -112,7 +112,7 @@ export function OngletGeographie() {
                   className="flex justify-between border-b border-admin-trait py-1.5 text-sm"
                 >
                   <span>{departement}</span>
-                  <span className="font-mono text-admin-gris">{total}</span>
+                  <span className="text-admin-gris">{total}</span>
                 </li>
               ))}
           </ul>
@@ -146,7 +146,7 @@ export function OngletGeographie() {
           >
             {envoi ? 'Téléversement…' : 'Choisir un fichier GeoJSON'}
           </button>
-          <p className="mt-3 font-mono text-[0.75rem] text-admin-gris">
+          <p className="mt-3 text-[0.75rem] text-admin-gris">
             Fichier .geojson · 25 Mo maximum
           </p>
         </div>

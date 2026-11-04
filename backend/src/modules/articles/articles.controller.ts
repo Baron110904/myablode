@@ -26,8 +26,10 @@ import {
   QueryArticlesDto,
   UpdateArticleDto,
 } from './dto/article.dto';
+import { ThrottleLecture } from 'src/common/throttle-lecture';
 
 @ApiTags('Actualités')
+@ThrottleLecture()
 @Controller('articles')
 export class ArticlesController {
   constructor(

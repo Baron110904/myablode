@@ -20,7 +20,7 @@ const VIDE: Paginated<Utilisateur> = { items: [], total: 0, page: 1, limit: 20, 
 
 const DESCRIPTIONS_ROLE: Record<Role, string> = {
   super_admin: 'Accès total : configuration Kobo, utilisateurs, paramètres système.',
-  admin: 'Import, campagnes, articles — sans configuration Kobo ni gestion des comptes.',
+  admin: 'Import, campagnes, articles - sans configuration Kobo ni gestion des comptes.',
   viewer: 'Lecture seule des statistiques et des données, exports anonymisés.',
 };
 
@@ -218,12 +218,12 @@ function ContenuUtilisateurs() {
                         <td className="admin-td font-bold">
                           {utilisateur.prenom} {utilisateur.nom}
                           {cestMoi && (
-                            <span className="ml-2 font-mono text-[0.6875rem] uppercase text-admin-gris">
+                            <span className="ml-2 text-[0.6875rem] uppercase text-admin-gris">
                               vous
                             </span>
                           )}
                         </td>
-                        <td className="admin-td font-mono text-[0.8125rem]">
+                        <td className="admin-td text-[0.8125rem]">
                           {utilisateur.email}
                         </td>
                         <td className="admin-td">
@@ -231,11 +231,11 @@ function ContenuUtilisateurs() {
                             {LIBELLES_ROLE[utilisateur.role]}
                           </span>
                         </td>
-                        <td className="admin-td font-mono text-[0.8125rem]">
-                          {utilisateur.twofa_enabled ? '✓' : '—'}
+                        <td className="admin-td text-[0.8125rem]">
+                          {utilisateur.twofa_enabled ? '✓' : '-'}
                         </td>
-                        <td className="admin-td font-mono text-[0.8125rem]">
-                          {utilisateur.last_login ? dateHeure(utilisateur.last_login) : '—'}
+                        <td className="admin-td text-[0.8125rem]">
+                          {utilisateur.last_login ? dateHeure(utilisateur.last_login) : '-'}
                         </td>
                         <td className="admin-td">
                           <span
@@ -323,7 +323,7 @@ function ContenuUtilisateurs() {
             Ce mot de passe ne sera plus affiché. Transmettez-le à la personne concernée
             par un canal sûr, et demandez-lui de le changer à sa première connexion.
           </Alerte>
-          <p className="mt-5 select-all border border-admin-trait bg-admin-fond px-5 py-4 text-center font-mono text-xl tracking-[0.15em]">
+          <p className="mt-5 select-all border border-admin-trait bg-admin-fond px-5 py-4 text-center text-xl tracking-[0.15em]">
             {motDePasseTemporaire.valeur}
           </p>
           <div className="mt-7 flex justify-end">
@@ -491,9 +491,9 @@ function ModaleUtilisateur({
               onChange={(e) => maj('role', e.target.value)}
               className="admin-champ"
             >
-              <option value="viewer">Viewer — lecture seule</option>
-              <option value="admin">Admin — données et contenus</option>
-              <option value="super_admin">Super admin — accès total</option>
+              <option value="viewer">Viewer - lecture seule</option>
+              <option value="admin">Admin - données et contenus</option>
+              <option value="super_admin">Super admin - accès total</option>
             </select>
             <p className="mt-1.5 text-[0.75rem] leading-relaxed text-admin-gris">
               {DESCRIPTIONS_ROLE[valeurs.role]}

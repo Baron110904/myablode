@@ -6,14 +6,26 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { Logo } from './Logo';
 
+/*
+ * « Carte » ne figure pas dans cette liste : le bouton vert de droite y mène
+ * déjà, et deux entrées pour une même destination dans un bandeau de cinq
+ * liens font hésiter. Le pied de page la conserve, lui, parmi les sections.
+ */
 const LIENS = [
   { href: '/', cle: 'accueil' as const },
-  { href: '/carte', cle: 'carte' as const },
   { href: '/resultats', cle: 'resultats' as const },
   { href: '/actualites', cle: 'actualites' as const },
   { href: '/a-propos', cle: 'aPropos' as const },
 ];
 
+/**
+ * En-tête sombre, commun à tout le site vitrine.
+ *
+ * La refonte le pose sur fond vert nuit plutôt que sur papier : sur les trois
+ * maquettes, il prolonge le bandeau de tête au lieu de s'en détacher. Les
+ * liens sont regroupés dans une pilule translucide, et le lien courant prend
+ * un fond blanc — un souligné ne se verrait pas sur ce fond.
+ */
 export function EnTete() {
   const t = useTranslations('nav');
   const chemin = usePathname();
@@ -39,43 +51,40 @@ export function EnTete() {
 
   return (
     <header
-      className={`sticky top-0 z-40 border-b bg-ablode-papier/95 backdrop-blur transition-[border-color,box-shadow] duration-300 ${
-        defile ? 'border-ablode-trait shadow-carte' : 'border-transparent'
+      className={`sticky top-0 z-40 bg-ablode-profond transition-shadow duration-300 ${
+        defile ? 'shadow-[0_10px_30px_-20px_rgba(0,0,0,0.9)]' : ''
       }`}
     >
-      <div className="conteneur flex h-[72px] items-center justify-between gap-6">
-        <div className="flex items-center gap-10">
-          <Logo taille={34} />
+      <div className="conteneur flex h-[76px] items-center justify-between gap-6">
+        <Logo taille={40} />
 
-          <nav
-            className="hidden items-center gap-7 lg:flex"
-            aria-label="Navigation principale"
-          >
-            {LIENS.map((lien) => (
+        <nav
+          className="hidden items-center gap-1 rounded-full bg-white/[0.07] p-1.5 lg:flex"
+          aria-label="Navigation principale"
+        >
+          {LIENS.map((lien) => {
+            const actif = estActif(lien.href);
+            return (
               <Link
                 key={lien.href}
                 href={lien.href}
-                aria-current={estActif(lien.href) ? 'page' : undefined}
-                className={`group relative py-1 text-[0.9375rem] font-medium transition-colors ${
-                  estActif(lien.href)
-                    ? 'text-ablode-encre'
-                    : 'text-ablode-gris hover:text-ablode-encre'
+                aria-current={actif ? 'page' : undefined}
+                className={`rounded-full px-4 py-2 text-[0.9375rem] font-medium transition-colors duration-200 ${
+                  actif
+                    ? 'bg-white text-ablode-encre'
+                    : 'text-white/65 hover:bg-white/10 hover:text-white'
                 }`}
               >
                 {t(lien.cle)}
-                {/* Souligné qui se déploie depuis la gauche au survol. */}
-                <span
-                  aria-hidden
-                  className={`absolute -bottom-0.5 left-0 h-px bg-ablode-vert transition-all duration-300 ${
-                    estActif(lien.href) ? 'w-full' : 'w-0 group-hover:w-full'
-                  }`}
-                />
               </Link>
-            ))}
-          </nav>
-        </div>
+            );
+          })}
+        </nav>
 
-        <Link href="/carte" className="hidden lg:inline-flex bouton-principal !px-5 !py-2.5">
+        <Link
+          href="/carte"
+          className="hidden lg:inline-flex items-center justify-center rounded-full bg-ablode-vert px-5 py-2.5 text-[0.9375rem] font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-ablode-vert-sombre hover:shadow-relief motion-reduce:hover:translate-y-0"
+        >
           {t('explorer')}
         </Link>
 
@@ -84,24 +93,30 @@ export function EnTete() {
           onClick={() => setMenuOuvert((ouvert) => !ouvert)}
           aria-expanded={menuOuvert}
           aria-controls="menu-mobile"
-          className="flex items-center gap-2.5 text-[0.875rem] font-semibold text-ablode-encre lg:hidden"
+          /*
+            `py-1.5` porte la cible à 33 px de haut. Sans lui, le bouton
+            mesurait 21 px — sous le minimum de 24 px du critère WCAG 2.2
+            « Target Size », et c'est la seule porte d'entrée vers la
+            navigation sur téléphone.
+          */
+          className="-mr-2 flex items-center gap-2.5 px-2 py-1.5 text-[0.875rem] font-semibold text-white lg:hidden"
         >
           <span className="flex h-3 w-4 flex-col justify-between">
             <span
               aria-hidden
-              className={`block h-px w-full bg-ablode-encre transition-transform duration-300 ${
+              className={`block h-px w-full bg-white transition-transform duration-300 ${
                 menuOuvert ? 'translate-y-[5.5px] rotate-45' : ''
               }`}
             />
             <span
               aria-hidden
-              className={`block h-px w-full bg-ablode-encre transition-opacity duration-200 ${
+              className={`block h-px w-full bg-white transition-opacity duration-200 ${
                 menuOuvert ? 'opacity-0' : ''
               }`}
             />
             <span
               aria-hidden
-              className={`block h-px w-full bg-ablode-encre transition-transform duration-300 ${
+              className={`block h-px w-full bg-white transition-transform duration-300 ${
                 menuOuvert ? '-translate-y-[5.5px] -rotate-45' : ''
               }`}
             />
@@ -113,10 +128,8 @@ export function EnTete() {
       {/* Tiroir mobile : hauteur animée plutôt qu'apparition brutale. */}
       <div
         id="menu-mobile"
-        className={`overflow-hidden border-t bg-ablode-papier transition-[max-height,opacity] duration-300 lg:hidden ${
-          menuOuvert
-            ? 'max-h-96 border-ablode-trait opacity-100'
-            : 'max-h-0 border-transparent opacity-0'
+        className={`overflow-hidden border-t border-white/10 bg-ablode-profond transition-[max-height,opacity] duration-300 lg:hidden ${
+          menuOuvert ? 'max-h-96 opacity-100' : 'max-h-0 border-transparent opacity-0'
         }`}
       >
         <nav className="conteneur flex flex-col py-2" aria-label="Navigation mobile">
@@ -124,14 +137,17 @@ export function EnTete() {
             <Link
               key={lien.href}
               href={lien.href}
-              className={`border-b border-ablode-trait/60 py-4 text-[1rem] font-medium transition-colors last:border-0 ${
-                estActif(lien.href) ? 'text-ablode-encre' : 'text-ablode-gris'
+              className={`border-b border-white/10 py-4 text-[1rem] font-medium transition-colors last:border-0 ${
+                estActif(lien.href) ? 'text-white' : 'text-white/60 hover:text-white'
               }`}
             >
               {t(lien.cle)}
             </Link>
           ))}
-          <Link href="/carte" className="bouton-principal my-4">
+          <Link
+            href="/carte"
+            className="my-4 inline-flex items-center justify-center rounded-full bg-ablode-vert px-7 py-3.5 text-[0.9375rem] font-semibold text-white"
+          >
             {t('explorer')}
           </Link>
         </nav>

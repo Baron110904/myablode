@@ -78,10 +78,10 @@ export class KoboSchedulerService {
 
     await this.mail.envoyer({
       to: process.env.SEED_ADMIN_EMAIL ?? 'admin@ablode.bj',
-      subject: 'MyABLODE — Échec de la synchronisation Kobo',
+      subject: 'MyABLODE - Échec de la synchronisation Kobo',
       html: `<p>La synchronisation automatique avec KoboToolbox a échoué deux fois de suite.</p>
              <p><strong>Dernière erreur :</strong> ${echapper(erreur)}</p>
-             <p>Formulaire : <code>${echapper(config.form_id ?? '—')}</code></p>
+             <p>Formulaire : <code>${echapper(config.form_id ?? '-')}</code></p>
              <p>Vérifiez le jeton API et la connexion réseau dans Paramètres → Kobo.</p>`,
     });
   }

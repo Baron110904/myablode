@@ -599,6 +599,52 @@ export class StatsService {
     );
   }
 
+  /**
+   * Ce qui attend une action dans le back-office, pour les pastilles de la
+   * barre latérale.
+   *
+   * Ne sont comptés que des états explicites du modèle : une ligne de
+   * dépistage marquée à vérifier ou hors norme, un message, une candidature
+   * ou une inscription non encore traités. Rien d'interprété - une pastille
+   * qui dit « 2 » sans qu'on sache de quoi est pire qu'une absence de
+   * pastille.
+   *
+   * Les quatre comptes tiennent dans une seule requête : quatre allers-
+   * retours pour quatre entiers, à chaque chargement de page du
+   * back-office, ne se justifient pas.
+   */
+  async enAttente(): Promise<{
+    depistages: number;
+    messages: number;
+    benevoles: number;
+    inscriptionsMarche: number;
+  }> {
+    const [ligne] = await this.dataSource.query<
+      Array<{
+        depistages: number;
+        messages: number;
+        benevoles: number;
+        inscriptions_marche: number;
+      }>
+    >(`
+      SELECT
+        (SELECT COUNT(*) FROM depistages
+          WHERE deleted_at IS NULL
+            AND (resultat = 'a_verifier' OR hors_norme))::int AS depistages,
+        (SELECT COUNT(*) FROM contacts WHERE NOT traite)::int AS messages,
+        (SELECT COUNT(*) FROM benevoles WHERE NOT traite)::int AS benevoles,
+        (SELECT COUNT(*) FROM inscriptions_marche WHERE NOT traite)::int
+          AS inscriptions_marche
+    `);
+
+    return {
+      depistages: ligne?.depistages ?? 0,
+      messages: ligne?.messages ?? 0,
+      benevoles: ligne?.benevoles ?? 0,
+      inscriptionsMarche: ligne?.inscriptions_marche ?? 0,
+    };
+  }
+
   /** Évolution mensuelle sur 12 mois, indépendante des filtres (dashboard). */
   async evolutionMensuelle12Mois(): Promise<PointEvolution[]> {
     return this.cache.remember('stats:evolution12', TTL_COURT, async () =>

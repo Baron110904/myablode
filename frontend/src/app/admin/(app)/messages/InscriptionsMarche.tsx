@@ -90,7 +90,7 @@ export function InscriptionsMarche({
             { libelle: 'Déjà venus', valeur: nombre(stats.ancienParticipants) },
             {
               libelle: 'Âge moyen',
-              valeur: stats.ageMoyen !== null ? `${stats.ageMoyen} ans` : '—',
+              valeur: stats.ageMoyen !== null ? `${stats.ageMoyen} ans` : '-',
             },
           ].map((carte) => (
             <div key={carte.libelle} className="bg-white px-5 py-4">
@@ -187,12 +187,17 @@ export function InscriptionsMarche({
                   <td className="admin-td">
                     {inscription.sexe === 'F' ? 'Féminin' : 'Masculin'}
                   </td>
-                  <td className="admin-td">{inscription.fonction}</td>
+                  {/* Fonction et quartier sont facultatifs au bulletin : la
+                      cellule porte un tiret plutôt que de rester vide, ce qui
+                      se confondrait avec un défaut d'affichage. */}
+                  <td className="admin-td">{inscription.fonction ?? '-'}</td>
                   <td className="admin-td">
                     <span className="text-sm">{inscription.ville}</span>
-                    <span className="block text-[0.75rem] text-admin-gris">
-                      {inscription.quartier}
-                    </span>
+                    {inscription.quartier && (
+                      <span className="block text-[0.75rem] text-admin-gris">
+                        {inscription.quartier}
+                      </span>
+                    )}
                   </td>
                   <td className="admin-td">
                     <span
@@ -211,7 +216,7 @@ export function InscriptionsMarche({
                         {inscription.telephone && (
                           <a
                             href={`tel:${inscription.telephone.replace(/\s/g, '')}`}
-                            className="block font-mono text-[0.8125rem] hover:text-admin-vert"
+                            className="block text-[0.8125rem] hover:text-admin-vert"
                           >
                             {inscription.telephone}
                           </a>
@@ -228,10 +233,10 @@ export function InscriptionsMarche({
                       </>
                     ) : (
                       /* Inscriptions reçues avant l'ajout de ces deux champs. */
-                      <span className="text-[0.8125rem] text-admin-gris">—</span>
+                      <span className="text-[0.8125rem] text-admin-gris">-</span>
                     )}
                   </td>
-                  <td className="admin-td font-mono text-[0.8125rem]">
+                  <td className="admin-td text-[0.8125rem]">
                     {dateHeure(inscription.created_at)}
                   </td>
                   <td className="admin-td text-right">

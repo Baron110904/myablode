@@ -55,7 +55,7 @@ const SETTINGS_DEFAUT: Array<{
   },
   {
     key: 'newsletter_signature',
-    value: 'ABLODE — Association Béninoise de Lutte contre l’Obésité, le Diabète et les Endocrinopathies · Abomey-Calavi, Bénin',
+    value: 'ABLODE - Association Béninoise de Lutte contre l’Obésité, le Diabète et les Endocrinopathies · Abomey-Calavi, Bénin',
     groupe: 'newsletter',
     description: 'Signature ajoutée en bas de chaque envoi',
   },
@@ -112,7 +112,8 @@ async function main(): Promise<void> {
         const result = await seedDemo(dataSource, adminId);
         console.log(
           `✓ Démo : ${result.depistages} dépistages, ${result.campagnes} campagnes, ` +
-            `${result.articles} articles, ${result.abonnes} abonnés.`,
+            `${result.articles} articles, ${result.abonnes} abonnés, ` +
+            `${result.evenements} dates au programme.`,
         );
       } else {
         console.log(`· ${nbDepistages} dépistages déjà présents, démo ignorée.`);

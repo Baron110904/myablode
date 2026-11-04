@@ -29,7 +29,13 @@ export function ReseauxSociaux({
             rel="noopener noreferrer"
             aria-label={reseau.action}
             title={reseau.action}
-            className={`group inline-flex items-center gap-2.5 border px-3 py-2.5 transition-all duration-200 hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 ${
+            /*
+              Taille de cible imposée : sans elle, le lien se réduisait à la
+              hauteur du logo, soit 22 px — sous le minimum de 24 px du
+              critère WCAG 2.2 « Target Size ». 44 px est la cible
+              confortable au doigt, et le logo reste centré dedans.
+            */
+            className={`group inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-2.5 border px-3 py-2.5 transition-all duration-200 hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 ${
               sombre
                 ? 'border-white/20 hover:border-white/50 hover:bg-white/5'
                 : 'border-ablode-trait bg-white hover:border-ablode-encre'
@@ -45,7 +51,7 @@ export function ReseauxSociaux({
             />
             {avecLibelles && (
               <span
-                className={`font-mono text-etiquette uppercase ${
+                className={`text-etiquette uppercase ${
                   sombre ? 'text-white/80' : 'text-ablode-encre'
                 }`}
               >

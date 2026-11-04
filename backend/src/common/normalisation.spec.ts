@@ -232,7 +232,7 @@ describe('calculerImc', () => {
   });
 });
 
-describe('motifHorsNorme — poids et taille', () => {
+describe('motifHorsNorme - poids et taille', () => {
   it('signale un poids hors des bornes', () => {
     expect(motifHorsNorme(null, null, 500, 170)).toContain('poids 500 kg');
     expect(motifHorsNorme(null, null, 1, 170)).toContain('poids 1 kg');

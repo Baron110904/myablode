@@ -309,12 +309,12 @@ export default function PageAgents() {
                           </span>
                         )}
                       </td>
-                      <td className="admin-td font-mono text-[0.8125rem]">
-                        {agent.code_kobo ?? '—'}
+                      <td className="admin-td text-[0.8125rem]">
+                        {agent.code_kobo ?? '-'}
                       </td>
                       <td className="admin-td">{LIBELLES_ROLE_TERRAIN[agent.role_terrain]}</td>
                       <td className="admin-td text-[0.8125rem] text-admin-gris">
-                        {agent.telephone ?? agent.email ?? '—'}
+                        {agent.telephone ?? agent.email ?? '-'}
                       </td>
                       <td className="admin-td">
                         {agent.affectations.length === 0 ? (
@@ -411,7 +411,7 @@ export default function PageAgents() {
       {aDesactiver && (
         <ConfirmationSuppression
           titre="Retirer cet agent de l’activité ?"
-          message={`${aDesactiver.prenom} ${aDesactiver.nom} sortira des listes actives. Ses dépistages déjà collectés restent rattachés à son nom — rien n’est effacé.`}
+          message={`${aDesactiver.prenom} ${aDesactiver.nom} sortira des listes actives. Ses dépistages déjà collectés restent rattachés à son nom - rien n’est effacé.`}
           libelleConfirmation="Désactiver"
           onConfirmer={() => void desactiver()}
           onAnnuler={() => setADesactiver(null)}
@@ -726,7 +726,7 @@ function ModaleFiche({
             valeur:
               stats && stats.depistages > 0
                 ? pourcentage((100 * stats.cas) / stats.depistages)
-                : '—',
+                : '-',
           },
           { libelle: 'Communes couvertes', valeur: nombre(stats?.communes ?? 0) },
         ].map((carte) => (
@@ -763,7 +763,7 @@ function ModaleFiche({
                     {libelleAffectation(affectation)}
                   </span>
                   {(affectation.date_debut || affectation.date_fin) && (
-                    <span className="ml-3 font-mono text-[0.75rem] text-admin-gris">
+                    <span className="ml-3 text-[0.75rem] text-admin-gris">
                       {affectation.date_debut ? date(affectation.date_debut) : '…'} →{' '}
                       {affectation.date_fin ? date(affectation.date_fin) : '…'}
                     </span>

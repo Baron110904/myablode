@@ -11,13 +11,28 @@
     "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
+    /*
+     * TypeScript 6 n'inclut plus d'office tous les paquets `@types`
+     * presents dans node_modules. Sans cette liste, les globaux de Jest
+     * — `describe`, `it`, `expect` — ne sont plus connus et chaque
+     * fichier de test ne compile plus. Les autres types restent atteints
+     * par leurs imports explicites.
+     */
+    "types": ["node", "jest"],
     "paths": {
-      "src/*": ["src/*"]
+      "src/*": ["./src/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
+    /*
+     * Les entites TypeORM declarent leurs colonnes sans les initialiser :
+     * c'est l'ORM qui les peuple a l'hydratation, jamais un constructeur.
+     * TypeScript 6 active cette verification par defaut des que
+     * `strictNullChecks` est pose ; elle signalerait chaque colonne de
+     * chaque entite.
+     */
+    "strictPropertyInitialization": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,

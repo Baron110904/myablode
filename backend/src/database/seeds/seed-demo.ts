@@ -55,6 +55,7 @@ export interface DemoResult {
   depistages: number;
   articles: number;
   abonnes: number;
+  evenements: number;
 }
 
 export async function seedDemo(
@@ -81,6 +82,7 @@ export async function seedDemo(
   );
   const articles = await insertArticles(dataSource);
   const abonnes = await insertAbonnes(dataSource, random);
+  const evenements = await insertEvenements(dataSource, aujourdhui);
   await insertBenevolesEtContacts(dataSource, random);
 
   return {
@@ -88,6 +90,7 @@ export async function seedDemo(
     depistages,
     articles,
     abonnes,
+    evenements,
   };
 }
 
@@ -122,7 +125,7 @@ async function insertCampagnes(
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, now()) RETURNING id`,
       [
         commune.id,
-        `Dépistage ${commune.nom} — ${moisAnnee(debut)}`,
+        `Dépistage ${commune.nom} - ${moisAnnee(debut)}`,
         iso(debut),
         iso(fin),
         responsables[Math.floor(random() * responsables.length)],
@@ -145,7 +148,7 @@ async function insertCampagnes(
        VALUES ($1, $2, $3, $4, $5, $6, 'planifiee', $7, now())`,
       [
         commune.id,
-        `Dépistage ${commune.nom} — ${moisAnnee(debut)}`,
+        `Dépistage ${commune.nom} - ${moisAnnee(debut)}`,
         iso(debut),
         iso(fin),
         responsables[Math.floor(random() * responsables.length)],
@@ -373,9 +376,9 @@ const ARTICLES_DEMO = [
     contenu: `<p>Le test réalisé lors des campagnes de l'ABLODE mesure la glycémie capillaire à jeun, exprimée en milligrammes par décilitre (mg/dL).</p>
 <h3>Trois zones</h3>
 <ul>
-<li><strong>Moins de 100 mg/dL</strong> — valeur normale ;</li>
-<li><strong>100 à 125 mg/dL</strong> — pré-diabète : le risque est réel mais réversible par l'alimentation et l'activité physique ;</li>
-<li><strong>126 mg/dL ou plus</strong> — évocateur de diabète, à confirmer par un second test en laboratoire.</li>
+<li><strong>Moins de 100 mg/dL</strong> - valeur normale ;</li>
+<li><strong>100 à 125 mg/dL</strong> - pré-diabète : le risque est réel mais réversible par l'alimentation et l'activité physique ;</li>
+<li><strong>126 mg/dL ou plus</strong> - évocateur de diabète, à confirmer par un second test en laboratoire.</li>
 </ul>
 <p>Un résultat élevé lors d'un dépistage ne pose jamais le diagnostic à lui seul. C'est le médecin du centre de santé vers lequel vous êtes orienté qui le confirmera.</p>`,
   },
@@ -418,6 +421,82 @@ async function insertArticles(dataSource: DataSource): Promise<number> {
     count += 1;
   }
   return count;
+}
+
+/**
+ * Programme de l'édition en cours.
+ *
+ * Les dates sont posées par rapport à aujourd'hui, et non en absolu : le
+ * bandeau de l'accueil n'affiche que les dates à venir, et un programme écrit
+ * en dur serait vide dès l'année suivante.
+ */
+async function insertEvenements(
+  dataSource: DataSource,
+  aujourdhui: Date,
+): Promise<number> {
+  const [{ count }] = await dataSource.query(
+    `SELECT COUNT(*)::int AS count FROM evenements`,
+  );
+  if (count > 0) return 0;
+
+  const edition = '6ᵉ édition';
+  const programme = [
+    {
+      titre: 'Campagne « Le diabète et nous »',
+      sous_titre: edition,
+      debut: -2,
+      fin: 27,
+      lieu: null,
+      description:
+        'Un mois de dépistages gratuits et de sensibilisation dans tout le Bénin.',
+    },
+    {
+      titre: 'Conférence de presse',
+      sous_titre: 'Lancement officiel de la campagne',
+      debut: 2,
+      fin: null,
+      lieu: null,
+      description:
+        'Présentation du programme de l’édition aux rédactions et aux partenaires.',
+    },
+    {
+      titre: 'Grande marche « Sucre à terre »',
+      sous_titre: 'dépistage gratuit et don de sang',
+      debut: 11,
+      fin: null,
+      lieu: 'Place de l’Amazone',
+      description:
+        'Cinq kilomètres contre la sédentarité, avec dépistage gratuit à l’arrivée.',
+    },
+    {
+      titre: 'Avant-première du film sur le diabète',
+      sous_titre: 'Projection publique',
+      debut: 18,
+      fin: null,
+      lieu: null,
+      description:
+        'Projection suivie d’un échange avec des soignants et des patients.',
+    },
+  ];
+
+  for (const date of programme) {
+    await dataSource.query(
+      `INSERT INTO evenements
+        (titre, sous_titre, date_debut, date_fin, lieu, description, edition,
+         publie, updated_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, true, now())`,
+      [
+        date.titre,
+        date.sous_titre,
+        iso(addDays(aujourdhui, date.debut)),
+        date.fin === null ? null : iso(addDays(aujourdhui, date.fin)),
+        date.lieu,
+        date.description,
+        edition,
+      ],
+    );
+  }
+  return programme.length;
 }
 
 async function insertAbonnes(

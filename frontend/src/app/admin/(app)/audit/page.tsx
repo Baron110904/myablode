@@ -155,7 +155,7 @@ export default function PageAudit() {
                 <tbody className="divide-y divide-admin-trait">
                   {donnees.items.map((entree) => (
                     <tr key={entree.id} className="transition-colors duration-150 hover:bg-admin-fond">
-                      <td className="admin-td whitespace-nowrap font-mono text-[0.8125rem]">
+                      <td className="admin-td whitespace-nowrap text-[0.8125rem]">
                         {dateHeure(entree.created_at)}
                       </td>
                       <td className="admin-td">
@@ -163,7 +163,7 @@ export default function PageAudit() {
                           ? `${entree.user.prenom} ${entree.user.nom}`
                           : entree.action.startsWith('sync')
                             ? 'Système (cron)'
-                            : '—'}
+                            : '-'}
                       </td>
                       <td className="admin-td">
                         <span
@@ -182,11 +182,11 @@ export default function PageAudit() {
                       <td className="admin-td">
                         {LIBELLES_ENTITE[entree.entity] ?? entree.entity}
                       </td>
-                      <td className="admin-td font-mono text-[0.8125rem] text-admin-gris">
-                        {entree.entity_id ?? '—'}
+                      <td className="admin-td text-[0.8125rem] text-admin-gris">
+                        {entree.entity_id ?? '-'}
                       </td>
-                      <td className="admin-td font-mono text-[0.8125rem] text-admin-gris">
-                        {entree.ip_address ?? '—'}
+                      <td className="admin-td text-[0.8125rem] text-admin-gris">
+                        {entree.ip_address ?? '-'}
                       </td>
                       <td className="admin-td text-right">
                         {entree.metadata ? (
@@ -198,7 +198,7 @@ export default function PageAudit() {
                             Voir
                           </button>
                         ) : (
-                          <span className="text-admin-gris">—</span>
+                          <span className="text-admin-gris">-</span>
                         )}
                       </td>
                     </tr>
@@ -231,10 +231,10 @@ export default function PageAudit() {
               {LIBELLES_ACTION[detail.action] ?? detail.action} ·{' '}
               {LIBELLES_ENTITE[detail.entity] ?? detail.entity}
             </h2>
-            <p className="mt-1 font-mono text-[0.8125rem] text-admin-gris">
+            <p className="mt-1 text-[0.8125rem] text-admin-gris">
               {dateHeure(detail.created_at)}
             </p>
-            <pre className="mt-5 overflow-auto bg-admin-fond p-4 font-mono text-[0.75rem] leading-relaxed">
+            <pre className="mt-5 overflow-auto bg-admin-fond p-4 text-[0.75rem] leading-relaxed">
               {JSON.stringify(detail.metadata, null, 2)}
             </pre>
             <div className="mt-6 flex justify-end">

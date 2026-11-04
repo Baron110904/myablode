@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { VueCarte } from './VueCarte';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/carte' },
+  openGraph: { url: '/carte' },
   title: 'Carte du dépistage',
   description:
     'Carte interactive des 77 communes du Bénin colorées selon le taux de ' +

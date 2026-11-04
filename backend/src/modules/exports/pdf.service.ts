@@ -90,7 +90,7 @@ export class PdfService {
       size: 'A4',
       margin: MARGE,
       info: {
-        Title: `Rapport de campagne — ${stats.campagne.nom}`,
+        Title: `Rapport de campagne - ${stats.campagne.nom}`,
         Author: 'ABLODE',
         Subject: 'Rapport de campagne de dépistage',
       },
@@ -309,7 +309,7 @@ export class PdfService {
         const pourcentage =
           total > 0
             ? `${virgule(Math.round((part.total / total) * 1000) / 10)} %`
-            : '—';
+            : '-';
         doc.fillColor(GRIS).font('Helvetica');
         doc.text(pourcentage, x + largeur - 50, ligneY, { width: 50, align: 'right' });
       }

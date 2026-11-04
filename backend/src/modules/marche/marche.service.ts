@@ -30,6 +30,13 @@ export interface FormulairePublic {
   ouvert: boolean;
   /** Nombre d'inscrits, pour donner l'élan sans nommer personne. */
   inscrits: number;
+  /** Fiche pratique affichée en marge du bulletin ; tout y est facultatif. */
+  dateEvenement: string | null;
+  lieu: string | null;
+  parcours: string | null;
+  surPlace: string | null;
+  /** Déjà découpé en lignes : la page n'a plus qu'à les énumérer. */
+  aPrevoir: string[];
 }
 
 @Injectable()
@@ -66,6 +73,11 @@ export class MarcheService {
     formulaire.introduction = dto.introduction?.trim() || null;
     formulaire.message_ferme = dto.message_ferme?.trim() || null;
     formulaire.date_fermeture = dto.date_fermeture ? new Date(dto.date_fermeture) : null;
+    formulaire.date_evenement = dto.date_evenement ? new Date(dto.date_evenement) : null;
+    formulaire.lieu = dto.lieu?.trim() || null;
+    formulaire.parcours = dto.parcours?.trim() || null;
+    formulaire.sur_place = dto.sur_place?.trim() || null;
+    formulaire.a_prevoir = dto.a_prevoir?.trim() || null;
     formulaire.publie = dto.publie ?? false;
 
     return this.formulaires.save(formulaire);
@@ -107,6 +119,20 @@ export class MarcheService {
       messageFerme: formulaire.message_ferme,
       ouvert: this.estOuvert(formulaire),
       inscrits,
+      dateEvenement: formulaire.date_evenement?.toISOString() ?? null,
+      lieu: formulaire.lieu,
+      parcours: formulaire.parcours,
+      surPlace: formulaire.sur_place,
+      /*
+       * Une ligne par élément, les lignes vides écartées : la saisie
+       * au back-office est un simple bloc de texte, et une ligne laissée
+       * blanche entre deux éléments ne doit pas produire une puce vide.
+       */
+      aPrevoir:
+        formulaire.a_prevoir
+          ?.split('\n')
+          .map((ligne) => ligne.trim())
+          .filter(Boolean) ?? [],
     };
   }
 
@@ -150,10 +176,10 @@ export class MarcheService {
           prenom: dto.prenom.trim(),
           age: dto.age,
           sexe: dto.sexe,
-          fonction: dto.fonction.trim(),
+          fonction: dto.fonction?.trim() || null,
           ville: dto.ville.trim(),
-          quartier: dto.quartier.trim(),
-          email: dto.email.trim().toLowerCase(),
+          quartier: dto.quartier?.trim() || null,
+          email: dto.email?.trim().toLowerCase() || null,
           telephone: dto.telephone.trim(),
           deja_participe: dto.deja_participe ?? false,
           motivation: dto.motivation?.trim() || null,
@@ -184,13 +210,16 @@ export class MarcheService {
      * Le formulaire annonce cet abonnement, et chaque envoi porte un lien de
      * désinscription : personne n'y entre à son insu.
      */
-    try {
-      await this.newsletter.inscrire(dto.email);
-    } catch (erreur) {
-      this.logger.warn(
-        `Inscription marche enregistrée, abonnement à la lettre échoué pour ` +
-          `${dto.email} : ${(erreur as Error).message}`,
-      );
+    const adresse = dto.email?.trim();
+    if (adresse) {
+      try {
+        await this.newsletter.inscrire(adresse);
+      } catch (erreur) {
+        this.logger.warn(
+          `Inscription marche enregistrée, abonnement à la lettre échoué pour ` +
+            `${adresse} : ${(erreur as Error).message}`,
+        );
+      }
     }
 
     return {

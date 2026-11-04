@@ -93,15 +93,42 @@ export function assainirHtml(html: string): string {
    */
   sortie = sortie.replace(/<(?!\/?[a-zA-Z][a-zA-Z0-9]*(?:\s[^<>]*)?\/?>)/g, '&lt;');
 
+  /*
+   * Compte les iframes dont l'ouverture a été supprimée, pour supprimer
+   * aussi leur fermeture. `replace` parcourt la chaîne dans l'ordre du
+   * document : quand la fermeture se présente, le compteur dit si
+   * l'ouverture correspondante a survécu. Sans cela, un `</iframe>` orphelin
+   * restait dans l'article.
+   */
+  let iframesSupprimes = 0;
+
   // 3. Filtrer chaque balise restante contre la liste blanche.
   sortie = sortie.replace(
     /<(\/?)([a-zA-Z][a-zA-Z0-9]*)((?:\s[^<>]*)?)\/?>/g,
     (_correspondance, fermeture: string, nomBrut: string, attributs: string) => {
       const nom = nomBrut.toLowerCase();
       if (!BALISES_AUTORISEES.has(nom)) return '';
-      if (fermeture) return `</${nom}>`;
+
+      if (fermeture) {
+        if (nom === 'iframe' && iframesSupprimes > 0) {
+          iframesSupprimes -= 1;
+          return '';
+        }
+        return `</${nom}>`;
+      }
 
       const attributsFiltres = filtrerAttributs(nom, attributs);
+
+      /*
+       * Un iframe dont la source a été rejetée — hôte non autorisé — ne doit
+       * pas survivre vidé de son `src` : il resterait un cadre inerte au
+       * milieu de l'article, invisible à la relecture du rédacteur.
+       */
+      if (nom === 'iframe' && !/\ssrc="/.test(attributsFiltres)) {
+        iframesSupprimes += 1;
+        return '';
+      }
+
       const autoFermante = ['br', 'hr', 'img'].includes(nom);
       return `<${nom}${attributsFiltres}${autoFermante ? ' /' : ''}>`;
     },

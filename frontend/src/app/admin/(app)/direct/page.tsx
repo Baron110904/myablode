@@ -281,7 +281,7 @@ export default function PageDirect() {
         valeur:
           suivi.surFenetre >= SEUIL_TAUX_LISIBLE
             ? pourcentage(suivi.tauxFenetre)
-            : '—',
+            : '-',
         spark: suivi.serie.map((p) =>
           p.depistages > 0 ? (100 * p.cas) / p.depistages : 0,
         ),
@@ -322,8 +322,8 @@ export default function PageDirect() {
                 En direct
               </span>
             )}
-            <span className="font-mono text-[0.8125rem] tabular-nums text-admin-gris">
-              {heure || '—'}
+            <span className="text-[0.8125rem] tabular-nums text-admin-gris">
+              {heure || '-'}
             </span>
           </span>
         }
@@ -334,7 +334,7 @@ export default function PageDirect() {
 
       {simulation && (
         <p className="flex flex-wrap items-center gap-2 border-b border-ablode-ambre/25 bg-ablode-ambre-voile px-6 py-3 text-[0.8125rem] font-semibold text-ablode-ambre">
-          Démonstration en cours — les chiffres et la courbe sont générés pour
+          Démonstration en cours - les chiffres et la courbe sont générés pour
           montrer l’écran en activité. Aucune de ces valeurs n’est une mesure.
         </p>
       )}
@@ -478,14 +478,14 @@ export default function PageDirect() {
                       key={arrivee.id}
                       className="flex items-center justify-between gap-3 px-6 py-2.5"
                     >
-                      <span className="shrink-0 font-mono text-[0.75rem] text-admin-gris">
+                      <span className="shrink-0 text-[0.75rem] text-admin-gris">
                         {horodatageFlux(arrivee.horodatage)}
                       </span>
                       <span className="flex-1 truncate text-sm font-semibold">
                         {arrivee.commune}
                       </span>
                       {arrivee.glycemie != null && (
-                        <span className="shrink-0 font-mono text-[0.75rem] tabular-nums text-admin-gris">
+                        <span className="shrink-0 text-[0.75rem] tabular-nums text-admin-gris">
                           {Math.round(arrivee.glycemie)} mg/dL
                         </span>
                       )}
@@ -502,7 +502,7 @@ export default function PageDirect() {
               <div className="flex items-center justify-between gap-3 px-6 pt-5">
                 <h2 className="etiquette">Communes actives</h2>
                 {suivi && (
-                  <span className="font-mono text-[0.8125rem] tabular-nums text-admin-gris">
+                  <span className="text-[0.8125rem] tabular-nums text-admin-gris">
                     {suivi.communesFenetre} / {suivi.totalCommunes}
                   </span>
                 )}
@@ -528,7 +528,7 @@ export default function PageDirect() {
                             {ligne.nom}
                           </span>
                         </span>
-                        <span className="flex shrink-0 items-center gap-3 font-mono text-[0.8125rem] tabular-nums">
+                        <span className="flex shrink-0 items-center gap-3 text-[0.8125rem] tabular-nums">
                           <span className="text-admin-gris">{nombre(ligne.depistages)}</span>
                           <span
                             className={
@@ -538,7 +538,7 @@ export default function PageDirect() {
                             }
                           >
                             {ligne.depistages < SEUIL_TAUX_LISIBLE
-                              ? '—'
+                              ? '-'
                               : pourcentage(ligne.taux)}
                           </span>
                         </span>
@@ -606,7 +606,7 @@ function BandeauCommunes({ classement }: { classement: LigneDirect[] }) {
                 : pourcentage(ligne.taux)}
             </span>
             {ligne.arrivees > 0 && (
-              <span className="font-mono text-[0.75rem] tabular-nums text-ablode-vert-clair">
+              <span className="text-[0.75rem] tabular-nums text-ablode-vert-clair">
                 ▲ {nombre(ligne.arrivees)}
               </span>
             )}
@@ -626,7 +626,7 @@ function BandeauCommunes({ classement }: { classement: LigneDirect[] }) {
  */
 function horodatageFlux(horodatage: string): string {
   const valeur = new Date(horodatage);
-  if (Number.isNaN(valeur.getTime())) return '—';
+  if (Number.isNaN(valeur.getTime())) return '-';
 
   const heure = valeur.toLocaleTimeString('fr-FR', {
     hour: '2-digit',

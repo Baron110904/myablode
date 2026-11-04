@@ -28,21 +28,31 @@ export function RechercheArticles({ valeurInitiale }: { valeurInitiale: string }
   }
 
   return (
-    <form onSubmit={soumettre} role="search" className="flex gap-2">
+    <form onSubmit={soumettre} role="search">
       <label htmlFor="recherche-articles" className="sr-only">
         {t('rechercher')}
       </label>
-      <input
-        id="recherche-articles"
-        type="search"
-        value={terme}
-        onChange={(e) => setTerme(e.target.value)}
-        placeholder={t('rechercher')}
-        className="champ w-full py-2 text-sm sm:w-64"
-      />
-      <button type="submit" className="puce-filtre shrink-0">
-        OK
-      </button>
+      {/*
+        Champ et bouton dans une même pilule blanche : la barre est posée sur
+        le bandeau sombre, où un champ bordé disparaîtrait. L'anneau de focus
+        est porté par le groupe, le champ étant transparent.
+      */}
+      <div className="flex items-center gap-2 rounded-full bg-white p-1.5 shadow-carte focus-within:ring-2 focus-within:ring-ablode-vert-clair">
+        <input
+          id="recherche-articles"
+          type="search"
+          value={terme}
+          onChange={(e) => setTerme(e.target.value)}
+          placeholder={t('rechercher')}
+          className="w-full bg-transparent px-4 py-2 text-[0.9375rem] text-ablode-encre placeholder:text-ablode-gris focus:outline-none sm:w-64"
+        />
+        <button
+          type="submit"
+          className="shrink-0 rounded-full bg-ablode-nuit px-5 py-2 text-[0.875rem] font-semibold text-white transition-colors duration-200 hover:bg-ablode-encre"
+        >
+          Rechercher
+        </button>
+      </div>
     </form>
   );
 }

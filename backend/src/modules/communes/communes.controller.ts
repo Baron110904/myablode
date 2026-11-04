@@ -21,8 +21,10 @@ import {
 import { UserRole } from 'src/database/entities';
 import { AuditService } from 'src/modules/audit/audit.service';
 import { CommunesService } from './communes.service';
+import { ThrottleLecture } from 'src/common/throttle-lecture';
 
 @ApiTags('Communes')
+@ThrottleLecture()
 @Controller('communes')
 export class CommunesController {
   constructor(

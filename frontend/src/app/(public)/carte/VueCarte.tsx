@@ -136,7 +136,7 @@ export function VueCarte() {
       {/* ─── Bandeau ─────────────────────────────────────────────────── */}
       <div className="conteneur flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-ablode-trait py-4">
         <h1 className="text-lg font-bold">{t('titre')}</h1>
-        <p className="font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-ablode-gris sm:text-etiquette">
+        <p className="text-[0.6875rem] uppercase tracking-[0.1em] text-ablode-gris sm:text-etiquette">
           {carte.features.length > 0 && (
             <>
               {carte.features.length} {t('communes')} ·{' '}
@@ -163,7 +163,7 @@ export function VueCarte() {
         </button>
 
         {chargement && (
-          <span className="animate-pulsation font-mono text-etiquette uppercase text-ablode-gris">
+          <span className="animate-pulsation text-etiquette uppercase text-ablode-gris">
             {t('chargement')}
           </span>
         )}
@@ -181,7 +181,7 @@ export function VueCarte() {
         <div className="h-[58vh] min-h-[340px] w-full lg:h-[calc(100vh-260px)] lg:min-h-[520px]">
           {chargement && carte.features.length === 0 ? (
             <div className="flex h-full items-center justify-center">
-              <span className="animate-pulsation font-mono text-etiquette uppercase text-ablode-gris">
+              <span className="animate-pulsation text-etiquette uppercase text-ablode-gris">
                 {t('chargement')}
               </span>
             </div>
@@ -209,7 +209,7 @@ export function VueCarte() {
               <h2 className="mb-4 text-base font-bold">{t('filtrer')}</h2>
               <PanneauFiltres filtres={filtres} onChangement={setFiltres} />
               {chargement && (
-                <p className="mt-4 animate-pulsation font-mono text-etiquette uppercase text-ablode-gris">
+                <p className="mt-4 animate-pulsation text-etiquette uppercase text-ablode-gris">
                   {t('chargement')}
                 </p>
               )}
@@ -252,7 +252,7 @@ export function VueCarte() {
         )}
 
         {!commune && (
-          <p className="pointer-events-none absolute right-6 top-6 z-[400] hidden font-mono text-etiquette uppercase text-ablode-gris xl:block">
+          <p className="pointer-events-none absolute right-6 top-6 z-[400] hidden text-etiquette uppercase text-ablode-gris xl:block">
             {t('cliquezCommune')}
           </p>
         )}
@@ -293,7 +293,7 @@ export function VueCarte() {
           )}
 
           {!commune && carte.features.length > 0 && (
-            <p className="mt-5 font-mono text-etiquette uppercase text-ablode-gris">
+            <p className="mt-5 text-etiquette uppercase text-ablode-gris">
               {t('toucherCommune')}
             </p>
           )}

@@ -186,20 +186,30 @@ export default function PageActualitesAdmin() {
                     return (
                       <tr key={article.id} className="transition-colors duration-150 hover:bg-admin-fond">
                         <td className="admin-td max-w-md">
-                          <span className="block truncate font-bold">{article.titre}</span>
-                          <span className="mt-0.5 block truncate font-mono text-[0.75rem] text-admin-gris">
+                          <span className="flex items-center gap-2">
+                            <span className="truncate font-bold">{article.titre}</span>
+                            {/* Repère de la mise en avant : sans lui, il fallait
+                                ouvrir chaque article pour savoir lequel occupe
+                                l'encart de la page d'actualités. */}
+                            {article.a_la_une && (
+                              <span className="pastille pastille-normal shrink-0">
+                                À la une
+                              </span>
+                            )}
+                          </span>
+                          <span className="mt-0.5 block truncate text-[0.75rem] text-admin-gris">
                             /{article.slug}
                           </span>
                         </td>
                         <td className="admin-td">
                           {LIBELLES_CATEGORIE[article.categorie]}
                         </td>
-                        <td className="admin-td">{article.auteur ?? '—'}</td>
-                        <td className="admin-td font-mono text-[0.8125rem] uppercase">
+                        <td className="admin-td">{article.auteur ?? '-'}</td>
+                        <td className="admin-td text-[0.8125rem] uppercase">
                           {article.langue}
                         </td>
-                        <td className="admin-td font-mono text-[0.8125rem]">
-                          {article.date_publication ? dateHeure(article.date_publication) : '—'}
+                        <td className="admin-td text-[0.8125rem]">
+                          {article.date_publication ? dateHeure(article.date_publication) : '-'}
                         </td>
                         <td className="admin-td">
                           <span

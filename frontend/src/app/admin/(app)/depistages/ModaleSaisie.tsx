@@ -258,8 +258,8 @@ export function ModaleSaisie({
         {/* L'IMC n'est pas saisi : il découle du poids et de la taille. */}
         <p className="mt-4 rounded-carte bg-admin-fond px-5 py-3.5 text-sm">
           <span className="etiquette">IMC calculé</span>
-          <span className="ml-3 font-mono text-base font-bold tabular-nums">
-            {imcCalcule !== null ? imcCalcule.toFixed(2) : '—'}
+          <span className="ml-3 text-base font-bold tabular-nums">
+            {imcCalcule !== null ? imcCalcule.toFixed(2) : '-'}
           </span>
           <span className="ml-3 text-[0.8125rem] text-admin-gris">
             {imcCalcule !== null
@@ -359,7 +359,7 @@ function Champ({
           onChange={(e) => onChange(e.target.value)}
           className="admin-champ"
         >
-          <option value="">—</option>
+          <option value="">-</option>
           {options.map((option) => (
             <option key={option.valeur} value={option.valeur}>
               {option.libelle}

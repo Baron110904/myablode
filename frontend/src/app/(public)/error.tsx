@@ -21,7 +21,7 @@ export default function ErreurPublique({
   return (
     <div className="conteneur flex min-h-[60vh] items-center py-20">
       <div className="max-w-lg">
-        <p className="font-mono text-etiquette uppercase text-ablode-alerte">Erreur</p>
+        <p className="text-etiquette uppercase text-ablode-alerte">Erreur</p>
         <h1 className="mt-4 text-[2rem] font-bold leading-tight tracking-[-0.02em]">
           {t('titre500')}
         </h1>

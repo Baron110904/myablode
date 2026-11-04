@@ -39,7 +39,7 @@ export function Garde({
   if (chargement) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <span className="animate-pulsation font-mono text-etiquette uppercase text-admin-gris">
+        <span className="animate-pulsation text-etiquette uppercase text-admin-gris">
           Vérification de la session…
         </span>
       </div>

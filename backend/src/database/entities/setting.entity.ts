@@ -24,17 +24,3 @@ export class Setting {
   updated_at: Date | null;
 }
 
-/** Clés connues, centralisées pour éviter les chaînes magiques. */
-export const SettingKeys = {
-  SEUIL_GLYCEMIE_NORMALE: 'seuil_glycemie_normale',
-  SEUIL_GLYCEMIE_DIABETE: 'seuil_glycemie_diabete',
-  SEUIL_IMC_SURPOIDS: 'seuil_imc_surpoids',
-  SEUIL_IMC_OBESITE: 'seuil_imc_obesite',
-  SEUIL_ALERTE_PREVALENCE: 'seuil_alerte_prevalence',
-  LANGUES_ACTIVES: 'langues_actives',
-  LANGUE_DEFAUT: 'langue_defaut',
-  NEWSLETTER_TEMPLATE: 'newsletter_template',
-  NEWSLETTER_SIGNATURE: 'newsletter_signature',
-  SECURITE_2FA: 'securite_2fa',
-  SECURITE_DUREE_SESSION: 'securite_duree_session',
-} as const;

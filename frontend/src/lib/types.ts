@@ -19,6 +19,8 @@ export type CategorieArticle =
   | 'resultats'
   | 'evenements';
 export type StatutArticle = 'draft' | 'published' | 'archived';
+export type CategorieVideo = 'depistage' | 'evenement' | 'prevention' | 'campagne';
+export type StatutVideo = 'draft' | 'published';
 export type Periode = '7j' | '30j' | 'annee' | 'tout' | 'perso';
 
 export interface Paginated<T> {
@@ -131,6 +133,39 @@ export interface Depistage {
   created_at: string;
 }
 
+export interface Video {
+  id: number;
+  titre: string;
+  description: string | null;
+  categorie: CategorieVideo;
+  /** Chemin relatif à l'API : `/uploads/videos/…`. */
+  fichier_url: string;
+  fichier_nom: string;
+  /** Octets, sérialisés en chaîne par le pilote PostgreSQL (bigint). */
+  taille: string | null;
+  mime: string | null;
+  miniature_url: string | null;
+  duree_secondes: number | null;
+  statut: StatutVideo;
+  a_la_une: boolean;
+  date_publication: string | null;
+  created_at: string;
+}
+
+export interface Evenement {
+  id: number;
+  titre: string;
+  sous_titre: string | null;
+  /** Date seule, au format AAAA-MM-JJ. */
+  date_debut: string;
+  date_fin: string | null;
+  lieu: string | null;
+  description: string | null;
+  edition: string | null;
+  publie: boolean;
+  created_at: string;
+}
+
 export interface Article {
   id: number;
   titre: string;
@@ -143,6 +178,10 @@ export interface Article {
   langue: string;
   statut: StatutArticle;
   date_publication: string | null;
+  /** Mis en avant sur la page « Actualités », depuis le back-office. */
+  a_la_une: boolean;
+  /** Passée cette date, l'article quitte le site mais reste au back-office. */
+  date_retrait: string | null;
   meta_title: string | null;
   meta_description: string | null;
   created_at: string;
@@ -298,6 +337,12 @@ export interface FormulaireMarchePublic {
   /** Faux dès que la date de clôture est passée. */
   ouvert: boolean;
   inscrits: number;
+  /** Fiche pratique : chaque ligne absente disparaît de l'encart. */
+  dateEvenement: string | null;
+  lieu: string | null;
+  parcours: string | null;
+  surPlace: string | null;
+  aPrevoir: string[];
 }
 
 /** Réglages du formulaire, côté back-office. */
@@ -308,6 +353,12 @@ export interface FormulaireMarche {
   introduction: string | null;
   date_fermeture: string | null;
   message_ferme: string | null;
+  date_evenement: string | null;
+  lieu: string | null;
+  parcours: string | null;
+  sur_place: string | null;
+  /** Ce qu'il faut apporter, une ligne par élément. */
+  a_prevoir: string | null;
   publie: boolean;
   created_at: string;
 }
@@ -320,10 +371,11 @@ export interface InscriptionMarche {
   prenom: string;
   age: number;
   sexe: Sexe;
-  fonction: string;
+  /** Facultatif au bulletin, donc absent de certaines inscriptions. */
+  fonction: string | null;
   ville: string;
-  quartier: string;
-  /** Nul sur les inscriptions antérieures à l'ajout du champ. */
+  quartier: string | null;
+  /** Facultatif, et nul sur les inscriptions antérieures à l'ajout du champ. */
   email: string | null;
   telephone: string | null;
   deja_participe: boolean;

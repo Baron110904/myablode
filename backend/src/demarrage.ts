@@ -15,7 +15,7 @@
 const debut = Date.now();
 
 process.stdout.write(
-  'MyABLODE — chargement des modules…\n' +
+  'MyABLODE - chargement des modules…\n' +
     'Le premier démarrage peut demander une minute ou deux, sans affichage.\n',
 );
 

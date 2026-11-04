@@ -15,7 +15,7 @@ export function GraphiqueMensuel({ donnees }: { donnees: PointEvolution[] }) {
   if (donnees.length === 0) {
     return (
       <div className="flex h-[320px] items-center justify-center bg-admin-fond">
-        <span className="font-mono text-etiquette uppercase text-admin-gris">
+        <span className="text-etiquette uppercase text-admin-gris">
           Aucune donnée
         </span>
       </div>

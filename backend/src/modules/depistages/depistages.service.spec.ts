@@ -9,7 +9,7 @@ import {
 import { SettingsService } from 'src/modules/settings/settings.service';
 import { DepistagesService } from './depistages.service';
 
-describe('DepistagesService — classification clinique', () => {
+describe('DepistagesService - classification clinique', () => {
   let service: DepistagesService;
 
   const seuils = {

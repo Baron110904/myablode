@@ -55,7 +55,11 @@ design.zip
 # ─── Outillage local ───────────────────────────────────────────────────────
 .claude/
 CLAUDE.md
+AGENTS.md
 neon.txt
+specs/
+docs/
+DEPLOIEMENT.md
 
 # ─── Éditeurs et systèmes ──────────────────────────────────────────────────
 .vscode/
@@ -64,6 +68,14 @@ neon.txt
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# ─── Fichiers déposés depuis le back-office ────────────────────────────────
+# Les vidéos des actualités sont écrites ici par l'API. Elles appartiennent au
+# disque du serveur, pas au dépôt : une seule campagne filmée y ajouterait
+# plusieurs centaines de mégaoctets, définitivement, car Git ne sait pas
+# oublier un fichier qu'il a vu passer.
+backend/uploads/
+uploads/
 
 # ─── À NE PAS AJOUTER ICI ──────────────────────────────────────────────────
 # Les éléments suivants doivent partir sur GitHub, le déploiement en dépend :
@@ -76,6 +88,5 @@ desktop.ini
 #   .env.production.exemple  le modèle à recopier
 #   render.yaml              la description du service Render
 #   sauvegarder.sh           le script de sauvegarde
-#   DEPLOIEMENT.md           la notice
 #   docker-compose*.yml      et les Dockerfile
 

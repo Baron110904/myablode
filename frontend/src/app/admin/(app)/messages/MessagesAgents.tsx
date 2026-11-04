@@ -108,7 +108,7 @@ export function MessagesAgents() {
                             ? `Équipe de ${message.commune.nom}`
                             : 'Destinataire retiré')}
                     </span>
-                    <span className="font-mono text-[0.75rem] text-admin-gris">
+                    <span className="text-[0.75rem] text-admin-gris">
                       {dateHeure(message.created_at)}
                     </span>
                   </div>

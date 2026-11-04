@@ -22,7 +22,7 @@ export function Logo({
         style={{ maxHeight: taille }}
       />
       {avecTexte && (
-        <span className="font-mono text-etiquette-lg uppercase text-ablode-encre">
+        <span className="text-etiquette-lg uppercase text-ablode-encre">
           MyABLODE
         </span>
       )}
@@ -32,7 +32,7 @@ export function Logo({
   if (!href) return contenu;
 
   return (
-    <Link href={href} aria-label="MyABLODE — accueil" className="shrink-0">
+    <Link href={href} aria-label="MyABLODE - accueil" className="inline-flex shrink-0 items-center py-1.5">
       {contenu}
     </Link>
   );

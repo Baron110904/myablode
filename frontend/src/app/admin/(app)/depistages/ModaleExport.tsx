@@ -147,7 +147,7 @@ export function ModaleExport({
                 />
                 {colonne.libelle}
                 {colonne.nominative && (
-                  <span className="font-mono text-[0.6875rem] text-ablode-ambre">
+                  <span className="text-[0.6875rem] text-ablode-ambre">
                     nominatif
                   </span>
                 )}
@@ -158,7 +158,7 @@ export function ModaleExport({
       </fieldset>
 
       {filtresActifs.length > 0 && (
-        <p className="mt-6 bg-admin-fond px-4 py-3 font-mono text-[0.75rem] text-admin-gris">
+        <p className="mt-6 bg-admin-fond px-4 py-3 text-[0.75rem] text-admin-gris">
           Filtres appliqués :{' '}
           {filtresActifs.map(([cle, valeur]) => `${cle}=${valeur}`).join(' · ')}
         </p>

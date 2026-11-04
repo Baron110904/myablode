@@ -12,9 +12,12 @@
   },
   "accueil": {
     "campagneEnCours": "Campaign under way",
-    "titre": "Diabetes advances quietly",
-    "chapeau": "Thousands of Beninese live with diabetes without knowing it. ABLODE goes to find them, municipality by municipality, with free tests. Here is what those screenings reveal.",
+    "titre": "Diabetes\nand us",
+    "slogan": "Everyone concerned, everyone screened!",
+    "chapeau": "ABLODE runs free diabetes and obesity screening campaigns across Benin. The results are published here, district by district.",
     "explorerCarte": "Explore the map",
+    "voirLesResultats": "See the results",
+    "decouvrirAssociation": "About the association",
     "devenirBenevole": "Become a volunteer",
     "surLeTerrain": "From the field",
     "toutesActualites": "All news",
@@ -156,13 +159,14 @@
   "pied": {
     "association": "Beninese Association for the Fight against Obesity, Diabetes and Endocrine Disorders",
     "adresse": "Abomey-Calavi, Benin",
+    "adresseTitre": "Address",
+    "contactTitre": "Contact",
     "navigation": "Navigation",
     "association2": "The association",
     "suivre": "Follow us",
     "mentions": "Legal notice",
     "donnees": "Data protection",
-    "droits": "All rights reserved.",
-    "sourceDonnees": "Municipality boundaries: geoBoundaries (open data). Base map: OpenStreetMap."
+    "droits": "All rights reserved."
   },
   "erreurs": {
     "titre404": "Page not found",

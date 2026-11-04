@@ -61,6 +61,26 @@ export class Article {
   @Column({ type: 'timestamp', nullable: true })
   date_publication: Date | null;
 
+  /**
+   * Article mis en avant sur la page « Actualités ».
+   *
+   * Plusieurs articles peuvent l'être : les listes publiques les remontent
+   * en tête, et le plus récent d'entre eux occupe le grand encart. Sans
+   * aucun article coché, c'est la dernière parution qui le prend — mieux
+   * vaut un encart rempli par défaut qu'une page qui s'effondre parce que
+   * personne n'a pensé à cocher la case.
+   */
+  @Column({ type: 'boolean', default: false })
+  a_la_une: boolean;
+
+  /**
+   * Échéance facultative : passée cette date, l'article disparaît du site
+   * mais reste au back-office. L'annonce d'un événement se retire ainsi
+   * toute seule, sans dépublication manuelle ni perte de l'archive.
+   */
+  @Column({ type: 'timestamp', nullable: true })
+  date_retrait: Date | null;
+
   @Column({ type: 'varchar', length: 200, nullable: true })
   meta_title: string | null;
 

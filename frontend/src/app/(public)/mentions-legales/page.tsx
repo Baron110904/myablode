@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/mentions-legales' },
+  openGraph: { url: '/mentions-legales' },
   title: 'Mentions légales et protection des données',
   description:
     'Éditeur du site, hébergement, traitement des données de dépistage et ' +
@@ -14,15 +16,23 @@ export const metadata: Metadata = {
  */
 export default function PageMentionsLegales() {
   return (
-    <div className="conteneur py-12">
-      <h1 className="text-[2.25rem] font-bold leading-tight tracking-[-0.02em]">
-        Mentions légales et protection des données
-      </h1>
+    <>
+      <section className="bg-ablode-profond text-white">
+        <div className="conteneur py-14">
+          <p className="text-etiquette uppercase text-ablode-vert-clair">
+            Informations légales
+          </p>
+          <h1 className="mt-4 text-[2.25rem] font-bold leading-tight tracking-[-0.02em] sm:text-[2.75rem]">
+            Mentions légales et protection des données
+          </h1>
+        </div>
+      </section>
 
-      <div className="article-contenu mt-10 max-w-lecture">
+      <div className="conteneur py-12">
+        <div className="article-contenu max-w-lecture">
         <h2>Éditeur du site</h2>
         <p>
-          MyABLODE est édité par l’ABLODE — Association Béninoise de Lutte contre
+          MyABLODE est édité par l’ABLODE - Association Béninoise de Lutte contre
           l’Obésité, le Diabète et les Endocrinopathies, association à but non lucratif
           dont le siège est à Abomey-Calavi, Bénin.
         </p>
@@ -120,7 +130,8 @@ export default function PageMentionsLegales() {
           estimation épidémiologique de la prévalence réelle du diabète ou de l’obésité au
           Bénin.
         </p>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

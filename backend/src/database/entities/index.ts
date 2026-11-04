@@ -8,10 +8,12 @@ export * from './contact.entity';
 export * from './marche.entity';
 export * from './departement.entity';
 export * from './depistage.entity';
+export * from './evenement.entity';
 export * from './kobo-config.entity';
 export * from './newsletter.entity';
 export * from './setting.entity';
 export * from './user.entity';
+export * from './video.entity';
 
 import { Agent, AgentAffectation, AgentFelicitation } from './agent.entity';
 import { Article } from './article.entity';
@@ -23,10 +25,12 @@ import { Benevole, ContactMessage } from './contact.entity';
 import { FormulaireMarche, InscriptionMarche } from './marche.entity';
 import { Departement } from './departement.entity';
 import { Depistage } from './depistage.entity';
+import { Evenement } from './evenement.entity';
 import { KoboConfig, KoboSyncLog } from './kobo-config.entity';
 import { NewsletterAbonne, NewsletterEnvoi } from './newsletter.entity';
 import { Setting } from './setting.entity';
 import { User } from './user.entity';
+import { Video } from './video.entity';
 
 /** Liste explicite consommée par TypeORM (DataSource et TypeOrmModule). */
 export const ENTITIES = [
@@ -42,6 +46,7 @@ export const ENTITIES = [
   ContactMessage,
   Departement,
   Depistage,
+  Evenement,
   FormulaireMarche,
   InscriptionMarche,
   KoboConfig,
@@ -50,4 +55,5 @@ export const ENTITIES = [
   NewsletterEnvoi,
   Setting,
   User,
+  Video,
 ];

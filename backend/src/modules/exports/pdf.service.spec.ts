@@ -8,7 +8,7 @@ import { CampagneStatut, type Campagne } from 'src/database/entities';
  * ne déborde pas sur une seconde page sans qu'on s'en aperçoive, et qu'une
  * campagne sans aucune donnée produit tout de même un document exploitable.
  */
-describe('PdfService — rapport de campagne', () => {
+describe('PdfService - rapport de campagne', () => {
   const service = new PdfService();
 
   it('tient sur une seule page pour une campagne renseignée', async () => {
@@ -99,7 +99,7 @@ function statsCompletes(): StatsCampagne {
     id: 26,
     commune_id: 12,
     commune: { nom: 'Bantè', departement: 'Collines' },
-    nom: 'Dépistage Bantè — décembre 2025',
+    nom: 'Dépistage Bantè - décembre 2025',
     date_debut: '2025-12-17',
     date_fin: '2025-12-20',
     responsable: 'A. Tossou',

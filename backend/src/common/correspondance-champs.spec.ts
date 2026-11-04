@@ -37,7 +37,7 @@ describe('reduireNomChamp', () => {
   });
 });
 
-describe('deduireChampCible — formulaire Kobo réel', () => {
+describe('deduireChampCible - formulaire Kobo réel', () => {
   it.each([
     ['Nom', 'nom'],
     ['Pr_nom', 'prenom'],
@@ -76,7 +76,7 @@ describe('deduireChampCible — formulaire Kobo réel', () => {
   });
 });
 
-describe('deduireChampCible — libellés variés', () => {
+describe('deduireChampCible - libellés variés', () => {
   it.each([
     ['nom_complet', 'nom'],
     ['glyc_mgdl', 'glycemie'],

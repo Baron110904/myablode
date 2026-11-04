@@ -168,7 +168,7 @@ export function OngletKobo() {
               type="url"
               value={apiUrl}
               onChange={(e) => setApiUrl(e.target.value)}
-              className="admin-champ font-mono text-[0.8125rem]"
+              className="admin-champ text-[0.8125rem]"
               placeholder="https://kf.kobotoolbox.org"
             />
             <p className="mt-1.5 text-[0.75rem] text-admin-gris">
@@ -187,10 +187,10 @@ export function OngletKobo() {
               value={jeton}
               onChange={(e) => setJeton(e.target.value)}
               autoComplete="off"
-              className="admin-champ font-mono text-[0.8125rem]"
+              className="admin-champ text-[0.8125rem]"
               placeholder={
                 config?.token_configure
-                  ? '•••••••••• (jeton enregistré — laisser vide pour le conserver)'
+                  ? '•••••••••• (jeton enregistré - laisser vide pour le conserver)'
                   : 'Collez votre jeton API Kobo'
               }
             />
@@ -209,7 +209,7 @@ export function OngletKobo() {
               id="form_id"
               value={formId}
               onChange={(e) => setFormId(e.target.value)}
-              className="admin-champ font-mono text-[0.8125rem]"
+              className="admin-champ text-[0.8125rem]"
               placeholder="aBcDeFgH12345…"
             />
             <p className="mt-1.5 text-[0.75rem] text-admin-gris">
@@ -252,7 +252,7 @@ export function OngletKobo() {
                       >
                         <div className="min-w-0">
                           <p className="truncate text-sm font-bold">{formulaire.nom}</p>
-                          <p className="font-mono text-[0.75rem] text-admin-gris">
+                          <p className="text-[0.75rem] text-admin-gris">
                             {formulaire.uid} · {nombre(formulaire.soumissions)} soumissions
                           </p>
                         </div>
@@ -289,7 +289,7 @@ export function OngletKobo() {
                         key={champ}
                         className="grid grid-cols-[1fr_28px_1fr] items-center gap-3"
                       >
-                        <span className="truncate bg-admin-fond px-3 py-2.5 font-mono text-[0.8125rem]">
+                        <span className="truncate bg-admin-fond px-3 py-2.5 text-[0.8125rem]">
                           {champ}
                         </span>
                         <span aria-hidden className="text-center text-admin-gris">
@@ -304,11 +304,11 @@ export function OngletKobo() {
                             }))
                           }
                           aria-label={`Colonne cible pour ${champ}`}
-                          className="admin-champ font-mono text-[0.8125rem]"
+                          className="admin-champ text-[0.8125rem]"
                         >
                           {CHAMPS_CIBLES.map((cible) => (
                             <option key={cible} value={cible}>
-                              {cible || '— Ignorer'}
+                              {cible || '- Ignorer'}
                             </option>
                           ))}
                         </select>
@@ -381,7 +381,7 @@ export function OngletKobo() {
                 <p className="text-sm text-admin-gris">Jamais synchronisé.</p>
               )}
               {config.last_sync_message && (
-                <p className="mt-2 font-mono text-[0.75rem] leading-relaxed text-admin-gris">
+                <p className="mt-2 text-[0.75rem] leading-relaxed text-admin-gris">
                   {config.last_sync_message}
                 </p>
               )}
@@ -437,26 +437,26 @@ export function OngletKobo() {
               <tbody className="divide-y divide-admin-trait">
                 {logs.map((log) => (
                   <tr key={log.id}>
-                    <td className="admin-td whitespace-nowrap font-mono text-[0.8125rem]">
+                    <td className="admin-td whitespace-nowrap text-[0.8125rem]">
                       {dateHeure(log.created_at)}
                     </td>
                     <td className="admin-td">
                       {log.declencheur === 'cron' ? 'Automatique' : 'Manuelle'}
                     </td>
-                    <td className="admin-td font-mono text-[0.8125rem]">
+                    <td className="admin-td text-[0.8125rem]">
                       {nombre(log.nb_recus)}
                     </td>
-                    <td className="admin-td font-mono text-[0.8125rem]">
+                    <td className="admin-td text-[0.8125rem]">
                       {nombre(log.nb_importes)}
                     </td>
-                    <td className="admin-td font-mono text-[0.8125rem]">
+                    <td className="admin-td text-[0.8125rem]">
                       {nombre(log.nb_doublons)}
                     </td>
-                    <td className="admin-td font-mono text-[0.8125rem]">
+                    <td className="admin-td text-[0.8125rem]">
                       {nombre(log.nb_erreurs)}
                     </td>
-                    <td className="admin-td font-mono text-[0.8125rem]">
-                      {log.duree_ms ? `${(log.duree_ms / 1000).toFixed(1)} s` : '—'}
+                    <td className="admin-td text-[0.8125rem]">
+                      {log.duree_ms ? `${(log.duree_ms / 1000).toFixed(1)} s` : '-'}
                     </td>
                     <td className="admin-td">
                       <span

@@ -9,7 +9,7 @@ import type { ApercuFichier, Campagne, RapportImport } from '@/lib/types';
 
 /** Champs de `depistages` qu'une colonne de fichier peut alimenter. */
 const CHAMPS_CIBLES: Array<{ valeur: string; libelle: string; requis?: boolean }> = [
-  { valeur: '', libelle: '— Ignorer cette colonne' },
+  { valeur: '', libelle: '- Ignorer cette colonne' },
   { valeur: 'code_unique', libelle: 'code_unique' },
   { valeur: 'nom', libelle: 'nom', requis: true },
   { valeur: 'prenom', libelle: 'prenom' },
@@ -130,7 +130,7 @@ export function ModaleImport({
           <span
             key={cle}
             aria-current={etape === cle ? 'step' : undefined}
-            className={`-mb-px border-b-2 pb-3 font-mono text-etiquette uppercase ${
+            className={`-mb-px border-b-2 pb-3 text-etiquette uppercase ${
               etape === cle
                 ? 'border-admin-vert text-admin-vert'
                 : 'border-transparent text-admin-gris'
@@ -171,8 +171,8 @@ export function ModaleImport({
             <p className="text-sm font-bold">
               Glissez votre fichier ici, ou sélectionnez-le
             </p>
-            <p className="mt-2 font-mono text-[0.8125rem] text-admin-gris">
-              Formats acceptés : .csv, .xlsx, .xls — 20 Mo maximum
+            <p className="mt-2 text-[0.8125rem] text-admin-gris">
+              Formats acceptés : .csv, .xlsx, .xls - 20 Mo maximum
             </p>
 
             <input
@@ -221,7 +221,7 @@ export function ModaleImport({
             />
           </div>
 
-          <p className="rounded-full bg-admin-actif px-4 py-3 font-mono text-[0.8125rem]">
+          <p className="rounded-full bg-admin-actif px-4 py-3 text-[0.8125rem]">
             {apercu.nomFichier}{' '}
             <span className="text-admin-gris">
               {nombre(apercu.totalLignes)} lignes · {apercu.colonnes.length} colonnes
@@ -237,7 +237,7 @@ export function ModaleImport({
                     {apercu.colonnes.map((colonne) => (
                       <th
                         key={colonne}
-                        className="whitespace-nowrap px-3 py-2 text-left font-mono text-[0.6875rem] uppercase text-admin-gris"
+                        className="whitespace-nowrap px-3 py-2 text-left text-[0.6875rem] uppercase text-admin-gris"
                       >
                         {colonne}
                       </th>
@@ -267,7 +267,7 @@ export function ModaleImport({
             <ul className="space-y-2">
               {apercu.colonnes.map((colonne) => (
                 <li key={colonne} className="grid grid-cols-[1fr_28px_1fr] items-center gap-3">
-                  <span className="truncate bg-admin-fond px-3 py-2.5 font-mono text-[0.8125rem]">
+                  <span className="truncate bg-admin-fond px-3 py-2.5 text-[0.8125rem]">
                     {colonne}
                   </span>
                   <span aria-hidden className="text-center text-admin-gris">
@@ -279,7 +279,7 @@ export function ModaleImport({
                       setMapping((courant) => ({ ...courant, [colonne]: e.target.value }))
                     }
                     aria-label={`Champ cible pour ${colonne}`}
-                    className="admin-champ font-mono text-[0.8125rem]"
+                    className="admin-champ text-[0.8125rem]"
                   >
                     {CHAMPS_CIBLES.map((champ) => (
                       <option key={champ.valeur} value={champ.valeur}>
@@ -368,7 +368,7 @@ export function ModaleImport({
               <ul className="max-h-56 divide-y divide-admin-trait overflow-auto border border-admin-trait">
                 {rapport.detailErreurs.map((detail) => (
                   <li key={detail.ligne} className="flex gap-4 px-4 py-2.5 text-[0.8125rem]">
-                    <span className="shrink-0 font-mono text-admin-gris">
+                    <span className="shrink-0 text-admin-gris">
                       Ligne {detail.ligne}
                     </span>
                     <span>{detail.raison}</span>

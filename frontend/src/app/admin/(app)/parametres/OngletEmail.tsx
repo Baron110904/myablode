@@ -22,7 +22,7 @@ const PREREGLAGES = [
     host: 'localhost',
     port: 1025,
     aide:
-      'Capture les messages sans les livrer. À consulter sur http://localhost:8025 — ' +
+      'Capture les messages sans les livrer. À consulter sur http://localhost:8025 - ' +
       'idéal pour vérifier le contenu des envois sans risquer d’écrire à de vraies adresses.',
   },
   {
@@ -219,7 +219,7 @@ export function OngletEmail() {
                 value={host}
                 onChange={(e) => setHost(e.target.value)}
                 placeholder="smtp-relay.brevo.com"
-                className="admin-champ font-mono text-[0.8125rem]"
+                className="admin-champ text-[0.8125rem]"
               />
             </div>
             <div>
@@ -231,7 +231,7 @@ export function OngletEmail() {
                 type="number"
                 value={port}
                 onChange={(e) => setPort(Number(e.target.value))}
-                className="admin-champ font-mono text-[0.8125rem]"
+                className="admin-champ text-[0.8125rem]"
               />
               <p className="mt-1.5 text-[0.75rem] text-admin-gris">
                 587 le plus souvent
@@ -249,7 +249,7 @@ export function OngletEmail() {
                 value={user}
                 onChange={(e) => setUser(e.target.value)}
                 autoComplete="off"
-                className="admin-champ font-mono text-[0.8125rem]"
+                className="admin-champ text-[0.8125rem]"
               />
             </div>
             <div>
@@ -267,7 +267,7 @@ export function OngletEmail() {
                     ? '•••••••••• (laisser vide pour le conserver)'
                     : ''
                 }
-                className="admin-champ font-mono text-[0.8125rem]"
+                className="admin-champ text-[0.8125rem]"
               />
             </div>
           </div>

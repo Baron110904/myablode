@@ -7,7 +7,7 @@ import { MailService } from './mail.service';
  * Les diagnostics SMTP sont lus par un administrateur d'association, pas par
  * un développeur : chaque échec doit indiquer quoi vérifier.
  */
-describe('MailService — diagnostic des erreurs SMTP', () => {
+describe('MailService - diagnostic des erreurs SMTP', () => {
   let service: MailService;
 
   const valeurs: Record<string, unknown> = {

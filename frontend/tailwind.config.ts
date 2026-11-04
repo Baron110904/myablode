@@ -22,6 +22,11 @@ const config: Config = {
           encre: '#14241d',
           /** Vert très sombre : pied de page, boutons pleins, blocs d'appel. */
           nuit: '#12291f',
+          /**
+           * Fond des bandeaux de tête depuis la refonte. Valeur relevée au
+           * pixel sur `design/accueil-6a.png`, pas estimée.
+           */
+          profond: '#0a2318',
           papier: '#fafcfb',
           voile: '#f7faf8',
           /** Fin du dégradé du bandeau d'accueil. */
@@ -29,9 +34,29 @@ const config: Config = {
           trait: '#e3ebe6',
           gris: '#6b7671',
           vert: '#0d8f5b',
+          /**
+           * Vert vif des maquettes de la 6ᵉ édition : pavé du slogan et
+           * bouton « Explorer la carte ». Relevé à #37b34a sur
+           * `design/accueil-6a.png`.
+           *
+           * Il est plus lumineux que `vert`, et c'est la raison pour laquelle
+           * il reste cantonné aux grands aplats : du blanc dessus n'atteint
+           * que 2,9:1 de contraste, suffisant pour du texte de titre
+           * (seuil 3:1), insuffisant pour du texte courant.
+           */
+          'vert-vif': '#37b34a',
           'vert-clair': '#5ddc93',
           'vert-voile': '#eaf5ee',
           'vert-sombre': '#0a5f3d',
+          /**
+           * Bleu du programme de l'accueil : il distingue une date encore à
+           * venir d'une opération engagée, que le vert signale. Deux teintes
+           * valent mieux qu'une nuance de vert — la différence se lit sans
+           * avoir à comparer.
+           */
+          ciel: '#1e9fd8',
+          'ciel-voile': '#e3f2fb',
+          'ciel-sombre': '#0a4d7a',
           alerte: '#c0392b',
           'alerte-voile': '#fdecea',
           ambre: '#b45309',
@@ -64,7 +89,13 @@ const config: Config = {
       },
       fontFamily: {
         sans: ['var(--police-titre)', 'Segoe UI', 'Helvetica Neue', 'Arial', 'sans-serif'],
-        mono: ['var(--police-mono)', 'Consolas', 'Menlo', 'monospace'],
+        /*
+         * Le site n'a plus qu'une famille. `font-mono` reste défini — et
+         * pointe sur la même police — pour qu'un `font-mono` oublié quelque
+         * part rende dans la typo de la charte plutôt que de faire resurgir
+         * un Courier système.
+         */
+        mono: ['var(--police-titre)', 'Segoe UI', 'Helvetica Neue', 'Arial', 'sans-serif'],
       },
       fontSize: {
         // Libellés capitales espacées : en-têtes de tableau et intertitres.
@@ -89,6 +120,21 @@ const config: Config = {
       backgroundImage: {
         /** Bandeau d'accueil : blanc à gauche, vert d'eau à droite. */
         bandeau: 'linear-gradient(105deg, #fafcfb 0%, #f4faf6 42%, #dcefe5 100%)',
+        /**
+         * Voile posé sur la photographie du bandeau d'accueil.
+         *
+         * Les paliers reproduisent le dégradé relevé sur `accueil-6a.png` :
+         * opaque au point de couture (50 % de l'écran), il s'efface vite puis
+         * s'étire en traîne. Une simple interpolation linéaire laisserait la
+         * photographie déborder bien trop à gauche.
+         */
+        'voile-heros':
+          'linear-gradient(to right, #0a2318 0%, rgba(10,35,24,0.88) 10%,' +
+          ' rgba(10,35,24,0.72) 20%, rgba(10,35,24,0.55) 30%,' +
+          ' rgba(10,35,24,0.40) 40%, rgba(10,35,24,0.23) 50%,' +
+          ' rgba(10,35,24,0.16) 60%, rgba(10,35,24,0.12) 70%,' +
+          ' rgba(10,35,24,0.08) 80%, rgba(10,35,24,0.04) 90%,' +
+          ' rgba(10,35,24,0) 100%)',
       },
       keyframes: {
         apparition: {
@@ -124,6 +170,16 @@ const config: Config = {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-50%)' },
         },
+        /* Reflet qui traverse un bouton plein au survol. */
+        reflet: {
+          '0%': { transform: 'translateX(-120%)' },
+          '100%': { transform: 'translateX(220%)' },
+        },
+        /* Respiration lente de la photographie du bandeau d'accueil. */
+        'zoom-lent': {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.06)' },
+        },
       },
       animation: {
         apparition: 'apparition 0.25s ease-out',
@@ -133,6 +189,10 @@ const config: Config = {
         battement: 'battement 1.4s ease-in-out infinite',
         'entree-flux': 'entree-flux 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
         defilement: 'defilement 42s linear infinite',
+        /** Bande de logos partenaires : assez lente pour être lisible. */
+        bande: 'defilement 46s linear infinite',
+        reflet: 'reflet 0.9s ease-out',
+        'zoom-lent': 'zoom-lent 24s ease-in-out infinite',
       },
     },
   },

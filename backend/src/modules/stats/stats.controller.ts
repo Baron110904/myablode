@@ -11,8 +11,10 @@ import {
   FiltresStatsDto,
 } from './dto/filtres.dto';
 import { StatsService } from './stats.service';
+import { ThrottleLecture } from 'src/common/throttle-lecture';
 
 @ApiTags('Statistiques')
+@ThrottleLecture()
 @Controller('stats')
 export class StatsController {
   constructor(
@@ -48,6 +50,13 @@ export class StatsController {
     return this.stats.carteGeoJson(filtres);
   }
 
+  /*
+   * Rétablie après la dépose de la carte vivante de l'accueil : celle-ci
+   * n'était pas la seule à s'en servir. Les pages « Carte » et « Résultats »
+   * interrogent cette route toutes les quinze secondes pour signaler les
+   * dépistages qui arrivent ; privées d'elle, elles n'affichaient plus rien
+   * et appelaient dans le vide une adresse répondant 404.
+   */
   @Public()
   @Get('derniers')
   @ApiOperation({
@@ -117,6 +126,16 @@ export class StatsController {
   }
 
   // ─── Routes admin ────────────────────────────────────────────────────────
+
+  @Get('en-attente')
+  @ApiBearerAuth()
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.VIEWER)
+  @ApiOperation({
+    summary: 'Ce qui attend une action, pour les pastilles de la navigation',
+  })
+  enAttente() {
+    return this.stats.enAttente();
+  }
 
   @Get('dashboard')
   @ApiBearerAuth()

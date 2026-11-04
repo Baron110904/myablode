@@ -146,7 +146,7 @@ export function EncadreFlux({
             <span className="truncate text-[0.8125rem] font-semibold">
               {arrivee.commune}
             </span>
-            <span className="shrink-0 font-mono text-[0.75rem] tabular-nums text-ablode-gris">
+            <span className="shrink-0 text-[0.75rem] tabular-nums text-ablode-gris">
               {heure(arrivee.horodatage)}
             </span>
           </li>
@@ -158,6 +158,6 @@ export function EncadreFlux({
 
 function heure(horodatage: string): string {
   const valeur = new Date(horodatage);
-  if (Number.isNaN(valeur.getTime())) return '—';
+  if (Number.isNaN(valeur.getTime())) return '-';
   return valeur.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
 }

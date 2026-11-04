@@ -55,7 +55,7 @@ export function Desinscription({ token }: { token: string }) {
   return (
     <div className="conteneur py-20">
       <div className="mx-auto max-w-lg border border-ablode-trait bg-white p-10 text-center">
-        <p className="font-mono text-etiquette uppercase text-ablode-gris">
+        <p className="text-etiquette uppercase text-ablode-gris">
           {t('desinscription')}
         </p>
 

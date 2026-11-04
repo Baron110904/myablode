@@ -179,7 +179,7 @@ export function ModaleFelicitations({
             placeholder="Ce que vous voulez reconnaître, en une phrase."
             className="admin-champ-multiligne"
           />
-          <p className="mt-2 text-right font-mono text-[0.75rem] text-admin-gris">
+          <p className="mt-2 text-right text-[0.75rem] text-admin-gris">
             {message.length} / 280
           </p>
         </div>

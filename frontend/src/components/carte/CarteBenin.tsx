@@ -188,7 +188,7 @@ export default function CarteBenin({
       const props = feature.properties;
 
       couche.bindTooltip(
-        `<span class="font-mono text-[11px] uppercase tracking-wider">${echapper(props.nom)}</span>` +
+        `<span class="text-[11px] uppercase tracking-wider">${echapper(props.nom)}</span>` +
           `<br/><span class="text-[12px]">${
             props.depistages > 0
               ? `${nombre(props.depistages)} dépistages · ${pourcentage(props.taux)}`

@@ -30,7 +30,7 @@ export const GABARITS: Gabarit[] = [
       { nom: 'lien', role: 'Adresse de réinitialisation, valable une heure' },
       { nom: 'duree', role: 'Durée de validité du lien' },
     ],
-    sujet: 'MyABLODE — Réinitialisation de votre mot de passe',
+    sujet: 'MyABLODE - Réinitialisation de votre mot de passe',
     corps:
       '<p>Vous avez demandé la réinitialisation de votre mot de passe.</p>' +
       '<p>Ce lien est valable {{duree}}. Passé ce délai, il faudra en demander un nouveau.</p>' +
@@ -42,7 +42,7 @@ export const GABARITS: Gabarit[] = [
     libelle: 'Accusé de réception d’un message',
     description: 'Confirmation aux personnes qui écrivent via le formulaire de contact.',
     variables: [{ nom: 'nom', role: 'Nom saisi dans le formulaire' }],
-    sujet: 'MyABLODE — Nous avons bien reçu votre message',
+    sujet: 'MyABLODE - Nous avons bien reçu votre message',
     corps:
       '<p>Votre message est bien arrivé à l’ABLODE. Notre équipe vous répondra ' +
       'dans les meilleurs délais.</p>',
@@ -52,7 +52,7 @@ export const GABARITS: Gabarit[] = [
     libelle: 'Confirmation de candidature',
     description: 'Accusé de réception aux personnes qui se proposent comme bénévoles.',
     variables: [{ nom: 'prenom', role: 'Prénom du candidat' }],
-    sujet: 'MyABLODE — Votre candidature de bénévole',
+    sujet: 'MyABLODE - Votre candidature de bénévole',
     corps:
       '<p>Merci pour votre candidature. Un membre de l’équipe vous contactera ' +
       'pour vous présenter les prochaines campagnes de dépistage près de chez ' +
@@ -65,7 +65,7 @@ export const GABARITS: Gabarit[] = [
       'Envoyé quand une candidature est acceptée. Ne contient aucun identifiant : ' +
       'ils sont remis en main propre.',
     variables: [{ nom: 'prenom', role: 'Prénom du bénévole' }],
-    sujet: 'MyABLODE — Bienvenue parmi les bénévoles de l’ABLODE',
+    sujet: 'MyABLODE - Bienvenue parmi les bénévoles de l’ABLODE',
     corps:
       '<p>Votre candidature est retenue. Bienvenue dans l’équipe des bénévoles ' +
       'de l’ABLODE.</p>' +
@@ -82,7 +82,7 @@ export const GABARITS: Gabarit[] = [
       { nom: 'motif', role: 'Raison de l’échec, telle que remontée' },
       { nom: 'echecs', role: 'Nombre d’échecs consécutifs' },
     ],
-    sujet: 'MyABLODE — Échec de la synchronisation des données',
+    sujet: 'MyABLODE - Échec de la synchronisation des données',
     corps:
       '<p>La récupération des données de terrain a échoué {{echecs}} fois de suite.</p>' +
       '<p>Motif signalé : {{motif}}</p>' +

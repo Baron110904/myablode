@@ -19,9 +19,9 @@ describe('nombre', () => {
   });
 
   it('affiche un tiret pour une valeur absente', () => {
-    expect(nombre(null)).toBe('—');
-    expect(nombre(undefined)).toBe('—');
-    expect(nombre(Number.NaN)).toBe('—');
+    expect(nombre(null)).toBe('-');
+    expect(nombre(undefined)).toBe('-');
+    expect(nombre(Number.NaN)).toBe('-');
   });
 
   it('utilise une espace insécable dessinée par les polices', () => {
@@ -44,7 +44,7 @@ describe('pourcentage', () => {
   });
 
   it('affiche un tiret pour une valeur absente', () => {
-    expect(pourcentage(null)).toBe('—');
+    expect(pourcentage(null)).toBe('-');
   });
 });
 

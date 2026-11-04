@@ -81,18 +81,18 @@ export function ModaleCandidature({
       <Modale titre="Accès créés" onFermer={onFermer}>
         <Alerte type="attention">
           Notez ces identifiants maintenant. Ils ne sont pas envoyés par
-          courriel et ne pourront plus être affichés — seul un nouveau mot de
+          courriel et ne pourront plus être affichés - seul un nouveau mot de
           passe pourra être généré depuis la page Utilisateurs.
         </Alerte>
 
         <dl className="mt-5 divide-y divide-admin-trait border-y border-admin-trait">
           <div className="flex items-center justify-between gap-4 py-3">
             <dt className="etiquette">Adresse</dt>
-            <dd className="font-mono text-sm font-bold">{identifiants.email}</dd>
+            <dd className="text-sm font-bold">{identifiants.email}</dd>
           </div>
           <div className="flex items-center justify-between gap-4 py-3">
             <dt className="etiquette">Mot de passe</dt>
-            <dd className="select-all font-mono text-base font-bold tracking-wide">
+            <dd className="select-all text-base font-bold tracking-wide">
               {identifiants.motDePasse}
             </dd>
           </div>
@@ -130,9 +130,9 @@ export function ModaleCandidature({
       <dl className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
         {[
           ['Courriel', candidature.email],
-          ['Téléphone', candidature.telephone ?? '—'],
-          ['Ville', candidature.ville ?? '—'],
-          ['Disponibilité', candidature.disponibilite ?? '—'],
+          ['Téléphone', candidature.telephone ?? '-'],
+          ['Ville', candidature.ville ?? '-'],
+          ['Disponibilité', candidature.disponibilite ?? '-'],
         ].map(([libelle, valeur]) => (
           <div key={libelle}>
             <dt className="etiquette">{libelle}</dt>

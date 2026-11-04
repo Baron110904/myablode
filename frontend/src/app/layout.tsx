@@ -20,7 +20,13 @@ import './globals.css';
  * Plus Jakarta Sans : géométrique à « a » d'un seul étage, terminaisons
  * coupées en biais, « 1 » sans empattement et « 7 » sans barre — les traits
  * relevés sur les maquettes de la refonte. Elle porte les titres comme le
- * texte courant ; une seule famille suffit à tenir l'ensemble.
+ * texte courant.
+ *
+ * C'est désormais la seule famille du site. Une monospace y cohabitait pour
+ * les libellés en capitales et les colonnes de chiffres ; le mélange se
+ * voyait d'une section à l'autre, et l'alignement des chiffres est obtenu
+ * par `tabular-nums`, que cette police fournit. Trois fichiers de moins à
+ * télécharger au premier affichage.
  *
  * Police variable : un seul fichier couvre les graisses 400 à 800.
  */
@@ -32,24 +38,12 @@ const jakarta = localFont({
   fallback: ['system-ui', 'sans-serif'],
 });
 
-/** Réservée aux valeurs chiffrées, aux identifiants et au suivi en direct. */
-const plexMono = localFont({
-  src: [
-    { path: '../polices/plex-400.woff2', weight: '400', style: 'normal' },
-    { path: '../polices/plex-500.woff2', weight: '500', style: 'normal' },
-    { path: '../polices/plex-600.woff2', weight: '600', style: 'normal' },
-  ],
-  display: 'swap',
-  variable: '--police-mono',
-  fallback: ['ui-monospace', 'monospace'],
-});
-
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000',
   ),
   title: {
-    default: 'MyABLODE — Dépistage du diabète et de l’obésité au Bénin',
+    default: 'MyABLODE - Dépistage du diabète et de l’obésité au Bénin',
     template: '%s · MyABLODE',
   },
   description:
@@ -87,7 +81,7 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={`${jakarta.variable} ${plexMono.variable}`}>
+    <html lang={locale} className={jakarta.variable}>
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           {children}

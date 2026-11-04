@@ -8,22 +8,22 @@ import type { Setting } from '@/lib/types';
 
 const DESCRIPTIONS: Record<string, { libelle: string; unite: string; aide: string }> = {
   seuil_glycemie_normale: {
-    libelle: 'Glycémie — limite du normal',
+    libelle: 'Glycémie - limite du normal',
     unite: 'mg/dL',
     aide: 'En dessous de cette valeur, le résultat est classé « Normal ».',
   },
   seuil_glycemie_diabete: {
-    libelle: 'Glycémie — seuil du diabète',
+    libelle: 'Glycémie - seuil du diabète',
     unite: 'mg/dL',
     aide: 'À partir de cette valeur, le résultat est classé « Diabète ». Entre les deux seuils : « Pré-diabète ».',
   },
   seuil_imc_surpoids: {
-    libelle: 'IMC — seuil de surpoids',
+    libelle: 'IMC - seuil de surpoids',
     unite: '',
     aide: 'Valeur indicative affichée dans les fiches.',
   },
   seuil_imc_obesite: {
-    libelle: 'IMC — seuil d’obésité',
+    libelle: 'IMC - seuil d’obésité',
     unite: '',
     aide: 'À partir de cette valeur, un dépistage de type obésité est classé « Obésité ».',
   },
@@ -149,7 +149,7 @@ export function OngletSeuils() {
                     className="admin-champ max-w-[140px]"
                   />
                   {info?.unite && (
-                    <span className="font-mono text-sm text-admin-gris">{info.unite}</span>
+                    <span className="text-sm text-admin-gris">{info.unite}</span>
                   )}
                 </div>
                 <p className="mt-1.5 max-w-lg text-[0.75rem] leading-relaxed text-admin-gris">

@@ -143,7 +143,7 @@ export default function PageNewsletter() {
         <Panneau
           titre="Derniers envois"
           action={
-            <span className="font-mono text-[0.8125rem] text-admin-gris">
+            <span className="text-[0.8125rem] text-admin-gris">
               {nombre(envois.total)} au total
             </span>
           }
@@ -159,7 +159,7 @@ export default function PageNewsletter() {
                 >
                   <div className="min-w-0">
                     <p className="truncate text-sm font-bold">{envoi.sujet}</p>
-                    <p className="mt-0.5 font-mono text-[0.75rem] text-admin-gris">
+                    <p className="mt-0.5 text-[0.75rem] text-admin-gris">
                       {envoi.date_envoi ? dateHeure(envoi.date_envoi) : 'Non envoyé'} ·{' '}
                       {nombre(envoi.nb_destinataires)} destinataires
                     </p>
@@ -221,10 +221,10 @@ export default function PageNewsletter() {
                 <tbody className="divide-y divide-admin-trait">
                   {abonnes.items.map((abonne) => (
                     <tr key={abonne.id} className="transition-colors duration-150 hover:bg-admin-fond">
-                      <td className="admin-td font-mono text-[0.8125rem]">
+                      <td className="admin-td text-[0.8125rem]">
                         {abonne.email}
                       </td>
-                      <td className="admin-td font-mono text-[0.8125rem]">
+                      <td className="admin-td text-[0.8125rem]">
                         {dateHeure(abonne.created_at)}
                       </td>
                       <td className="admin-td">
@@ -387,7 +387,7 @@ function ModaleEnvoi({
             onChange={(e) => choisirArticle(e.target.value)}
             className="admin-champ"
           >
-            <option value="">— Rédiger un contenu libre</option>
+            <option value="">- Rédiger un contenu libre</option>
             {articles.map((article) => (
               <option key={article.id} value={article.id}>
                 {article.titre}

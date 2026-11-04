@@ -1,5 +1,6 @@
 import type {
   CategorieArticle,
+  CategorieVideo,
   ResultatDepistage,
   SourceDepistage,
   StatutCampagne,
@@ -20,7 +21,7 @@ import type {
 export const FUSEAU_BENIN = 'Africa/Porto-Novo';
 
 export function nombre(valeur: number | null | undefined): string {
-  if (valeur === null || valeur === undefined || Number.isNaN(valeur)) return '—';
+  if (valeur === null || valeur === undefined || Number.isNaN(valeur)) return '-';
   // Intl produit une espace fine insécable (U+202F) que beaucoup de polices,
   // Inter comprise, rendent sans largeur : « 11732 » au lieu de « 11 732 ».
   // L'espace insécable classique (U+00A0) est universellement dessinée.
@@ -28,7 +29,7 @@ export function nombre(valeur: number | null | undefined): string {
 }
 
 export function pourcentage(valeur: number | null | undefined, decimales = 1): string {
-  if (valeur === null || valeur === undefined || Number.isNaN(valeur)) return '—';
+  if (valeur === null || valeur === undefined || Number.isNaN(valeur)) return '-';
   return `${valeur.toFixed(decimales).replace('.', ',')} %`;
 }
 
@@ -38,9 +39,9 @@ export function variation(valeur: number): string {
 }
 
 export function date(valeur: string | Date | null | undefined): string {
-  if (!valeur) return '—';
+  if (!valeur) return '-';
   const d = new Date(valeur);
-  if (Number.isNaN(d.getTime())) return '—';
+  if (Number.isNaN(d.getTime())) return '-';
   return d.toLocaleDateString('fr-FR', {
     day: 'numeric',
     month: 'long',
@@ -50,9 +51,9 @@ export function date(valeur: string | Date | null | undefined): string {
 }
 
 export function dateCourte(valeur: string | Date | null | undefined): string {
-  if (!valeur) return '—';
+  if (!valeur) return '-';
   const d = new Date(valeur);
-  if (Number.isNaN(d.getTime())) return '—';
+  if (Number.isNaN(d.getTime())) return '-';
   return d.toLocaleDateString('fr-FR', {
     day: '2-digit',
     month: '2-digit',
@@ -62,9 +63,9 @@ export function dateCourte(valeur: string | Date | null | undefined): string {
 }
 
 export function dateHeure(valeur: string | Date | null | undefined): string {
-  if (!valeur) return '—';
+  if (!valeur) return '-';
   const d = new Date(valeur);
-  if (Number.isNaN(d.getTime())) return '—';
+  if (Number.isNaN(d.getTime())) return '-';
   return d.toLocaleString('fr-FR', {
     day: '2-digit',
     month: '2-digit',
@@ -88,9 +89,9 @@ export function moisAnnee(valeur: string): string {
 
 /** Ancienneté lisible : « il y a 4 min », « il y a 3 j ». */
 export function depuis(valeur: string | Date | null | undefined): string {
-  if (!valeur) return '—';
+  if (!valeur) return '-';
   const d = new Date(valeur);
-  if (Number.isNaN(d.getTime())) return '—';
+  if (Number.isNaN(d.getTime())) return '-';
 
   const secondes = Math.floor((Date.now() - d.getTime()) / 1000);
   if (secondes < 60) return "à l'instant";
@@ -138,6 +139,132 @@ export const LIBELLES_CATEGORIE: Record<CategorieArticle, string> = {
   resultats: 'Résultats',
   evenements: 'Événements',
 };
+
+export const LIBELLES_CATEGORIE_VIDEO: Record<CategorieVideo, string> = {
+  depistage: 'Dépistage',
+  evenement: 'Événement',
+  prevention: 'Prévention',
+  campagne: 'Campagne',
+};
+
+// ─── Programme de l'édition ──────────────────────────────────────────────────
+
+/**
+ * Jour civil au Bénin, au format AAAA-MM-JJ.
+ *
+ * Le calcul du « dans combien de jours » doit se faire en jours civils, pas
+ * en tranches de 24 heures : à 23 h, un événement du lendemain matin est
+ * « demain », pas « dans 0 jour ». La locale `en-CA` rend directement le
+ * format ISO, sans recomposition manuelle.
+ */
+export function jourBenin(valeur: Date | string = new Date()): string {
+  const d = typeof valeur === 'string' ? new Date(valeur) : valeur;
+  if (Number.isNaN(d.getTime())) return '';
+  return d.toLocaleDateString('en-CA', { timeZone: FUSEAU_BENIN });
+}
+
+/** Nombre de jours civils entre deux dates AAAA-MM-JJ. */
+function ecartEnJours(depuisJour: string, versJour: string): number {
+  const a = Date.parse(`${depuisJour}T00:00:00Z`);
+  const b = Date.parse(`${versJour}T00:00:00Z`);
+  if (Number.isNaN(a) || Number.isNaN(b)) return 0;
+  return Math.round((b - a) / 86_400_000);
+}
+
+export interface EtatEvenement {
+  cle: 'en_cours' | 'aujourdhui' | 'a_venir' | 'passe';
+  libelle: string;
+}
+
+/**
+ * Pastille d'un événement du programme : « En cours », « Dans 11 jours »…
+ *
+ * `aujourdhui` est un paramètre et non `new Date()` interne : la fonction est
+ * appelée côté serveur, et la rendre pure la laisse testable sans geler
+ * l'horloge.
+ */
+export function etatEvenement(
+  dateDebut: string,
+  dateFin: string | null,
+  aujourdhui: string = jourBenin(),
+): EtatEvenement {
+  const debut = dateDebut.slice(0, 10);
+  const fin = (dateFin ?? dateDebut).slice(0, 10);
+
+  if (fin < aujourdhui) return { cle: 'passe', libelle: 'Terminé' };
+  // Opération entamée et pas encore close : c'est le seul cas « en cours ».
+  if (debut < aujourdhui) return { cle: 'en_cours', libelle: 'En cours' };
+  if (debut === aujourdhui) return { cle: 'aujourdhui', libelle: 'Aujourd’hui' };
+
+  const jours = ecartEnJours(aujourdhui, debut);
+  return {
+    cle: 'a_venir',
+    libelle: jours === 1 ? 'Demain' : `Dans ${jours} jours`,
+  };
+}
+
+/**
+ * Période d'un événement, en capitales dans le bandeau : « 5 NOVEMBRE »,
+ * « 1ᵉʳ – 30 NOV. ». Le premier du mois s'écrit « 1ᵉʳ » en français.
+ */
+export function periodeEvenement(dateDebut: string, dateFin: string | null): string {
+  const debut = new Date(`${dateDebut.slice(0, 10)}T12:00:00Z`);
+  if (Number.isNaN(debut.getTime())) return '';
+
+  const jour = (d: Date) => {
+    const numero = Number(d.toLocaleDateString('en-CA', { timeZone: 'UTC' }).slice(8));
+    return numero === 1 ? '1ᵉʳ' : String(numero);
+  };
+  const mois = (d: Date, abrege: boolean) =>
+    d.toLocaleDateString('fr-FR', { month: abrege ? 'short' : 'long', timeZone: 'UTC' });
+
+  if (!dateFin || dateFin.slice(0, 10) === dateDebut.slice(0, 10)) {
+    return `${jour(debut)} ${mois(debut, false)}`;
+  }
+
+  const fin = new Date(`${dateFin.slice(0, 10)}T12:00:00Z`);
+  if (Number.isNaN(fin.getTime())) return `${jour(debut)} ${mois(debut, false)}`;
+
+  // Même mois : il ne s'écrit qu'une fois, « 1ᵉʳ – 30 nov. ».
+  const memeMois = mois(debut, true) === mois(fin, true);
+  return memeMois
+    ? `${jour(debut)} – ${jour(fin)} ${mois(fin, true)}`
+    : `${jour(debut)} ${mois(debut, true)} – ${jour(fin)} ${mois(fin, true)}`;
+}
+
+// ─── Vidéos ──────────────────────────────────────────────────────────────────
+
+/** Durée d'une vidéo au format « 3:42 » ou « 1:04:08 ». */
+export function duree(secondes: number | null | undefined): string {
+  if (secondes === null || secondes === undefined || !Number.isFinite(secondes)) {
+    return '-';
+  }
+  const total = Math.max(0, Math.round(secondes));
+  const heures = Math.floor(total / 3600);
+  const minutes = Math.floor((total % 3600) / 60);
+  const reste = total % 60;
+
+  const paire = (valeur: number) => String(valeur).padStart(2, '0');
+  return heures > 0
+    ? `${heures}:${paire(minutes)}:${paire(reste)}`
+    : `${minutes}:${paire(reste)}`;
+}
+
+/** Poids d'un fichier, en unité lisible. */
+export function tailleFichier(octets: number | string | null | undefined): string {
+  const valeur = typeof octets === 'string' ? Number(octets) : octets;
+  if (valeur === null || valeur === undefined || !Number.isFinite(valeur)) return '-';
+  if (valeur < 1024) return `${valeur} o`;
+
+  const unites = ['ko', 'Mo', 'Go'];
+  let taille = valeur / 1024;
+  let rang = 0;
+  while (taille >= 1024 && rang < unites.length - 1) {
+    taille /= 1024;
+    rang += 1;
+  }
+  return `${taille.toFixed(taille < 10 ? 1 : 0).replace('.', ',')} ${unites[rang]}`;
+}
 
 /**
  * Première page d'un compte après connexion.
@@ -229,6 +356,8 @@ export const LIBELLES_ENTITE: Record<string, string> = {
   depistage: 'Dépistage',
   campagne: 'Campagne',
   article: 'Article',
+  video: 'Vidéo',
+  evenement: 'Événement',
   communes: 'Communes',
   settings: 'Paramètres',
   kobo: 'Kobo',

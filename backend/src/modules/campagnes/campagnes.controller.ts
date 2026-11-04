@@ -31,8 +31,10 @@ import {
   QueryCampagnesDto,
   UpdateCampagneDto,
 } from './dto/campagne.dto';
+import { ThrottleLecture } from 'src/common/throttle-lecture';
 
 @ApiTags('Campagnes')
+@ThrottleLecture()
 @Controller('campagnes')
 export class CampagnesController {
   constructor(

@@ -46,10 +46,14 @@ export function EditeurArticle({
     date_publication: article?.date_publication
       ? new Date(article.date_publication).toISOString().slice(0, 16)
       : '',
+    date_retrait: article?.date_retrait
+      ? new Date(article.date_retrait).toISOString().slice(0, 16)
+      : '',
     meta_title: article?.meta_title ?? '',
     meta_description: article?.meta_description ?? '',
   });
 
+  const [aLaUne, setALaUne] = useState(article?.a_la_une ?? false);
   const [apercu, setApercu] = useState(false);
   const [erreur, setErreur] = useState('');
   const [erreurs, setErreurs] = useState<string[]>([]);
@@ -101,6 +105,16 @@ export function EditeurArticle({
       date_publication: valeurs.date_publication
         ? new Date(valeurs.date_publication).toISOString()
         : undefined,
+      a_la_une: aLaUne,
+      /*
+       * `null` et non `undefined` : `JSON.stringify` laisse tomber les
+       * propriétés indéfinies, et l'API ne verrait pas la différence entre
+       * « champ vidé » et « champ non transmis ». Une échéance posée par
+       * erreur resterait alors impossible à retirer.
+       */
+      date_retrait: valeurs.date_retrait
+        ? new Date(valeurs.date_retrait).toISOString()
+        : null,
       meta_title: valeurs.meta_title || undefined,
       meta_description: valeurs.meta_description || undefined,
     };
@@ -153,6 +167,8 @@ export function EditeurArticle({
 
   const publicationFuture =
     valeurs.date_publication && new Date(valeurs.date_publication) > new Date();
+  const retraitPasse =
+    valeurs.date_retrait && new Date(valeurs.date_retrait) <= new Date();
 
   return (
     <>
@@ -291,7 +307,7 @@ export function EditeurArticle({
                         rows={20}
                         value={valeurs.contenu}
                         onChange={(e) => maj('contenu', e.target.value)}
-                        className="block w-full resize-y bg-white px-4 py-3.5 font-mono text-[0.8125rem] leading-relaxed text-admin-encre placeholder:text-admin-gris focus:outline-none"
+                        className="block w-full resize-y bg-white px-4 py-3.5 text-[0.8125rem] leading-relaxed text-admin-encre placeholder:text-admin-gris focus:outline-none"
                         placeholder="<p>Votre texte…</p>"
                       />
                     </div>
@@ -343,6 +359,40 @@ export function EditeurArticle({
                     </p>
                   )}
                 </div>
+
+                <div>
+                  <label htmlFor="date_retrait" className="etiquette mb-2 block">
+                    Date de retrait (facultatif)
+                  </label>
+                  <input
+                    id="date_retrait"
+                    type="datetime-local"
+                    value={valeurs.date_retrait}
+                    onChange={(e) => maj('date_retrait', e.target.value)}
+                    className="admin-champ-multiligne"
+                  />
+                  <p className="mt-1.5 text-[0.75rem] text-admin-gris">
+                    {retraitPasse
+                      ? 'Date passée : l’article ne figure plus sur le site. Il reste modifiable ici.'
+                      : 'Passée cette date, l’article quitte le site mais reste au back-office. Laissez vide pour qu’il y demeure.'}
+                  </p>
+                </div>
+
+                <label className="flex cursor-pointer items-start gap-3 rounded-carte border border-admin-trait bg-white px-4 py-3">
+                  <input
+                    type="checkbox"
+                    checked={aLaUne}
+                    onChange={(e) => setALaUne(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 rounded border-admin-trait accent-ablode-vert"
+                  />
+                  <span className="text-[0.8125rem] leading-snug">
+                    <span className="font-semibold">À la une</span>
+                    <span className="mt-1 block text-[0.75rem] text-admin-gris">
+                      Remonte l’article en tête des actualités. Le plus récent des
+                      articles à la une occupe le grand encart.
+                    </span>
+                  </span>
+                </label>
 
                 <div>
                   <label htmlFor="categorie" className="etiquette mb-2 block">
@@ -431,7 +481,7 @@ export function EditeurArticle({
                     value={valeurs.slug}
                     onChange={(e) => maj('slug', e.target.value)}
                     placeholder="générée automatiquement depuis le titre"
-                    className="admin-champ font-mono text-[0.8125rem]"
+                    className="admin-champ text-[0.8125rem]"
                   />
                   <p className="mt-1.5 text-[0.75rem] text-admin-gris">
                     Fin de l’adresse web de l’article. La modifier après

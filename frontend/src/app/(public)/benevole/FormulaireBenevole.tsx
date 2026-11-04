@@ -84,7 +84,7 @@ export function FormulaireBenevole() {
         role="status"
         className="flex flex-col items-start justify-center border border-ablode-trait bg-white p-9"
       >
-        <span className="font-mono text-etiquette uppercase text-ablode-vert">
+        <span className="text-etiquette uppercase text-ablode-vert">
           ✓ Candidature reçue
         </span>
         <p className="mt-4 text-[1.0625rem] leading-relaxed">{messageServeur}</p>

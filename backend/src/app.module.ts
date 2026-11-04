@@ -19,6 +19,7 @@ import { CommunesModule } from './modules/communes/communes.module';
 import { ContactsModule } from './modules/contacts/contacts.module';
 import { MarcheModule } from './modules/marche/marche.module';
 import { DepistagesModule } from './modules/depistages/depistages.module';
+import { EvenementsModule } from './modules/evenements/evenements.module';
 import { ExportsModule } from './modules/exports/exports.module';
 import { PdfModule } from './modules/exports/pdf.module';
 import { HealthModule } from './modules/health/health.module';
@@ -29,6 +30,7 @@ import { NewsletterModule } from './modules/newsletter/newsletter.module';
 import { SettingsModule } from './modules/settings/settings.module';
 import { StatsModule } from './modules/stats/stats.module';
 import { UsersModule } from './modules/users/users.module';
+import { VideosModule } from './modules/videos/videos.module';
 
 @Module({
   imports: [
@@ -97,6 +99,8 @@ import { UsersModule } from './modules/users/users.module';
     StatsModule,
     AgentsModule,
     ArticlesModule,
+    VideosModule,
+    EvenementsModule,
     NewsletterModule,
     ContactsModule,
     MarcheModule,

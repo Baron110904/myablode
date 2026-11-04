@@ -346,7 +346,7 @@ export class ImportsService {
         normaliserTexte(valeurs.code_unique, 50) ??
         (await genererCodeDepistage(this.dataSource, dateDepistage)),
       nom,
-      prenom: normaliserTexte(valeurs.prenom, 100) ?? '—',
+      prenom: normaliserTexte(valeurs.prenom, 100) ?? '-',
       date_naissance: dateNaissance,
       sexe,
       telephone: normaliserTexte(valeurs.telephone, 20),

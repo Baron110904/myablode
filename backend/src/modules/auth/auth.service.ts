@@ -9,10 +9,22 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import { randomBytes, createHash } from 'crypto';
+import type { SignOptions } from 'jsonwebtoken';
 import { authenticator } from 'otplib';
 import { Repository } from 'typeorm';
 import { User, UserRole } from 'src/database/entities';
 import { LoginDto } from './dto/auth.dto';
+
+/**
+ * Durée de validité acceptée par la signature JWT : un nombre de secondes,
+ * ou une durée écrite (« 15m », « 7d »).
+ *
+ * Le type est emprunté à `jsonwebtoken` plutôt que redéclaré : depuis sa
+ * version 12, `@nestjs/jwt` n'accepte plus un `string` quelconque, et une
+ * chaîne mal formée dans l'environnement ne serait plus détectée qu'à
+ * l'exécution, au moment de la première connexion.
+ */
+type DureeJeton = NonNullable<SignOptions['expiresIn']>;
 
 export interface TokenPair {
   accessToken: string;
@@ -84,11 +96,11 @@ export class AuthService {
 
     const accessToken = await this.jwt.signAsync(payload, {
       secret: this.config.get<string>('jwt.accessSecret'),
-      expiresIn: this.config.get<string>('jwt.accessTtl'),
+      expiresIn: this.config.get<DureeJeton>('jwt.accessTtl'),
     });
     const refreshToken = await this.jwt.signAsync(payload, {
       secret: this.config.get<string>('jwt.refreshSecret'),
-      expiresIn: this.config.get<string>('jwt.refreshTtl'),
+      expiresIn: this.config.get<DureeJeton>('jwt.refreshTtl'),
     });
 
     await this.users.update(user.id, {

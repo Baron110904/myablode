@@ -1,6 +1,6 @@
 import { assainirHtml } from './sanitize-html';
 
-describe('assainirHtml — neutralisation des vecteurs XSS', () => {
+describe('assainirHtml - neutralisation des vecteurs XSS', () => {
   it('supprime les balises script et leur contenu', () => {
     const sortie = assainirHtml('<p>Bonjour</p><script>alert("xss")</script>');
     expect(sortie).not.toContain('script');
@@ -31,6 +31,19 @@ describe('assainirHtml — neutralisation des vecteurs XSS', () => {
     expect(assainirHtml('<form action="/x"><input name="a"></form>')).toBe('');
     expect(assainirHtml('<iframe src="https://evil.example"></iframe>')).not.toContain(
       'evil.example',
+    );
+  });
+
+  /*
+   * Relevé pendant une campagne de tests : l'adresse refusée disparaissait
+   * bien, mais la balise restait, vidée. L'article publié contenait alors un
+   * cadre inerte, invisible à la relecture du rédacteur.
+   */
+  it('ne laisse pas un iframe vide quand sa source est refusée', () => {
+    expect(assainirHtml('<iframe src="//evil.example"></iframe>')).toBe('');
+    expect(assainirHtml('<iframe></iframe>')).toBe('');
+    expect(assainirHtml('<p>Avant</p><iframe src="http://pirate.bj"></iframe><p>Après</p>')).toBe(
+      '<p>Avant</p><p>Après</p>',
     );
   });
 
@@ -78,7 +91,7 @@ describe('assainirHtml — neutralisation des vecteurs XSS', () => {
  * `class` comme `style` étaient effacés. À l'enregistrement, la mise en forme
  * s'évaporait sans explication.
  */
-describe('assainirHtml — conservation de la mise en forme', () => {
+describe('assainirHtml - conservation de la mise en forme', () => {
   it('conserve tous les niveaux de titre', () => {
     const sortie = assainirHtml('<h1>Un</h1><h2>Deux</h2><h5>Cinq</h5>');
     expect(sortie).toBe('<h1>Un</h1><h2>Deux</h2><h5>Cinq</h5>');
@@ -110,7 +123,7 @@ describe('assainirHtml — conservation de la mise en forme', () => {
   });
 });
 
-describe('assainirHtml — filtrage de l’attribut style', () => {
+describe('assainirHtml - filtrage de l’attribut style', () => {
   it('conserve les propriétés de mise en forme', () => {
     expect(assainirHtml('<p style="text-align:center;color:#0f766e">Centre</p>')).toBe(
       '<p style="text-align:center; color:#0f766e">Centre</p>',
@@ -153,7 +166,7 @@ describe('assainirHtml — filtrage de l’attribut style', () => {
  * Deux contournements confirmés exploitables sur la page publique d'un article
  * — rendue côté serveur, où un <script> injecté s'exécute réellement.
  */
-describe('assainirHtml — contournements confirmés', () => {
+describe('assainirHtml - contournements confirmés', () => {
   it('refuse un « javascript: » encodé en entité HTML', () => {
     // Le navigateur décode &colon; puis exécute le lien au clic. Vérifié.
     expect(assainirHtml('<a href="javascript&colon;alert(1)">x</a>')).toBe('<a>x</a>');

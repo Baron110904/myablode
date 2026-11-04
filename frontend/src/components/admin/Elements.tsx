@@ -19,7 +19,7 @@ export function EnTetePage({
       <div className="flex flex-wrap items-center gap-4">
         <h1 className="text-xl font-bold tracking-[-0.01em]">{titre}</h1>
         {complement && (
-          <span className="font-mono text-[0.8125rem] text-admin-gris">{complement}</span>
+          <span className="text-[0.8125rem] text-admin-gris">{complement}</span>
         )}
         {badge}
       </div>
@@ -82,7 +82,7 @@ export function Chargement({
   if (message) {
     return (
       <div className="flex items-center justify-center px-6 py-16">
-        <span className="animate-pulsation font-mono text-etiquette uppercase text-admin-gris">
+        <span className="animate-pulsation text-etiquette uppercase text-admin-gris">
           {message}
         </span>
       </div>
@@ -134,7 +134,7 @@ export function Alerte({
           type="button"
           onClick={onFermer}
           aria-label="Fermer"
-          className="shrink-0 font-mono leading-none opacity-60 hover:opacity-100"
+          className="shrink-0 leading-none opacity-60 hover:opacity-100"
         >
           ×
         </button>
@@ -193,7 +193,7 @@ export function Modale({
           <div>
             <h2 className="text-lg font-bold tracking-[-0.01em]">{titre}</h2>
             {sousTitre && (
-              <p className="mt-1 font-mono text-[0.8125rem] text-admin-gris">{sousTitre}</p>
+              <p className="mt-1 text-[0.8125rem] text-admin-gris">{sousTitre}</p>
             )}
           </div>
           <button
@@ -239,7 +239,7 @@ export function Pagination({
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-4 border-t border-admin-trait px-6 py-4">
-      <p className="font-mono text-[0.8125rem] text-admin-gris">
+      <p className="text-[0.8125rem] text-admin-gris">
         {debut}–{fin} sur {new Intl.NumberFormat('fr-FR').format(total)}
       </p>
 
@@ -309,7 +309,7 @@ export function ConfirmationSuppression({
           type="button"
           onClick={onConfirmer}
           disabled={enCours}
-          className="inline-flex items-center justify-center bg-ablode-alerte px-4 py-2.5 font-mono text-etiquette uppercase text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+          className="inline-flex items-center justify-center bg-ablode-alerte px-4 py-2.5 text-etiquette uppercase text-white transition-opacity hover:opacity-90 disabled:opacity-50"
         >
           {enCours ? '…' : libelleConfirmation}
         </button>

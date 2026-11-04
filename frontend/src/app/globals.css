@@ -216,6 +216,11 @@
     @apply bg-ablode-violet-voile text-ablode-violet;
   }
 
+  /* Date encore à venir, dans le programme de l'accueil. */
+  .pastille-ciel {
+    @apply bg-ablode-ciel-voile text-ablode-ciel-sombre;
+  }
+
   .pastille-neutre {
     @apply bg-admin-fond text-admin-gris;
   }
@@ -228,11 +233,13 @@
    * pas une page.
    */
   .direct-etiquette {
-    @apply font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-white/45;
+    @apply text-[0.6875rem] uppercase tracking-[0.12em] text-white/45;
   }
 
   .direct-valeur {
-    @apply font-mono tabular-nums text-white;
+    /* `tabular-nums` suffit à aligner les colonnes de chiffres : c'est ce
+       qu'apportait la monospace, sans la seconde famille. */
+    @apply tabular-nums text-white;
   }
 
   .direct-point {
@@ -241,6 +248,20 @@
 }
 
 @layer utilities {
+  /*
+   * Entrée en cascade des bandeaux de tête.
+   *
+   * Purement CSS, contrairement au composant `Reveler` qui attend un
+   * IntersectionObserver : le contenu d'un bandeau est visible d'emblée, il
+   * n'a rien à révéler au défilement. Surtout, il s'affiche sans attendre
+   * l'hydratation — sinon la première chose que voit le visiteur est un
+   * aplat vert vide, et le plus grand élément de la page n'arrive qu'après
+   * le JavaScript.
+   */
+  .entree {
+    animation: entree-montee 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
   .titre-affiche {
     @apply text-[2.75rem] font-extrabold leading-[1.06] tracking-[-0.035em] sm:text-[3.5rem];
   }
@@ -251,6 +272,34 @@
 
   .chiffre-cle {
     @apply text-[2.25rem] font-extrabold leading-none tracking-[-0.03em] sm:text-[2.75rem];
+  }
+}
+
+/*
+ * L'entrée joue sur `translate`, propriété distincte de `transform`, et non
+ * sur `transform: translateY()`.
+ *
+ * La raison est de cascade : une animation l'emporte sur les déclarations
+ * ordinaires, et `animation-fill-mode: both` fige l'état final. Une image clé
+ * finissant sur `transform: none` effaçait donc définitivement toute
+ * transformation posée par ailleurs — c'est ce qui redressait le pavé incliné
+ * du slogan. `translate` se compose avec `transform` au lieu de le remplacer.
+ */
+@keyframes entree-montee {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Le contenu reste affiché : seul le mouvement disparaît. */
+  .entree {
+    animation: none;
   }
 }
 
@@ -424,7 +473,10 @@
 }
 
 .article-contenu code {
-  @apply rounded bg-ablode-voile px-1.5 py-0.5 font-mono text-[0.9em];
+  /* Même famille que le reste : le site ne publie pas de code, et une
+     seconde police pour un cas qui ne se présente pas ne se justifie pas.
+     Le fond teinté suffit à marquer l'extrait. */
+  @apply rounded bg-ablode-voile px-1.5 py-0.5 text-[0.9em];
 }
 
 @media print {

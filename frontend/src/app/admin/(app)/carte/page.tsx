@@ -159,7 +159,7 @@ export default function PageCarteAdmin() {
     ctx.fillStyle = '#101614';
     ctx.font = 'bold 22px sans-serif';
     ctx.fillText(
-      `MyABLODE — Prévalence par ${niveau === 'departement' ? 'département' : 'commune'}`,
+      `MyABLODE - Prévalence par ${niveau === 'departement' ? 'département' : 'commune'}`,
       40,
       44,
     );
@@ -221,7 +221,7 @@ export default function PageCarteAdmin() {
               <h2 className="etiquette mb-4">Filtrer la carte</h2>
               <PanneauFiltres filtres={filtres} onChangement={setFiltres} compact />
               {chargement && (
-                <p className="mt-4 animate-pulsation font-mono text-etiquette uppercase text-admin-gris">
+                <p className="mt-4 animate-pulsation text-etiquette uppercase text-admin-gris">
                   Chargement…
                 </p>
               )}

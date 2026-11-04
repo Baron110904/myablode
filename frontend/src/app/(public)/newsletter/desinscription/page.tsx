@@ -6,10 +6,15 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function PageDesinscription({
+/*
+ * Depuis Next 15, `params` et `searchParams` arrivent sous forme de
+ * promesses : le rendu peut commencer avant que la requete soit
+ * entierement analysee. Il faut donc les attendre avant de les lire.
+ */
+export default async function PageDesinscription({
   searchParams,
 }: {
-  searchParams: { token?: string };
+  searchParams: Promise<{ token?: string }>;
 }) {
-  return <Desinscription token={searchParams.token ?? ''} />;
+  return <Desinscription token={(await searchParams).token ?? ''} />;
 }

@@ -25,20 +25,55 @@ export class ConfigurerFormulaireDto {
   @IsOptional()
   @IsString()
   @Length(0, 2000)
-  introduction?: string;
+  introduction?: string | null;
 
   @ApiPropertyOptional({
     description: 'Date et heure de clôture. Sans elle, le formulaire reste ouvert.',
   })
   @IsOptional()
   @IsDateString()
-  date_fermeture?: string;
+  date_fermeture?: string | null;
 
   @ApiPropertyOptional({ description: 'Message affiché une fois la date passée' })
   @IsOptional()
   @IsString()
   @Length(0, 400)
-  message_ferme?: string;
+  message_ferme?: string | null;
+
+  @ApiPropertyOptional({
+    nullable: true,
+    description: 'Jour et heure du départ, mis en avant sur la fiche pratique',
+  })
+  @IsOptional()
+  @IsDateString()
+  date_evenement?: string | null;
+
+  @ApiPropertyOptional({ maxLength: 200, nullable: true })
+  @IsOptional()
+  @IsString()
+  @Length(0, 200)
+  lieu?: string | null;
+
+  @ApiPropertyOptional({ maxLength: 100, nullable: true, example: '5 km' })
+  @IsOptional()
+  @IsString()
+  @Length(0, 100)
+  parcours?: string | null;
+
+  @ApiPropertyOptional({ maxLength: 200, nullable: true })
+  @IsOptional()
+  @IsString()
+  @Length(0, 200)
+  sur_place?: string | null;
+
+  @ApiPropertyOptional({
+    nullable: true,
+    description: 'Ce qu’il faut apporter, une ligne par élément',
+  })
+  @IsOptional()
+  @IsString()
+  @Length(0, 1000)
+  a_prevoir?: string | null;
 
   @ApiPropertyOptional({ default: false })
   @IsOptional()
@@ -79,28 +114,33 @@ export class CreerInscriptionDto {
   @IsIn(['M', 'F'], { message: 'Sexe attendu : M ou F.' })
   sexe: 'M' | 'F';
 
-  @ApiProperty({ maxLength: 120, description: 'Profession ou rôle déclaré' })
+  @ApiPropertyOptional({ maxLength: 120, description: 'Profession ou rôle déclaré' })
+  @IsOptional()
   @IsString()
   @Length(2, 120)
-  fonction: string;
+  fonction?: string;
 
   @ApiProperty({ maxLength: 100 })
   @IsString()
   @Length(2, 100)
   ville: string;
 
-  @ApiProperty({ maxLength: 120 })
+  @ApiPropertyOptional({ maxLength: 120 })
+  @IsOptional()
   @IsString()
   @Length(2, 120)
-  quartier: string;
+  quartier?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     maxLength: 150,
-    description: 'Ajouté à la lettre d’information, avec mention sur le formulaire',
+    description:
+      'Facultatif. S’il est donné, il est ajouté à la lettre d’information, ' +
+      'ce que le formulaire annonce.',
   })
+  @IsOptional()
   @IsEmail({}, { message: 'Adresse électronique invalide.' })
   @Length(5, 150)
-  email: string;
+  email?: string;
 
   @ApiProperty({ maxLength: 30 })
   @IsString()

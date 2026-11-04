@@ -30,7 +30,16 @@ export class ArticlesService {
       .andWhere(
         '(article.date_publication IS NULL OR article.date_publication <= now())',
       )
-      .orderBy('article.date_publication', 'DESC')
+      .andWhere('(article.date_retrait IS NULL OR article.date_retrait > now())')
+      /*
+       * Les articles à la une passent devant, les autres restent du plus
+       * récent au plus ancien. Trier ainsi plutôt que laisser la page
+       * chercher l'article mis en avant garantit qu'il se trouve sur la
+       * première page : coché sur une parution de mars, il serait sinon
+       * invisible dès que douze articles l'auraient suivi.
+       */
+      .orderBy('article.a_la_une', 'DESC')
+      .addOrderBy('article.date_publication', 'DESC')
       .skip(query.skip)
       .take(query.limit);
 
@@ -87,6 +96,7 @@ export class ArticlesService {
       .andWhere(
         '(article.date_publication IS NULL OR article.date_publication <= now())',
       )
+      .andWhere('(article.date_retrait IS NULL OR article.date_retrait > now())')
       .orderBy('article.date_publication', 'DESC')
       .take(limite)
       .getMany();
@@ -106,9 +116,16 @@ export class ArticlesService {
   /** Version publique : un brouillon ne doit pas fuiter via son URL. */
   async findBySlugPublic(slug: string): Promise<Article> {
     const article = await this.findBySlug(slug);
+    const maintenant = new Date();
     const publie =
       article.statut === ArticleStatut.PUBLISHED &&
-      (!article.date_publication || article.date_publication <= new Date());
+      (!article.date_publication || article.date_publication <= maintenant) &&
+      /*
+       * Un article retiré répond 404 et non une page vide : son adresse
+       * circule encore dans les courriels et les partages, et il vaut mieux
+       * dire « cela n'existe plus » que servir une coquille.
+       */
+      (!article.date_retrait || article.date_retrait > maintenant);
     if (!publie) {
       throw new NotFoundException(`Article « ${slug} » introuvable.`);
     }
@@ -135,6 +152,7 @@ export class ArticlesService {
       contenu: assainirHtml(dto.contenu),
       extrait: dto.extrait ?? this.extraireResume(dto.contenu),
       date_publication: this.resoudreDatePublication(dto),
+      date_retrait: dto.date_retrait ? new Date(dto.date_retrait) : null,
     });
     return this.repository.save(article);
   }
@@ -152,8 +170,17 @@ export class ArticlesService {
       }
     }
 
-    const { slug, contenu, date_publication, ...reste } = dto;
+    const { slug, contenu, date_publication, date_retrait, ...reste } = dto;
     Object.assign(article, reste);
+
+    /*
+     * `undefined` signifie « champ non transmis », `null` « champ vidé ».
+     * Les distinguer permet d'effacer une échéance depuis le back-office :
+     * confondues, la date restait inscrite quoi qu'on fasse.
+     */
+    if (date_retrait !== undefined) {
+      article.date_retrait = date_retrait ? new Date(date_retrait) : null;
+    }
 
     if (date_publication !== undefined) {
       article.date_publication = date_publication ? new Date(date_publication) : null;
@@ -178,6 +205,7 @@ export class ArticlesService {
        FROM articles
        WHERE statut = 'published'
          AND (date_publication IS NULL OR date_publication <= now())
+         AND (date_retrait IS NULL OR date_retrait > now())
        GROUP BY categorie ORDER BY total DESC`,
     );
   }

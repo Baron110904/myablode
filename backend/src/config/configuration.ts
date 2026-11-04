@@ -40,6 +40,12 @@ export interface AppConfig {
     sameSite: 'lax' | 'strict' | 'none';
   };
   throttle: { ttl: number; limit: number };
+  uploads: {
+    /** Racine des fichiers déposés depuis le back-office. */
+    dir: string;
+    /** Plafond d'une vidéo, en mégaoctets. */
+    maxVideoMo: number;
+  };
   smtp: {
     host?: string;
     port: number;
@@ -108,6 +114,15 @@ export default (): AppConfig => ({
   throttle: {
     ttl: toInt(process.env.THROTTLE_TTL, 60),
     limit: toInt(process.env.THROTTLE_LIMIT, 100),
+  },
+  uploads: {
+    /*
+     * Chemin absolu recommandé en production : c'est le point de montage du
+     * disque persistant. Laissé relatif, le dossier suit le conteneur et les
+     * vidéos disparaissent au redéploiement — voir DEPLOIEMENT.md.
+     */
+    dir: process.env.UPLOADS_DIR ?? 'uploads',
+    maxVideoMo: toInt(process.env.UPLOAD_VIDEO_MAX_MO, 200),
   },
   smtp: {
     host: process.env.SMTP_HOST || undefined,

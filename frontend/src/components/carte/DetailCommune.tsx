@@ -35,7 +35,7 @@ export function DetailCommune({
             />
             <h3 className="text-lg font-bold leading-tight">{commune.nom}</h3>
           </div>
-          <p className="mt-1 pl-6 font-mono text-etiquette uppercase text-ablode-gris">
+          <p className="mt-1 pl-6 text-etiquette uppercase text-ablode-gris">
             {commune.niveau === 'departement'
               ? libelleNiveau(commune.niveau)
               : commune.departement}
@@ -46,7 +46,7 @@ export function DetailCommune({
           type="button"
           onClick={onFermer}
           aria-label="Fermer le détail"
-          className="shrink-0 font-mono text-lg leading-none text-ablode-gris hover:text-ablode-encre"
+          className="shrink-0 text-lg leading-none text-ablode-gris hover:text-ablode-encre"
         >
           ×
         </button>
@@ -66,7 +66,7 @@ export function DetailCommune({
           {commune.couverture !== null && commune.population !== null && (
             <div className="mt-5 border-t border-ablode-trait pt-4">
               <dl className="flex items-baseline justify-between">
-                <dt className="font-mono text-etiquette uppercase text-ablode-gris">
+                <dt className="text-etiquette uppercase text-ablode-gris">
                   Dépistés pour 1 000 habitants
                 </dt>
                 <dd className="text-lg font-bold">
@@ -88,7 +88,7 @@ export function DetailCommune({
           </div>
 
           {commune.derniere_campagne && (
-            <p className="mt-4 font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-ablode-gris">
+            <p className="mt-4 text-[0.6875rem] uppercase tracking-[0.1em] text-ablode-gris">
               {t('derniereCampagne')} : {date(commune.derniere_campagne)}
             </p>
           )}

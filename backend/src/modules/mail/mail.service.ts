@@ -139,7 +139,7 @@ export class MailService {
   async envoyer(message: Message): Promise<boolean> {
     if (!this.transporter) {
       this.logger.log(
-        `[EMAIL NON ENVOYÉ — SMTP absent] à ${message.to} · « ${message.subject} »`,
+        `[EMAIL NON ENVOYÉ - SMTP absent] à ${message.to} · « ${message.subject} »`,
       );
       return false;
     }
@@ -171,7 +171,7 @@ export class MailService {
 
     const envoye = await this.envoyer({
       to: destinataire,
-      subject: 'MyABLODE — Message de test',
+      subject: 'MyABLODE - Message de test',
       html: gabarit(
         'Configuration validée',
         `<p>Si vous lisez ce message, l’envoi d’emails depuis la plateforme MyABLODE
@@ -235,7 +235,7 @@ export class MailService {
       to: email,
       subject: remplirGabarit(modele.sujet, {}),
       html: gabarit(
-        remplirGabarit(modele.sujet, {}).replace(/^MyABLODE\s*[—–-]\s*/, ''),
+        remplirGabarit(modele.sujet, {}).replace(/^MyABLODE\s*[-–-]\s*/, ''),
         remplirGabarit(modele.corps, { lien, duree: 'une heure' }, ['lien']) + bouton,
       ),
     });
@@ -272,7 +272,7 @@ export class MailService {
   ): Promise<boolean> {
     return this.envoyer({
       to: email,
-      subject: 'Votre candidature de bénévole — ABLODE',
+      subject: 'Votre candidature de bénévole - ABLODE',
       html: `<p>Bonjour ${echapper(prenom)},</p>${enParagraphes(reponse)}<p>L’équipe de l’ABLODE</p>`,
     });
   }
@@ -348,7 +348,7 @@ function gabarit(titre: string, corps: string): string {
       <div style="color:#334155;font-size:15px;line-height:1.65">${corps}</div>
     </div>
     <p style="margin-top:20px;text-align:center;color:#94a3b8;font-size:12px">
-      ABLODE — Association Béninoise de Lutte contre l’Obésité, le Diabète et les Endocrinopathies · Abomey-Calavi, Bénin
+      ABLODE - Association Béninoise de Lutte contre l’Obésité, le Diabète et les Endocrinopathies · Abomey-Calavi, Bénin
     </p>
   </div>
 </body></html>`;

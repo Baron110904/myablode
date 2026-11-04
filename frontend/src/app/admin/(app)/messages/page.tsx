@@ -193,11 +193,11 @@ export default function PageMessages() {
                         <span className="text-sm font-bold">{message.nom}</span>
                         <a
                           href={`mailto:${message.email}`}
-                          className="font-mono text-[0.8125rem] text-admin-vert hover:underline"
+                          className="text-[0.8125rem] text-admin-vert hover:underline"
                         >
                           {message.email}
                         </a>
-                        <span className="font-mono text-[0.75rem] text-admin-gris">
+                        <span className="text-[0.75rem] text-admin-gris">
                           {dateHeure(message.created_at)}
                         </span>
                       </p>
@@ -248,19 +248,19 @@ export default function PageMessages() {
                       <td className="admin-td">
                         <a
                           href={`mailto:${benevole.email}`}
-                          className="block font-mono text-[0.8125rem] text-admin-vert hover:underline"
+                          className="block text-[0.8125rem] text-admin-vert hover:underline"
                         >
                           {benevole.email}
                         </a>
                         {benevole.telephone && (
-                          <span className="font-mono text-[0.75rem] text-admin-gris">
+                          <span className="text-[0.75rem] text-admin-gris">
                             {benevole.telephone}
                           </span>
                         )}
                       </td>
-                      <td className="admin-td">{benevole.ville ?? '—'}</td>
-                      <td className="admin-td">{benevole.disponibilite ?? '—'}</td>
-                      <td className="admin-td font-mono text-[0.8125rem]">
+                      <td className="admin-td">{benevole.ville ?? '-'}</td>
+                      <td className="admin-td">{benevole.disponibilite ?? '-'}</td>
+                      <td className="admin-td text-[0.8125rem]">
                         {dateHeure(benevole.created_at)}
                       </td>
                       <td className="admin-td">

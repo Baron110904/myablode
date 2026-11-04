@@ -152,7 +152,7 @@ export default function PageTableauDeBord() {
             </div>
 
             <div className="grid gap-5 xl:grid-cols-[1.75fr_1fr]">
-              <Panneau titre="Évolution mensuelle" action={<span className="font-mono text-[0.8125rem] text-admin-gris">12 derniers mois</span>}>
+              <Panneau titre="Évolution mensuelle" action={<span className="text-[0.8125rem] text-admin-gris">12 derniers mois</span>}>
                 <GraphiqueMensuel donnees={donnees.evolution} />
               </Panneau>
 
@@ -162,7 +162,7 @@ export default function PageTableauDeBord() {
                   peut('super_admin', 'admin') ? (
                     <Link
                       href="/admin/carte"
-                      className="font-mono text-etiquette uppercase text-admin-vert hover:underline"
+                      className="text-etiquette uppercase text-admin-vert hover:underline"
                     >
                       Ouvrir
                     </Link>
@@ -202,7 +202,7 @@ export default function PageTableauDeBord() {
                           <span className="pastille pastille-alerte">
                             {pourcentage(commune.taux)}
                           </span>
-                          <span className="font-mono text-[0.8125rem] text-admin-gris">
+                          <span className="text-[0.8125rem] text-admin-gris">
                             {nombre(commune.depistages)} dép.
                           </span>
                         </span>
@@ -233,12 +233,12 @@ export default function PageTableauDeBord() {
                             {entree.user && (
                               <span className="text-admin-gris">
                                 {' '}
-                                — {entree.user.prenom} {entree.user.nom}
+                                - {entree.user.prenom} {entree.user.nom}
                               </span>
                             )}
                           </span>
                         </span>
-                        <span className="shrink-0 font-mono text-[0.75rem] text-admin-gris">
+                        <span className="shrink-0 text-[0.75rem] text-admin-gris">
                           {depuis(entree.created_at)}
                         </span>
                       </li>
@@ -268,7 +268,7 @@ export default function PageTableauDeBord() {
                             {LIBELLES_STATUT_CAMPAGNE[campagne.statut]}
                           </span>
                         </div>
-                        <p className="mt-1 font-mono text-[0.75rem] text-admin-gris">
+                        <p className="mt-1 text-[0.75rem] text-admin-gris">
                           {date(campagne.date_debut)}
                           {campagne.responsable && ` · ${campagne.responsable}`}
                         </p>
@@ -301,7 +301,7 @@ function CarteKpi({
         <span className="text-[1.75rem] font-bold leading-none tracking-[-0.02em]">
           {valeur}
         </span>
-        <span className="font-mono text-[0.75rem] text-admin-vert">{detail}</span>
+        <span className="text-[0.75rem] text-admin-vert">{detail}</span>
       </p>
     </div>
   );
@@ -310,7 +310,7 @@ function CarteKpi({
 function BadgeKobo({ config }: { config: KoboConfig }) {
   if (!config.token_configure || !config.form_id) {
     return (
-      <span className="inline-flex items-center gap-2 bg-ablode-ambre-voile px-3 py-1.5 font-mono text-[0.75rem] text-ablode-ambre">
+      <span className="inline-flex items-center gap-2 bg-ablode-ambre-voile px-3 py-1.5 text-[0.75rem] text-ablode-ambre">
         <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-ablode-ambre" />
         Kobo non configuré
       </span>
@@ -321,7 +321,7 @@ function BadgeKobo({ config }: { config: KoboConfig }) {
 
   return (
     <span
-      className={`inline-flex items-center gap-2 px-3 py-1.5 font-mono text-[0.75rem] ${
+      className={`inline-flex items-center gap-2 px-3 py-1.5 text-[0.75rem] ${
         erreur ? 'bg-ablode-alerte-voile text-ablode-alerte' : 'bg-admin-actif text-ablode-vert-sombre'
       }`}
     >

@@ -11,6 +11,11 @@ const VIDE = {
   introduction: '',
   date_fermeture: '',
   message_ferme: '',
+  date_evenement: '',
+  lieu: '',
+  parcours: '',
+  sur_place: '',
+  a_prevoir: '',
 };
 
 /**
@@ -19,7 +24,11 @@ const VIDE = {
  * Les champs du bulletin — nom, prénom, âge, sexe, fonction, ville, quartier,
  * participation passée, motivation — sont fixes : ce sont ceux du formulaire
  * papier de la marche. Ce qui se règle ici, c'est le titre, le texte
- * d'accueil, l'échéance et la publication.
+ * d'accueil, l'échéance, la fiche pratique et la publication.
+ *
+ * La fiche pratique — jour, lieu, parcours, ce qui attend sur place et ce
+ * qu'il faut apporter — s'affiche en marge du bulletin. Tout y est
+ * facultatif, et une ligne laissée vide ne paraît pas.
  *
  * Le panneau n'apparaît qu'une fois l'article enregistré : le formulaire est
  * rattaché à un article, il lui faut donc un identifiant.
@@ -51,6 +60,13 @@ export function PanneauFormulaireMarche({ articleId }: { articleId: number | nul
           ? new Date(formulaire.date_fermeture).toISOString().slice(0, 16)
           : '',
         message_ferme: formulaire.message_ferme ?? '',
+        date_evenement: formulaire.date_evenement
+          ? new Date(formulaire.date_evenement).toISOString().slice(0, 16)
+          : '',
+        lieu: formulaire.lieu ?? '',
+        parcours: formulaire.parcours ?? '',
+        sur_place: formulaire.sur_place ?? '',
+        a_prevoir: formulaire.a_prevoir ?? '',
       });
     } catch {
       /* Aucun formulaire sur cet article : le panneau reste replié. */
@@ -75,11 +91,24 @@ export function PanneauFormulaireMarche({ articleId }: { articleId: number | nul
           method: 'PUT',
           body: {
             titre: valeurs.titre.trim(),
-            introduction: valeurs.introduction.trim() || undefined,
-            message_ferme: valeurs.message_ferme.trim() || undefined,
+            /*
+             * `null` et non `undefined` : `JSON.stringify` laisse tomber les
+             * propriétés indéfinies, et le serveur n'aurait alors aucun moyen
+             * de distinguer « champ vidé » de « champ non transmis ». Une
+             * date de clôture posée par erreur ne pouvait plus être retirée.
+             */
+            introduction: valeurs.introduction.trim() || null,
+            message_ferme: valeurs.message_ferme.trim() || null,
             date_fermeture: valeurs.date_fermeture
               ? new Date(valeurs.date_fermeture).toISOString()
-              : undefined,
+              : null,
+            date_evenement: valeurs.date_evenement
+              ? new Date(valeurs.date_evenement).toISOString()
+              : null,
+            lieu: valeurs.lieu.trim() || null,
+            parcours: valeurs.parcours.trim() || null,
+            sur_place: valeurs.sur_place.trim() || null,
+            a_prevoir: valeurs.a_prevoir.trim() || null,
             publie,
           },
         },
@@ -212,6 +241,85 @@ export function PanneauFormulaireMarche({ articleId }: { articleId: number | nul
             Affichée en grand sur le site. Sans date, le formulaire reste ouvert
             jusqu’à ce que vous le dépubliiez.
           </p>
+        </div>
+
+        <div className="rounded-carte border border-admin-trait p-4">
+          <p className="etiquette">Fiche pratique</p>
+          <p className="mt-2 text-[0.75rem] leading-relaxed text-admin-gris">
+            Affichée en marge du bulletin. Laissez vide ce que vous ne voulez pas
+            montrer.
+          </p>
+
+          <div className="mt-4 space-y-4">
+            <div>
+              <label htmlFor="fm-jour" className="etiquette mb-2 block">
+                Jour et heure de départ
+              </label>
+              <input
+                id="fm-jour"
+                type="datetime-local"
+                value={valeurs.date_evenement}
+                onChange={(e) => maj('date_evenement', e.target.value)}
+                className="admin-champ"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="fm-lieu" className="etiquette mb-2 block">
+                Lieu
+              </label>
+              <input
+                id="fm-lieu"
+                value={valeurs.lieu}
+                onChange={(e) => maj('lieu', e.target.value)}
+                placeholder="Place de l’Amazone, Cotonou"
+                className="admin-champ"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="fm-parcours" className="etiquette mb-2 block">
+                Parcours
+              </label>
+              <input
+                id="fm-parcours"
+                value={valeurs.parcours}
+                onChange={(e) => maj('parcours', e.target.value)}
+                placeholder="5 km"
+                className="admin-champ"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="fm-surplace" className="etiquette mb-2 block">
+                Sur place
+              </label>
+              <input
+                id="fm-surplace"
+                value={valeurs.sur_place}
+                onChange={(e) => maj('sur_place', e.target.value)}
+                placeholder="Dépistage gratuit et don de sang"
+                className="admin-champ"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="fm-prevoir" className="etiquette mb-2 block">
+                À prévoir
+              </label>
+              <textarea
+                id="fm-prevoir"
+                rows={3}
+                value={valeurs.a_prevoir}
+                onChange={(e) => maj('a_prevoir', e.target.value)}
+                placeholder={'Une tenue et des chaussures de sport\nUne bouteille d’eau\nUne pièce d’identité'}
+                className="admin-champ-multiligne"
+              />
+              <p className="mt-2 text-[0.75rem] leading-relaxed text-admin-gris">
+                Une ligne par élément. Chacune devient une puce sur le site.
+              </p>
+            </div>
+          </div>
         </div>
 
         <div>

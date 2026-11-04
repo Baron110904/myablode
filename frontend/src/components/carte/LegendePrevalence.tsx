@@ -27,7 +27,7 @@ export function LegendePrevalence({
               className="inline-block h-3 w-6 shrink-0"
               style={{ backgroundColor: palier.couleur }}
             />
-            <span className="font-mono text-[0.6875rem] text-ablode-gris">
+            <span className="text-[0.6875rem] text-ablode-gris">
               {palier.libelle}
             </span>
           </li>

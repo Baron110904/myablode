@@ -1,3 +1,4 @@
+import { DonneesAssociation } from '@/components/public/DonneesStructurees';
 import { EnTete } from '@/components/public/EnTete';
 import { PiedDePageConditionnel } from '@/components/public/PiedDePageConditionnel';
 
@@ -8,6 +9,8 @@ export default function LayoutPublic({
 }) {
   return (
     <div className="flex min-h-screen flex-col">
+      {/* Identité de l'association, sur toutes les pages du site vitrine. */}
+      <DonneesAssociation />
       <a
         href="#contenu"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-ablode-nuit focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white"

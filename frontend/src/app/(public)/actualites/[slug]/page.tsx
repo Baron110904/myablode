@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { AppelInscription } from '@/components/public/AppelInscription';
+import { DonneesArticle } from '@/components/public/DonneesStructurees';
 import { FormulaireNewsletter } from '@/components/public/FormulaireNewsletter';
 import { ImageArticle } from '@/components/public/ImageArticle';
 import { BoutonsPartage } from './BoutonsPartage';
@@ -20,32 +21,50 @@ async function chargerArticle(slug: string): Promise<Article | null> {
   }
 }
 
+/*
+ * Depuis Next 15, `params` et `searchParams` arrivent sous forme de
+ * promesses : le rendu peut commencer avant que la requete soit
+ * entierement analysee. Il faut donc les attendre avant de les lire.
+ */
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const article = await chargerArticle(params.slug);
+  const article = await chargerArticle((await params).slug);
   if (!article) return { title: 'Article introuvable' };
+
+  const chemin = `/actualites/${article.slug}`;
 
   return {
     title: article.meta_title ?? article.titre,
     description: article.meta_description ?? article.extrait ?? undefined,
+    /*
+     * Canonique posée sur le slug courant. Un article renommé garde son
+     * ancienne adresse en circulation — dans un courriel, sur un réseau —
+     * et les deux mèneraient au même texte sans dire laquelle fait foi.
+     */
+    alternates: { canonical: chemin },
     openGraph: {
       title: article.titre,
       description: article.extrait ?? undefined,
       type: 'article',
+      url: chemin,
       publishedTime: article.date_publication ?? undefined,
       images: article.image_url ? [article.image_url] : undefined,
     },
   };
 }
 
-export default async function PageArticle({ params }: { params: { slug: string } }) {
+export default async function PageArticle({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const t = await getTranslations('actualites');
   const tNews = await getTranslations('newsletter');
 
-  const article = await chargerArticle(params.slug);
+  const article = await chargerArticle((await params).slug);
   if (!article) notFound();
 
   const autres = await apiPublicOuDefaut<Article[]>('/articles/recents', []);
@@ -62,21 +81,23 @@ export default async function PageArticle({ params }: { params: { slug: string }
 
   return (
     <article className="conteneur py-12">
+      <DonneesArticle article={article} />
+
       <Link
         href="/actualites"
-        className="font-mono text-etiquette uppercase text-ablode-gris hover:text-ablode-encre"
+        className="text-etiquette uppercase text-ablode-gris hover:text-ablode-encre"
       >
         ← {t('retour')}
       </Link>
 
       <header className="mx-auto mt-8 max-w-lecture">
-        <p className="font-mono text-etiquette uppercase text-ablode-vert">
+        <p className="text-etiquette uppercase text-ablode-vert">
           {LIBELLES_CATEGORIE[article.categorie]}
         </p>
         <h1 className="mt-4 text-[2.25rem] font-bold leading-[1.15] tracking-[-0.025em]">
           {article.titre}
         </h1>
-        <p className="mt-5 font-mono text-etiquette uppercase text-ablode-gris">
+        <p className="mt-5 text-etiquette uppercase text-ablode-gris">
           {t('publieLe')} {date(article.date_publication)}
         </p>
       </header>
@@ -128,13 +149,13 @@ export default async function PageArticle({ params }: { params: { slug: string }
                   href={`/actualites/${autre.slug}`}
                   className="group block h-full p-6 transition-colors hover:bg-white"
                 >
-                  <p className="font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-ablode-vert">
+                  <p className="text-[0.6875rem] uppercase tracking-[0.1em] text-ablode-vert">
                     {LIBELLES_CATEGORIE[autre.categorie]}
                   </p>
                   <h3 className="mt-2 text-base font-bold leading-snug group-hover:text-ablode-vert-sombre">
                     {autre.titre}
                   </h3>
-                  <p className="mt-3 font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-ablode-gris">
+                  <p className="mt-3 text-[0.6875rem] uppercase tracking-[0.1em] text-ablode-gris">
                     {date(autre.date_publication)}
                   </p>
                 </Link>

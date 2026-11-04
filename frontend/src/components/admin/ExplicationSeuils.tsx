@@ -35,8 +35,8 @@ export function ExplicationSeuils({
           « Normal ». Un IMC de {imcObesite} ou plus donne « Obésité ».
         </p>
         <p className="mt-1.5">
-          Une valeur invraisemblable — glycémie hors de 20–900 mg/dL, IMC hors de
-          8–90 — n’est <strong>pas refusée</strong> : la ligne entre en base et
+          Une valeur invraisemblable - glycémie hors de 20–900 mg/dL, IMC hors de
+          8–90 - n’est <strong>pas refusée</strong> : la ligne entre en base et
           apparaît dans le filtre « Hors norme » pour être reprise.
         </p>
       </div>
@@ -49,12 +49,12 @@ export function ExplicationSeuils({
         <p>
           Le site ne porte aucun jugement clinique. Il compare une mesure à un
           seuil, et rien d’autre. Le résultat est calculé à l’enregistrement,
-          quelle que soit la porte d’entrée — formulaire Kobo, fichier importé
+          quelle que soit la porte d’entrée - formulaire Kobo, fichier importé
           ou saisie manuelle.
         </p>
 
         <Regles
-          titre="Dépistage du diabète — seule la glycémie compte"
+          titre="Dépistage du diabète - seule la glycémie compte"
           lignes={[
             [`Moins de ${glycemieNormale} mg/dL`, 'Normal', 'normal'],
             [
@@ -68,7 +68,7 @@ export function ExplicationSeuils({
         />
 
         <Regles
-          titre="Dépistage de l’obésité — seul l’IMC compte"
+          titre="Dépistage de l’obésité - seul l’IMC compte"
           lignes={[
             [`Moins de ${imcObesite}`, 'Normal', 'normal'],
             [`${imcObesite} et plus`, 'Obésité', 'obesite'],
@@ -87,7 +87,7 @@ export function ExplicationSeuils({
         <p>
           Le seuil de surpoids ({imcSurpoids}) est affiché à titre indicatif sur
           les fiches : il n’entre pas dans le classement. Un dépistage
-          d’endocrinopathie est toujours classé « Autre » — aucun seuil ne
+          d’endocrinopathie est toujours classé « Autre » - aucun seuil ne
           remplace l’examen d’un soignant.
         </p>
       </Section>
@@ -135,7 +135,7 @@ export function ExplicationSeuils({
           Pour lever le signalement, corrigez la mesure depuis la liste des
           dépistages (bouton <strong>Corriger</strong>) : le résultat, l’IMC et
           le signalement sont recalculés. Le bouton <strong>Valider</strong> dit
-          seulement qu’un humain a relu la ligne — utile quand la mesure est
+          seulement qu’un humain a relu la ligne - utile quand la mesure est
           définitivement perdue.
         </p>
         <p>

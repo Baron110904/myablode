@@ -44,6 +44,32 @@ export class FormulaireMarche {
   @Column({ type: 'varchar', length: 400, nullable: true })
   message_ferme: string | null;
 
+  /*
+   * Fiche pratique affichée en marge du bulletin. Tout y est facultatif :
+   * chaque ligne absente disparaît de la fiche au lieu d'afficher un
+   * intitulé vide. Ces informations vivaient dans le texte d'introduction,
+   * où elles se perdaient au milieu du récit.
+   */
+
+  /** Jour et heure du départ, mis en avant en tête de la fiche. */
+  @Column({ type: 'timestamp', nullable: true })
+  date_evenement: Date | null;
+
+  @Column({ type: 'varchar', length: 200, nullable: true })
+  lieu: string | null;
+
+  /** Distance ou tracé, tel qu'on l'annonce : « 5 km ». */
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  parcours: string | null;
+
+  /** Ce que l'association propose sur place : dépistage, don du sang… */
+  @Column({ type: 'varchar', length: 200, nullable: true })
+  sur_place: string | null;
+
+  /** Ce que le participant apporte, une ligne par élément. */
+  @Column({ type: 'text', nullable: true })
+  a_prevoir: string | null;
+
   @Column({ type: 'boolean', default: false })
   publie: boolean;
 
@@ -90,15 +116,21 @@ export class InscriptionMarche {
   @Column({ type: 'varchar', length: 1 })
   sexe: 'M' | 'F';
 
-  /** Profession ou rôle déclaré : élève, infirmier, commerçante… */
-  @Column({ type: 'varchar', length: 120 })
-  fonction: string;
+  /**
+   * Profession ou rôle déclaré : élève, infirmier, commerçante…
+   *
+   * Facultatif au bulletin, donc nullable ici : exiger la profession pour
+   * marcher cinq kilomètres faisait renoncer des gens à l'inscription.
+   */
+  @Column({ type: 'varchar', length: 120, nullable: true })
+  fonction: string | null;
 
   @Column({ type: 'varchar', length: 100 })
   ville: string;
 
-  @Column({ type: 'varchar', length: 120 })
-  quartier: string;
+  /** Facultatif également : la ville suffit à répartir les départs. */
+  @Column({ type: 'varchar', length: 120, nullable: true })
+  quartier: string | null;
 
   /**
    * Nullable en base malgré l'obligation au formulaire : les inscriptions

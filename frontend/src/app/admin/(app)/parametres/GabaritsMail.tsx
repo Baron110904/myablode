@@ -169,7 +169,7 @@ function FormulaireGabarit({
           <ul className="space-y-1.5">
             {gabarit.variables.map((variable) => (
               <li key={variable.nom} className="text-[0.8125rem] leading-relaxed">
-                <code className="rounded bg-white px-1.5 py-0.5 font-mono text-[0.75rem]">
+                <code className="rounded bg-white px-1.5 py-0.5 text-[0.75rem]">
                   {`{{${variable.nom}}}`}
                 </code>{' '}
                 <span className="text-admin-gris">{variable.role}</span>

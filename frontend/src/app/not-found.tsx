@@ -11,7 +11,7 @@ export default async function PageIntrouvable() {
       <EnTete />
       <main className="conteneur flex flex-1 items-center py-24">
         <div className="max-w-lg">
-          <p className="font-mono text-etiquette uppercase text-ablode-vert">404</p>
+          <p className="text-etiquette uppercase text-ablode-vert">404</p>
           <h1 className="mt-4 text-[2.25rem] font-bold leading-tight tracking-[-0.02em]">
             {t('titre404')}
           </h1>

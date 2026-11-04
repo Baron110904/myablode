@@ -4,7 +4,7 @@ export const ASSOCIATION = {
   nom: 'Association Béninoise de Lutte contre l’Obésité, le Diabète et les Endocrinopathies',
   anneeCreation: 2018,
 
-  adresse: 'Lot 27, Parcelle F Sedegbe — Maison Sessinou Blanche',
+  adresse: 'Lot 27, Parcelle F Sedegbe - Maison Sessinou Blanche',
   ville: 'Abomey-Calavi',
   pays: 'Bénin',
 
@@ -43,16 +43,50 @@ export const RESEAUX_SOCIAUX: ReseauSocial[] = [
 
 export interface Partenaire {
   nom: string;
-  logo: string;
+  /**
+   * Fichier du logo, ou `null` tant qu'il n'a pas été fourni.
+   *
+   * Sans fichier, la bande affiche un cartouche typographique au nom du
+   * partenaire. C'est volontaire : reconstituer de mémoire le logo d'un
+   * ministère ou d'une institution produirait une marque fausse, affichée
+   * comme authentique. Déposer le PNG dans `public/partenaires/` et
+   * renseigner le chemin ici suffit à le remplacer.
+   */
+  logo: string | null;
   /** Nature de la contribution, affichée sous le logo. */
   role: string;
 }
 
 export const PARTENAIRES: Partenaire[] = [
   {
+    nom: 'Organisation mondiale de la Santé',
+    logo: '/partenaires/oms.png',
+    role: 'Appui technique',
+  },
+  {
+    nom: 'Gouvernement du Bénin',
+    logo: '/partenaires/gouvernement-benin.png',
+    role: 'Tutelle institutionnelle',
+  },
+  {
+    nom: 'Ministère de la Santé',
+    logo: '/partenaires/ministere-sante.png',
+    role: 'Politiques de santé publique',
+  },
+  {
     nom: 'FSS Cotonou',
     logo: '/partenaires/fss-cotonou.png',
     role: 'Faculté des sciences de la santé',
+  },
+  {
+    nom: 'Celtiis',
+    logo: '/partenaires/celtiis.jpeg',
+    role: 'Télécommunications',
+  },
+  {
+    nom: 'Nasuba Infos',
+    logo: '/partenaires/nasuba.png',
+    role: 'Partenaire média',
   },
   {
     nom: 'SBEE',

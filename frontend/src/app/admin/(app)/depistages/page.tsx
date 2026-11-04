@@ -406,18 +406,18 @@ export default function PageDepistages() {
                           />
                         </td>
                       )}
-                      <td className="admin-td whitespace-nowrap font-mono text-[0.8125rem] text-admin-gris">
-                        {depistage.code_unique ?? '—'}
+                      <td className="admin-td whitespace-nowrap text-[0.8125rem] text-admin-gris">
+                        {depistage.code_unique ?? '-'}
                       </td>
                       <td className="admin-td whitespace-nowrap font-bold">
                         {depistage.prenom} {depistage.nom}
                       </td>
-                      <td className="admin-td">{depistage.commune?.nom ?? '—'}</td>
+                      <td className="admin-td">{depistage.commune?.nom ?? '-'}</td>
                       <td className="admin-td">{depistage.sexe}</td>
-                      <td className="admin-td font-mono text-[0.8125rem]">
-                        {age(depistage.date_naissance, depistage.date_depistage) ?? '—'}
+                      <td className="admin-td text-[0.8125rem]">
+                        {age(depistage.date_naissance, depistage.date_depistage) ?? '-'}
                       </td>
-                      <td className="admin-td font-mono text-[0.8125rem]">
+                      <td className="admin-td text-[0.8125rem]">
                         {dateCourte(depistage.date_depistage)}
                       </td>
                       <td className="admin-td">
@@ -439,7 +439,7 @@ export default function PageDepistages() {
                           )}
                         </span>
                       </td>
-                      <td className="admin-td font-mono text-[0.8125rem] text-admin-gris">
+                      <td className="admin-td text-[0.8125rem] text-admin-gris">
                         {LIBELLES_SOURCE[depistage.source]}
                       </td>
                       <td className="admin-td">

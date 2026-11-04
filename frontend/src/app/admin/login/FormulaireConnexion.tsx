@@ -127,7 +127,7 @@ export function FormulaireConnexion() {
               maxLength={6}
               value={code2fa}
               onChange={(e) => setCode2fa(e.target.value.replace(/\D/g, ''))}
-              className="admin-champ py-3 font-mono tracking-[0.3em]"
+              className="admin-champ py-3 tracking-[0.3em]"
               placeholder="000000"
             />
           </div>

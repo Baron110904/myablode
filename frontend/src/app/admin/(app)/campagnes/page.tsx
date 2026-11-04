@@ -195,19 +195,19 @@ export default function PageCampagnes() {
                           {campagne.nom}
                         </button>
                         {campagne.archivee && (
-                          <span className="ml-2 font-mono text-[0.6875rem] uppercase text-admin-gris">
+                          <span className="ml-2 text-[0.6875rem] uppercase text-admin-gris">
                             archivée
                           </span>
                         )}
                       </td>
-                      <td className="admin-td">{campagne.commune?.nom ?? '—'}</td>
-                      <td className="admin-td font-mono text-[0.8125rem]">
+                      <td className="admin-td">{campagne.commune?.nom ?? '-'}</td>
+                      <td className="admin-td text-[0.8125rem]">
                         {date(campagne.date_debut)}
                       </td>
-                      <td className="admin-td font-mono text-[0.8125rem]">
-                        {campagne.date_fin ? date(campagne.date_fin) : '—'}
+                      <td className="admin-td text-[0.8125rem]">
+                        {campagne.date_fin ? date(campagne.date_fin) : '-'}
                       </td>
-                      <td className="admin-td">{campagne.responsable ?? '—'}</td>
+                      <td className="admin-td">{campagne.responsable ?? '-'}</td>
                       <td className="admin-td">
                         <span
                           className={`pastille ${
@@ -438,7 +438,7 @@ function ModaleCampagne({
               required
               value={valeurs.nom}
               onChange={(e) => maj('nom', e.target.value)}
-              placeholder="Campagne de Cotonou — Août 2026"
+              placeholder="Campagne de Cotonou - Août 2026"
               className="admin-champ"
             />
           </div>
@@ -453,7 +453,7 @@ function ModaleCampagne({
               onChange={(e) => maj('commune_id', e.target.value)}
               className="admin-champ"
             >
-              <option value="">—</option>
+              <option value="">-</option>
               {communes.map((commune) => (
                 <option key={commune.id} value={commune.id}>
                   {commune.nom}
@@ -583,7 +583,7 @@ function ModaleDetail({
             {stats.parResultat.map((ligne) => (
               <li key={ligne.resultat} className="flex justify-between py-2.5 text-sm">
                 <span>{ligne.resultat}</span>
-                <span className="font-mono">{nombre(ligne.total)}</span>
+                <span>{nombre(ligne.total)}</span>
               </li>
             ))}
           </ul>

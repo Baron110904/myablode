@@ -6,14 +6,24 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
  * Content-Security-Policy : les tuiles OpenStreetMap et les images distantes
  * sont autorisées, tout le reste est restreint à l'origine (section 6.2 XSS).
  */
+const api = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
+
 const csp = [
   "default-src 'self'",
   // Next.js injecte des scripts inline pour l'hydratation.
   "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://tile.openstreetmap.org https://*.tile.openstreetmap.org",
+  // L'API sert aussi les miniatures des vidéos déposées au back-office.
+  `img-src 'self' data: blob: ${api} https://tile.openstreetmap.org https://*.tile.openstreetmap.org`,
+  /*
+   * Les vidéos de la rubrique Actualités sont servies par l'API, sur un autre
+   * domaine qu'en production. Sans `media-src`, elles retombent sur
+   * `default-src 'self'` et le lecteur reste noir, sans erreur visible
+   * ailleurs que dans la console.
+   */
+  `media-src 'self' blob: ${api}`,
   "font-src 'self' data:",
-  `connect-src 'self' ${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000'}`,
+  `connect-src 'self' ${api}`,
   "frame-src https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com",
   "object-src 'none'",
   "base-uri 'self'",

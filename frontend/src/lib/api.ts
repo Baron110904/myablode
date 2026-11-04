@@ -13,6 +13,19 @@ import type { Utilisateur } from './types';
 export const API_URL =
   process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
 
+/**
+ * Adresse absolue d'un fichier déposé depuis le back-office.
+ *
+ * L'API renvoie un chemin relatif (`/uploads/videos/…`) : il est servi par
+ * l'API, pas par Next. Seul ce préfixe est réécrit — une adresse comme
+ * `/articles/glycemie.jpg` désigne un fichier du site et doit le rester.
+ */
+export function urlMedia(chemin: string | null | undefined): string {
+  if (!chemin) return '';
+  if (chemin.startsWith('/uploads/')) return `${API_URL}${chemin}`;
+  return chemin;
+}
+
 export class ApiError extends Error {
   constructor(
     message: string,
@@ -171,6 +184,125 @@ export async function apiAdmin<T>(
     return (await reponse.text()) as T;
   }
   return reponse.json() as Promise<T>;
+}
+
+export interface OptionsTeleversement {
+  /** Corps multipart déjà constitué. */
+  formData: FormData;
+  /** Appelé à chaque avancée, de 0 à 100. */
+  onProgression?: (pourcentage: number) => void;
+  /** Permet d'interrompre un envoi en cours. */
+  signal?: AbortSignal;
+}
+
+/**
+ * Téléverse un fichier en rendant compte de l'avancement.
+ *
+ * `fetch` ne sait pas suivre la progression d'un envoi : il faut
+ * XMLHttpRequest. Le code vit ici, et non dans le composant, parce que le
+ * jeton d'accès et sa rotation y vivent déjà — un composant qui bricolerait
+ * son propre en-tête d'autorisation s'en trouverait désynchronisé au premier
+ * renouvellement.
+ *
+ * Sur un 401, le jeton est renouvelé et l'envoi rejoué une fois. C'est long
+ * quand le fichier est lourd, mais c'est l'alternative à une erreur affichée
+ * après plusieurs minutes d'attente.
+ */
+export async function televerser<T>(
+  chemin: string,
+  options: OptionsTeleversement,
+): Promise<T> {
+  // Session restaurée mais jeton pas encore en mémoire : on l'obtient avant
+  // d'engager le transfert plutôt qu'après l'avoir perdu.
+  if (!jetonAcces) await rafraichirJeton();
+
+  try {
+    return await envoyerFormulaire<T>(chemin, options);
+  } catch (erreur) {
+    if (erreur instanceof ApiError && erreur.statut === 401) {
+      const nouveau = await rafraichirJeton();
+      if (nouveau) return envoyerFormulaire<T>(chemin, options);
+    }
+    throw erreur;
+  }
+}
+
+function envoyerFormulaire<T>(
+  chemin: string,
+  { formData, onProgression, signal }: OptionsTeleversement,
+): Promise<T> {
+  return new Promise<T>((resoudre, rejeter) => {
+    if (signal?.aborted) {
+      rejeter(new ApiError('Envoi interrompu.', 0));
+      return;
+    }
+
+    const requete = new XMLHttpRequest();
+    requete.open('POST', construireUrl(chemin));
+    // Indispensable : le cookie de rafraîchissement est HttpOnly.
+    requete.withCredentials = true;
+    requete.setRequestHeader('Accept', 'application/json');
+    if (jetonAcces) requete.setRequestHeader('Authorization', `Bearer ${jetonAcces}`);
+    /*
+     * Content-Type est volontairement absent : le navigateur doit le poser
+     * lui-même pour y joindre la frontière multipart. L'imposer à la main
+     * produit un corps que le serveur ne sait pas découper.
+     */
+
+    const interrompre = () => requete.abort();
+    signal?.addEventListener('abort', interrompre);
+    const detacher = () => signal?.removeEventListener('abort', interrompre);
+
+    if (onProgression) {
+      requete.upload.onprogress = (evenement) => {
+        if (evenement.lengthComputable) {
+          onProgression(Math.round((evenement.loaded / evenement.total) * 100));
+        }
+      };
+    }
+
+    requete.onload = () => {
+      detacher();
+      if (requete.status >= 200 && requete.status < 300) {
+        try {
+          resoudre(requete.responseText ? JSON.parse(requete.responseText) : (undefined as T));
+        } catch {
+          rejeter(new ApiError('Réponse illisible du serveur.', requete.status));
+        }
+        return;
+      }
+      rejeter(erreurDeRequete(requete));
+    };
+
+    requete.onerror = () => {
+      detacher();
+      rejeter(new ApiError('Envoi interrompu. Vérifiez la connexion.', 0));
+    };
+
+    requete.onabort = () => {
+      detacher();
+      rejeter(new ApiError('Envoi interrompu.', 0));
+    };
+
+    requete.send(formData);
+  });
+}
+
+function erreurDeRequete(requete: XMLHttpRequest): ApiError {
+  // 413 est produit par le serveur sans corps JSON exploitable.
+  if (requete.status === 413) {
+    return new ApiError('Fichier trop lourd pour le serveur.', 413);
+  }
+  try {
+    const corps = JSON.parse(requete.responseText);
+    return new ApiError(
+      corps?.message ?? `Erreur ${requete.status}`,
+      requete.status,
+      corps?.erreurs,
+    );
+  } catch {
+    return new ApiError(`Erreur ${requete.status}`, requete.status);
+  }
 }
 
 /** Télécharge un fichier généré par l'API (exports, rapports PDF). */

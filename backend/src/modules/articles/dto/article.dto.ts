@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
+  IsBoolean,
   IsDateString,
   IsEnum,
   IsIn,
@@ -67,7 +68,24 @@ export class CreateArticleDto {
   })
   @IsOptional()
   @IsDateString()
-  date_publication?: string;
+  date_publication?: string | null;
+
+  @ApiPropertyOptional({
+    default: false,
+    description: 'Remonte l’article en tête des listes publiques',
+  })
+  @IsOptional()
+  @IsBoolean()
+  a_la_une?: boolean;
+
+  @ApiPropertyOptional({
+    nullable: true,
+    description:
+      'Date au-delà de laquelle l’article quitte le site ; il reste au back-office',
+  })
+  @IsOptional()
+  @IsDateString()
+  date_retrait?: string | null;
 
   @ApiPropertyOptional()
   @IsOptional()

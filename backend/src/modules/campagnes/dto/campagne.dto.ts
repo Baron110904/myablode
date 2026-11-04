@@ -14,7 +14,7 @@ import { CampagneStatut } from 'src/database/entities';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 export class CreateCampagneDto {
-  @ApiProperty({ example: 'Campagne de Cotonou — Août 2026' })
+  @ApiProperty({ example: 'Campagne de Cotonou - Août 2026' })
   @IsString()
   @IsNotEmpty({ message: 'Le nom de la campagne est obligatoire.' })
   @MaxLength(150)
