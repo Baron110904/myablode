@@ -13,6 +13,23 @@ import {
 import { MailService } from 'src/modules/mail/mail.service';
 import { SettingsService } from 'src/modules/settings/settings.service';
 
+/**
+ * Repère de la dernière consultation de la page Newsletter.
+ *
+ * Les abonnés ne se « traitent » pas un par un, à la différence d'un message
+ * de contact : il n'y a donc rien à cocher sur une ligne. Ce qu'on veut
+ * savoir tient en une question - qu'est-il arrivé depuis mon dernier
+ * passage. Une seule date y répond, et elle se loge dans les paramètres sans
+ * demander de migration.
+ *
+ * Le repère est commun à tous les administrateurs : ouvrir la page éteint la
+ * pastille pour chacun. Pour une équipe de quelques personnes qui se
+ * répartissent les tâches, c'est le comportement attendu ; un repère par
+ * compte ferait réapparaître la même nouveauté autant de fois qu'il y a de
+ * comptes.
+ */
+export const CLE_CONSULTATION_NEWSLETTER = 'newsletter.derniere_consultation';
+
 @Injectable()
 export class NewsletterService {
   private readonly logger = new Logger(NewsletterService.name);
@@ -41,6 +58,21 @@ export class NewsletterService {
    */
   async tousLesAbonnes(): Promise<NewsletterAbonne[]> {
     return this.abonnes.find({ order: { created_at: 'DESC' } });
+  }
+
+  /**
+   * Note que la page a été regardée : les inscriptions antérieures cessent
+   * de compter pour des nouveautés.
+   */
+  async marquerConsulte(): Promise<{ consulteLe: string }> {
+    const maintenant = new Date().toISOString();
+    await this.settings.definir(
+      CLE_CONSULTATION_NEWSLETTER,
+      maintenant,
+      'newsletter',
+      'Dernière ouverture de la page Newsletter au back-office',
+    );
+    return { consulteLe: maintenant };
   }
 
   async inscrire(email: string): Promise<{ message: string }> {

@@ -5,6 +5,8 @@ import {
   date,
   dateCourte,
   dateHeure,
+  decomposerEdition,
+  editionNormalisee,
   nombre,
   paliersPrevalence,
   pourcentage,
@@ -142,5 +144,49 @@ describe('fuseau horaire du Bénin', () => {
 
   it('reste stable au premier jour du mois', () => {
     expect(date('2026-09-01')).toBe('1 septembre 2026');
+  });
+});
+
+describe('libelle d’edition', () => {
+  /*
+   * Le defaut constate en production : l’administrateur avait saisi
+   * « 6ème édition » la ou le jeu de demonstration portait
+   * « 6ᵉ édition ». Les deux doivent desormais se composer
+   * pareil.
+   */
+  it('ramene toutes les graphies au meme couple', () => {
+    for (const saisie of [
+      '6ème édition',
+      '6eme édition',
+      '6e édition',
+      '6ᵉ édition',
+      '6 édition',
+      '6',
+    ]) {
+      expect(decomposerEdition(saisie)).toEqual({ numero: '6', exposant: 'e' });
+    }
+  });
+
+  it('accorde la premiere edition au feminin', () => {
+    expect(decomposerEdition('1ère édition')).toEqual({ numero: '1', exposant: 're' });
+    expect(decomposerEdition('1re édition')).toEqual({ numero: '1', exposant: 're' });
+    expect(decomposerEdition('1 édition')).toEqual({ numero: '1', exposant: 're' });
+    expect(decomposerEdition('1er édition')).toEqual({ numero: '1', exposant: 'er' });
+  });
+
+  it('ecrit l’exposant pour une lecture en ligne', () => {
+    expect(editionNormalisee('6ème édition')).toBe('6ᵉ édition');
+    expect(editionNormalisee('1ère édition')).toBe('1ʳᵉ édition');
+  });
+
+  /*
+   * Un intitule qui ne commence pas par un nombre est rendu tel quel plutot
+   * que tronque : mieux vaut un libelle inattendu qu’un bandeau vide.
+   */
+  it('laisse passer un intitule libre sans le casser', () => {
+    expect(decomposerEdition('Édition spéciale')).toBeNull();
+    expect(editionNormalisee('Édition spéciale')).toBe('Édition spéciale');
+    expect(editionNormalisee(null)).toBeNull();
+    expect(editionNormalisee('   ')).toBeNull();
   });
 });

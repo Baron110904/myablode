@@ -84,6 +84,20 @@ export class NewsletterController {
     return this.newsletter.findAbonnes(pagination, actifs === 'true');
   }
 
+  /*
+   * Marquage explicite plutôt qu'effet de bord de `GET /abonnes` : la liste
+   * est aussi appelée par l'export et par la pagination, qui ne valent pas
+   * lecture. Une route à part dit ce qu'elle fait.
+   */
+  @Post('vu')
+  @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN)
+  @ApiOperation({ summary: 'Note la page Newsletter comme consultée' })
+  marquerVu() {
+    return this.newsletter.marquerConsulte();
+  }
+
   @Get('statistiques')
   @ApiBearerAuth()
   @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.VIEWER)

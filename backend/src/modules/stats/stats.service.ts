@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { CacheService } from 'src/common/cache/cache.service';
+import { CLE_CONSULTATION_NEWSLETTER } from 'src/modules/newsletter/newsletter.service';
 import { SettingsService } from 'src/modules/settings/settings.service';
 import {
   FiltresCarteDto,
@@ -618,6 +619,7 @@ export class StatsService {
     messages: number;
     benevoles: number;
     inscriptionsMarche: number;
+    newsletter: number;
   }> {
     const [ligne] = await this.dataSource.query<
       Array<{
@@ -625,8 +627,10 @@ export class StatsService {
         messages: number;
         benevoles: number;
         inscriptions_marche: number;
+        newsletter: number;
       }>
-    >(`
+    >(
+      `
       SELECT
         (SELECT COUNT(*) FROM depistages
           WHERE deleted_at IS NULL
@@ -634,14 +638,29 @@ export class StatsService {
         (SELECT COUNT(*) FROM contacts WHERE NOT traite)::int AS messages,
         (SELECT COUNT(*) FROM benevoles WHERE NOT traite)::int AS benevoles,
         (SELECT COUNT(*) FROM inscriptions_marche WHERE NOT traite)::int
-          AS inscriptions_marche
-    `);
+          AS inscriptions_marche,
+        /*
+         * Abonnés arrivés depuis la dernière ouverture de la page. Sans
+         * repère enregistré - au premier démarrage, ou tant que personne n'a
+         * ouvert la page - « -infinity » les compte tous : c'est bien ce
+         * qu'on veut dire par « pas encore vu ».
+         */
+        (SELECT COUNT(*) FROM newsletter
+          WHERE active
+            AND created_at > COALESCE(
+              (SELECT (value #>> '{}')::timestamp
+                 FROM settings WHERE key = $1),
+              '-infinity'::timestamp))::int AS newsletter
+    `,
+      [CLE_CONSULTATION_NEWSLETTER],
+    );
 
     return {
       depistages: ligne?.depistages ?? 0,
       messages: ligne?.messages ?? 0,
       benevoles: ligne?.benevoles ?? 0,
       inscriptionsMarche: ligne?.inscriptions_marche ?? 0,
+      newsletter: ligne?.newsletter ?? 0,
     };
   }
 

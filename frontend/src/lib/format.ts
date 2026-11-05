@@ -232,6 +232,53 @@ export function periodeEvenement(dateDebut: string, dateFin: string | null): str
     : `${jour(debut)} ${mois(debut, true)} – ${jour(fin)} ${mois(fin, true)}`;
 }
 
+/*
+ * Le libellé d'édition est saisi librement au back-office. « 6ᵉ édition »,
+ * « 6ème édition », « 6e édition » désignent la même chose, mais ne se
+ * composent pas de la même façon : un « ème » en toute lettre occupe trois
+ * caractères de titre et fait passer le bloc sous le titre, là où un
+ * exposant tient à côté. La saisie est donc ramenée à sa forme canonique à
+ * l'affichage, plutôt que d'exiger de l'administrateur qu'il tape un
+ * caractère exposant que son clavier ne porte pas.
+ */
+const EXPOSANTS: Record<string, string> = { e: 'ᵉ', re: 'ʳᵉ', er: 'ᵉʳ' };
+
+function exposantCanonique(numero: string, saisi: string): string {
+  // « ᵉʳ » et « ʳᵉ » sont ramenés à « er » et « re » avant comparaison.
+  const nu = saisi.toLowerCase().replace(/ᵉ/g, 'e').replace(/ʳ/g, 'r');
+  if (/^(ere|ère|re)$/.test(nu)) return 're';
+  if (/^er$/.test(nu)) return 'er';
+  if (/^(eme|ème|e)$/.test(nu)) return 'e';
+  // Rien de lisible : « 1re édition » au féminin, « 6e » au-delà.
+  return numero === '1' ? 're' : 'e';
+}
+
+/**
+ * Numéro d'édition et son exposant, séparés pour être composés à deux
+ * tailles dans le bandeau d'accueil.
+ *
+ * Renvoie `null` quand le libellé ne commence pas par un nombre : un intitulé
+ * libre est alors affiché tel quel, sans être tronqué.
+ */
+export function decomposerEdition(
+  libelle: string | null | undefined,
+): { numero: string; exposant: string } | null {
+  if (!libelle) return null;
+  const sansLeMot = libelle.replace(/\s*éditions?\s*$/i, '').trim();
+  const trouve = sansLeMot.match(/^(\d{1,3})\s*([a-zèéêᵉʳ]*)$/i);
+  if (!trouve) return null;
+  return { numero: trouve[1], exposant: exposantCanonique(trouve[1], trouve[2]) };
+}
+
+/** Libellé d'édition pour une lecture en ligne : « 6ᵉ édition ». */
+export function editionNormalisee(
+  libelle: string | null | undefined,
+): string | null {
+  const parts = decomposerEdition(libelle);
+  if (!parts) return libelle?.trim() || null;
+  return `${parts.numero}${EXPOSANTS[parts.exposant]} édition`;
+}
+
 // ─── Vidéos ──────────────────────────────────────────────────────────────────
 
 /** Durée d'une vidéo au format « 3:42 » ou « 1:04:08 ». */

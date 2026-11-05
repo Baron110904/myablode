@@ -15,6 +15,7 @@ interface EnAttente {
   messages: number;
   benevoles: number;
   inscriptionsMarche: number;
+  newsletter: number;
 }
 
 const AUCUN: EnAttente = {
@@ -22,14 +23,24 @@ const AUCUN: EnAttente = {
   messages: 0,
   benevoles: 0,
   inscriptionsMarche: 0,
+  newsletter: 0,
 };
+
+/**
+ * Signal de rafraîchissement immédiat des pastilles.
+ *
+ * Une page qui vient d’éteindre sa propre pastille l’émet : sans lui, le
+ * compteur resterait affiché jusqu’au sondage suivant, et l’administrateur
+ * lirait « 3 nouveaux » sur la page même où il vient de les voir.
+ */
+export const EVENEMENT_COMPTEURS = 'myablode:compteurs';
 
 interface Entree {
   href: string;
   libelle: string;
   roles: Role[];
   /** Clé du compteur à afficher en pastille, s'il y en a un. */
-  compteur?: 'depistages' | 'messages';
+  compteur?: 'depistages' | 'messages' | 'newsletter';
   /** Mention permanente, et non un nombre : « LIVE » sur le suivi. */
   mention?: string;
 }
@@ -95,7 +106,12 @@ const GROUPES: Groupe[] = [
   {
     titre: 'Communication',
     entrees: [
-      { href: '/admin/newsletter', libelle: 'Newsletter', roles: ['super_admin', 'admin'] },
+      {
+        href: '/admin/newsletter',
+        libelle: 'Newsletter',
+        roles: ['super_admin', 'admin'],
+        compteur: 'newsletter',
+      },
       {
         href: '/admin/messages',
         libelle: 'Messages',
@@ -150,9 +166,12 @@ export function BarreLaterale({ onNavigation }: { onNavigation?: () => void }) {
 
     void relever();
     const minuteur = window.setInterval(() => void relever(), INTERVALLE_COMPTEURS);
+    const surSignal = () => void relever();
+    window.addEventListener(EVENEMENT_COMPTEURS, surSignal);
     return () => {
       annule = true;
       window.clearInterval(minuteur);
+      window.removeEventListener(EVENEMENT_COMPTEURS, surSignal);
     };
   }, [utilisateur, chemin]);
 
@@ -167,6 +186,7 @@ export function BarreLaterale({ onNavigation }: { onNavigation?: () => void }) {
       depistages: enAttente.depistages,
       messages:
         enAttente.messages + enAttente.benevoles + enAttente.inscriptionsMarche,
+      newsletter: enAttente.newsletter,
     }),
     [enAttente],
   );
@@ -182,7 +202,7 @@ export function BarreLaterale({ onNavigation }: { onNavigation?: () => void }) {
     [utilisateur],
   );
 
-  const total = compteurs.depistages + compteurs.messages;
+  const total = compteurs.depistages + compteurs.messages + compteurs.newsletter;
   const voitLeTableauDeBord =
     utilisateur !== null && TABLEAU_DE_BORD.roles.includes(utilisateur.role);
 
@@ -282,7 +302,7 @@ function Rubrique({
   onNavigation,
 }: {
   groupe: Groupe;
-  compteurs: { depistages: number; messages: number };
+  compteurs: Record<NonNullable<Entree['compteur']>, number>;
   estActif: (href: string) => boolean;
   onNavigation?: () => void;
 }) {
@@ -435,6 +455,17 @@ function Cloche({
       libelle: 'inscription à la marche à traiter',
       pluriel: 'inscriptions à la marche à traiter',
       nombre: enAttente.inscriptionsMarche,
+    },
+    {
+      href: '/admin/newsletter',
+      /*
+       * « Depuis votre dernier passage » et non « non traité » : un abonné
+       * ne se traite pas, il s'ajoute. La ligne annonce une nouveauté à
+       * regarder, pas une tâche à faire.
+       */
+      libelle: 'nouvel abonné à la lettre',
+      pluriel: 'nouveaux abonnés à la lettre',
+      nombre: enAttente.newsletter,
     },
   ].filter((ligne) => ligne.nombre > 0);
 

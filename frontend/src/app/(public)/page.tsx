@@ -12,7 +12,13 @@ import { FormulaireNewsletter } from '@/components/public/FormulaireNewsletter';
 import { ImageArticle } from '@/components/public/ImageArticle';
 import { Reveler } from '@/components/public/Reveler';
 import { apiPublicOuDefaut } from '@/lib/api';
-import { date, jourBenin, LIBELLES_CATEGORIE } from '@/lib/format';
+import {
+  date,
+  decomposerEdition,
+  editionNormalisee,
+  jourBenin,
+  LIBELLES_CATEGORIE,
+} from '@/lib/format';
 import type { Article, Evenement, ResumeStats } from '@/lib/types';
 
 /**
@@ -98,8 +104,15 @@ export default async function PageAccueil() {
    * même point.
    */
   const aujourdhui = jourBenin();
-  // Le libellé d'édition est saisi au back-office, avec les dates.
+  /*
+   * Le libellé d'édition est saisi au back-office, avec les dates, et sa
+   * graphie varie d'une saisie à l'autre. Il est donc décomposé ici une
+   * fois pour toutes : le chiffre et son exposant pour le bandeau, la
+   * forme suivie pour les titres qui le citent dans une phrase.
+   */
   const edition = evenements.find((evenement) => evenement.edition)?.edition ?? null;
+  const editionChiffre = decomposerEdition(edition);
+  const editionTexte = editionNormalisee(edition);
 
   return (
     <>
@@ -158,8 +171,23 @@ export default async function PageAccueil() {
               {edition && (
                 <span className="flex flex-col items-start leading-none text-ablode-vert-clair">
                   <span className="text-[1.4em] leading-[0.82]">
-                    {/* Le numéro seul, en très gros ; « édition » le qualifie dessous. */}
-                    {edition.replace(/\s*édition\s*$/i, '')}
+                    {/*
+                      Le numéro seul, en très gros ; « édition » le qualifie
+                      dessous. L'exposant est une balise à part, et non les
+                      lettres saisies : composé en toutes lettres, un
+                      « 6ème » triplait la largeur du bloc et le renvoyait
+                      sous le titre au lieu de tenir à sa droite.
+                    */}
+                    {editionChiffre ? (
+                      <>
+                        {editionChiffre.numero}
+                        <sup className="text-[0.42em] font-bold">
+                          {editionChiffre.exposant}
+                        </sup>
+                      </>
+                    ) : (
+                      edition.replace(/\s*éditions?\s*$/i, '')
+                    )}
                   </span>
                   {/* Corps et interlettrage calés sur la largeur relevée
                       (71,5 px pour 80 px de titre), afin que le bloc reste à
@@ -246,7 +274,7 @@ export default async function PageAccueil() {
               montrant pas.
             */}
             <h2 id="titre-programme" className="sr-only">
-              Programme{edition ? ` de la ${edition}` : ''}
+              Programme{editionTexte ? ` de la ${editionTexte}` : ''}
             </h2>
             <ChronologieEdition evenements={evenements} aujourdhui={aujourdhui} />
           </div>
@@ -317,7 +345,7 @@ export default async function PageAccueil() {
           </div>
 
           <Reveler delai={ACTIONS.length * 90} className="mt-4">
-            <EncartGrandesDates evenements={evenements} edition={edition} />
+            <EncartGrandesDates evenements={evenements} edition={editionTexte} />
           </Reveler>
         </div>
       </section>

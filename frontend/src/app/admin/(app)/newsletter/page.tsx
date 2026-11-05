@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { EVENEMENT_COMPTEURS } from '@/components/admin/BarreLaterale';
 import { EditeurTexte } from '@/components/admin/EditeurTexte';
 import {
   Alerte,
@@ -77,6 +78,20 @@ export default function PageNewsletter() {
       params: { statut: 'published', limit: 50 },
     })
       .then((reponse) => setArticles(reponse.items))
+      .catch(() => undefined);
+  }, []);
+
+  /*
+   * La page est ouverte : les abonnés arrivés depuis le dernier passage ne
+   * sont plus des nouveautés. Le repère est posé une seule fois, au montage,
+   * et non à chaque pagination - feuilleter la liste n’est pas la découvrir.
+   *
+   * Un échec reste sans conséquence visible : la pastille sera simplement
+   * encore là au prochain passage.
+   */
+  useEffect(() => {
+    void apiAdmin('/newsletter/vu', { method: 'POST' })
+      .then(() => window.dispatchEvent(new Event(EVENEMENT_COMPTEURS)))
       .catch(() => undefined);
   }, []);
 

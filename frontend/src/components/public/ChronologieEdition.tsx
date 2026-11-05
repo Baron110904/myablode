@@ -2,6 +2,43 @@ import { etatEvenement, jourBenin, periodeEvenement } from '@/lib/format';
 import type { Evenement } from '@/lib/types';
 import { Reveler } from './Reveler';
 
+/** L’accueil n’en montre jamais plus : au-delà, chaque cellule est illisible. */
+const MAX_DATES = 4;
+
+/**
+ * Colonnes selon le nombre de dates réellement présentes.
+ *
+ * Une grille figée à quatre colonnes laissait une cellule blanche vide à
+ * droite dès que le programme en comptait trois : la carte paraissait
+ * tronquée, alors qu’elle était simplement trop large pour son contenu.
+ *
+ * Trois dates passent directement d’une colonne à trois, sans l’étape à
+ * deux : un 2 + 1 rouvrirait le même trou sur tablette.
+ *
+ * Les classes sont écrites en toutes lettres. Tailwind ne produit que ce
+ * qu’il lit dans les sources : une classe assemblée à l’exécution
+ * n’existerait pas dans la feuille de style.
+ */
+const COLONNES: Record<number, string> = {
+  1: '',
+  2: 'sm:grid-cols-2',
+  3: 'lg:grid-cols-3',
+  4: 'sm:grid-cols-2 lg:grid-cols-4',
+};
+
+/**
+ * Filets verticaux de la chronologie, calés sur la grille ci-dessus.
+ *
+ * Ils doivent apparaître aux mêmes paliers, faute de quoi trois dates
+ * empilées sur téléphone héritent d’un trait à gauche qui ne sépare rien.
+ */
+const SEPARATEURS: Record<number, string> = {
+  1: '',
+  2: 'sm:[&:not(:nth-child(2n+1))]:border-l',
+  3: 'lg:[&:not(:first-child)]:border-l',
+  4: 'sm:[&:not(:nth-child(2n+1))]:border-l lg:[&:not(:first-child)]:border-l',
+};
+
 /**
  * Bandeau chronologique posé à cheval sur le bas du bandeau d'accueil.
  *
@@ -19,12 +56,15 @@ export function ChronologieEdition({
 }) {
   if (evenements.length === 0) return null;
 
-  // Quatre colonnes au maximum : au-delà, chaque cellule devient illisible.
-  const dates = evenements.slice(0, 4);
+  const dates = evenements.slice(0, MAX_DATES);
 
   return (
     <Reveler delai={120}>
-      <ol className="grid overflow-hidden rounded-carte border border-ablode-trait bg-white shadow-relief sm:grid-cols-2 lg:grid-cols-4">
+      <ol
+        className={`grid overflow-hidden rounded-carte border border-ablode-trait bg-white shadow-relief ${
+          COLONNES[dates.length]
+        }`}
+      >
         {dates.map((evenement) => {
           const etat = etatEvenement(evenement.date_debut, evenement.date_fin, aujourdhui);
           const imminent = etat.cle === 'en_cours' || etat.cle === 'aujourdhui';
@@ -37,7 +77,9 @@ export function ChronologieEdition({
                 séparateurs qui suivent la grille : un trait à gauche quand
                 les colonnes s'alignent, au-dessus quand elles s'empilent.
               */
-              className={`group relative border-ablode-trait border-t-4 p-6 transition-colors duration-300 hover:bg-ablode-voile sm:[&:not(:nth-child(2n+1))]:border-l lg:[&:not(:first-child)]:border-l ${
+              className={`group relative border-ablode-trait border-t-4 p-6 transition-colors duration-300 hover:bg-ablode-voile ${
+                SEPARATEURS[dates.length]
+              } ${
                 /*
                   Vert quand l'opération est engagée, bleu tant qu'elle est à
                   venir. La couleur porte l'information : elle se lit d'un
@@ -96,6 +138,10 @@ export function EncartGrandesDates({
 }) {
   if (evenements.length === 0) return null;
 
+  // Le même programme que la chronologie de tête : même borne, donc mêmes
+  // dates. Les deux blocs se contrediraient si l’un en montrait une de plus.
+  const dates = evenements.slice(0, MAX_DATES);
+
   return (
     <div className="grid gap-8 rounded-carte bg-ablode-profond p-8 text-white sm:p-10 lg:grid-cols-[minmax(0,14rem)_1fr] lg:gap-12">
       <div>
@@ -114,8 +160,8 @@ export function EncartGrandesDates({
         reste de la page, tandis que ces quatre traits lisent comme une
         frise.
       */}
-      <ol className="grid gap-x-8 gap-y-7 sm:grid-cols-2 lg:grid-cols-4">
-        {evenements.slice(0, 4).map((evenement) => (
+      <ol className={`grid gap-x-8 gap-y-7 ${COLONNES[dates.length]}`}>
+        {dates.map((evenement) => (
           <li key={evenement.id} className="border-t border-white/15 pt-4">
             <p className="text-[0.8125rem] font-bold uppercase leading-snug tracking-[0.03em] text-ablode-vert-clair">
               {periodeEvenement(evenement.date_debut, evenement.date_fin)}
