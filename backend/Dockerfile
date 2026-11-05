@@ -33,6 +33,13 @@ COPY src/assets ./dist/assets
 # sans lui, la création des données de démonstration s'arrête net.
 COPY data ./data
 
+# Destination des vidéos déposées depuis le back-office. Le dossier est créé
+# ici, pendant que la construction tourne encore en root, et donné à `node` :
+# sans cela, le processus se heurte à un /app appartenant à la racine et
+# l'application s'arrête au démarrage sur « EACCES: permission denied, mkdir
+# '/app/uploads/videos' ».
+RUN mkdir -p /app/uploads/videos && chown -R node:node /app/uploads
+
 # Utilisateur non privilégié : une faille dans l'application ne doit pas
 # donner la racine du conteneur.
 USER node
