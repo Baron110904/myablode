@@ -38,7 +38,7 @@ export default async function PageBenevole() {
               <ul className="space-y-4">
                 {[
                   'Accueillir et orienter les personnes sur les postes de dépistage',
-                  'Aider à la saisie des fiches sur tablette (formation assurée)',
+                  'Aider à la saisie des fiches sur tablette',
                   'Distribuer les supports de sensibilisation',
                   'Participer à l’organisation de la marche « Sucre à terre »',
                 ].map((tache) => (
@@ -57,11 +57,6 @@ export default async function PageBenevole() {
                 ))}
               </ul>
             </div>
-
-            <p className="mt-6 rounded-carte border-l-[3px] border-ablode-vert bg-ablode-vert-voile p-5 text-[0.9375rem] leading-relaxed">
-              Les gestes cliniques (piqûre capillaire, lecture de glycémie) restent
-              réservés aux professionnels de santé qui encadrent chaque campagne.
-            </p>
           </div>
 
           <FormulaireBenevole />

@@ -11,6 +11,7 @@ export function ChampFormulaire({
   placeholder,
   autoComplete,
   options,
+  libelleVide = 'Choisir…',
   lignes,
 }: {
   id: string;
@@ -25,6 +26,14 @@ export function ChampFormulaire({
   autoComplete?: string;
   /** Rend un <select> au lieu d'un <input>. */
   options?: Array<{ valeur: string; libelle: string }>;
+  /**
+   * Intitulé de l'option vide d'un <select>.
+   *
+   * Elle portait un simple tiret, qui ne dit pas si le champ attend une
+   * réponse ou accepte le silence. Sur un champ facultatif, mieux vaut
+   * nommer ce que veut dire « ne rien choisir ».
+   */
+  libelleVide?: string;
   /** Rend un <textarea> de N lignes. */
   lignes?: number;
 }) {
@@ -60,7 +69,7 @@ export function ChampFormulaire({
           {...proprietesCommunes}
           onChange={(e) => onChange(e.target.value)}
         >
-          <option value="">-</option>
+          <option value="">{libelleVide}</option>
           {options.map((option) => (
             <option key={option.valeur} value={option.valeur}>
               {option.libelle}

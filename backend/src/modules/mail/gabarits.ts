@@ -43,9 +43,14 @@ export const GABARITS: Gabarit[] = [
     description: 'Confirmation aux personnes qui écrivent via le formulaire de contact.',
     variables: [{ nom: 'nom', role: 'Nom saisi dans le formulaire' }],
     sujet: 'MyABLODE - Nous avons bien reçu votre message',
+    /*
+     * Pas de délai annoncé : rien dans la plateforme ne déclenche de réponse
+     * aux messages de contact, qui sont lus puis traités à la main. Promettre
+     * une réponse « dans les meilleurs délais » engageait l'association sur
+     * ce que le logiciel ne garantit pas.
+     */
     corps:
-      '<p>Votre message est bien arrivé à l’ABLODE. Notre équipe vous répondra ' +
-      'dans les meilleurs délais.</p>',
+      '<p>Votre message est bien arrivé à l’ABLODE. Il sera lu par l’équipe.</p>',
   },
   {
     cle: 'mail_confirmation_benevole',
@@ -53,10 +58,13 @@ export const GABARITS: Gabarit[] = [
     description: 'Accusé de réception aux personnes qui se proposent comme bénévoles.',
     variables: [{ nom: 'prenom', role: 'Prénom du candidat' }],
     sujet: 'MyABLODE - Votre candidature de bénévole',
+    /*
+     * Celui-ci peut annoncer une suite : accepter ou refuser une candidature
+     * déclenche effectivement un message depuis le back-office.
+     */
     corps:
-      '<p>Merci pour votre candidature. Un membre de l’équipe vous contactera ' +
-      'pour vous présenter les prochaines campagnes de dépistage près de chez ' +
-      'vous.</p>',
+      '<p>Merci pour votre candidature. Vous recevrez un message dès qu’elle ' +
+      'aura été examinée.</p>',
   },
   {
     cle: 'mail_acceptation_benevole',

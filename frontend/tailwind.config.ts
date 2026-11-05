@@ -170,6 +170,17 @@ const config: Config = {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-50%)' },
         },
+        /*
+         * Même course, en sens inverse : la seconde bande de partenaires du
+         * téléphone remonte de la gauche vers la droite. Partir de -50 %
+         * plutôt que d'inverser le sens de lecture de l'animation garde la
+         * piste alignée sur sa copie - c'est ce décalage de la moitié exacte
+         * qui rend la boucle invisible.
+         */
+        'defilement-inverse': {
+          '0%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
         /* Reflet qui traverse un bouton plein au survol. */
         reflet: {
           '0%': { transform: 'translateX(-120%)' },
@@ -191,6 +202,7 @@ const config: Config = {
         defilement: 'defilement 42s linear infinite',
         /** Bande de logos partenaires : assez lente pour être lisible. */
         bande: 'defilement 46s linear infinite',
+        'bande-inverse': 'defilement-inverse 46s linear infinite',
         reflet: 'reflet 0.9s ease-out',
         'zoom-lent': 'zoom-lent 24s ease-in-out infinite',
       },

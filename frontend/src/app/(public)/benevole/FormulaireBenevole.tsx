@@ -144,6 +144,7 @@ export function FormulaireBenevole() {
           libelle={t('disponibilite')}
           valeur={valeurs.disponibilite}
           onChange={maj('disponibilite')}
+          libelleVide="Non précisée"
           options={[
             { valeur: 'Semaine', libelle: t('disponibilites.semaine') },
             { valeur: 'Week-end', libelle: t('disponibilites.weekend') },

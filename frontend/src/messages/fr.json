@@ -85,7 +85,7 @@
   },
   "newsletter": {
     "titre": "Recevez les résultats de chaque campagne",
-    "chapeau": "Une lettre mensuelle : chiffres du dépistage, nouvelles communes couvertes, conseils de prévention.",
+    "chapeau": "Chiffres du dépistage, nouvelles communes couvertes et conseils de prévention, directement dans votre boîte.",
     "placeholder": "votre@email.bj",
     "inscrire": "S'inscrire",
     "succes": "Votre inscription est enregistrée. Merci !",
@@ -111,7 +111,7 @@
     "message": "Message",
     "envoyer": "Envoyer le message",
     "envoi": "Envoi en cours…",
-    "succes": "Votre message a bien été transmis. Nous vous répondrons rapidement.",
+    "succes": "Votre message est bien arrivé. Un accusé de réception vient de vous être envoyé par courriel.",
     "coordonnees": "Coordonnées"
   },
   "benevole": {
@@ -131,7 +131,7 @@
     },
     "message": "Quelques mots sur vous (facultatif)",
     "envoyer": "Envoyer ma candidature",
-    "succes": "Merci ! Votre candidature est enregistrée, un membre de l'équipe vous contactera."
+    "succes": "Votre candidature est enregistrée. Un accusé de réception vient de vous être envoyé par courriel."
   },
   "commun": {
     "chargement": "Chargement…",

@@ -76,7 +76,14 @@ export function FormulaireNewsletter({ variante = 'sombre' }: { variante?: 'somb
           l'anneau de focus à la place du champ : un halo autour du seul
           `input` se verrait découpé par la pilule qui l'entoure.
         */
-        <div className="flex flex-col gap-2 rounded-bloc bg-white p-1.5 focus-within:ring-2 focus-within:ring-white/60 sm:flex-row sm:items-center sm:rounded-full">
+        /*
+          Dès `sm`, champ et bouton partagent une même pilule blanche. En
+          dessous, ils se séparent en deux pilules superposées : empilés dans
+          une seule boîte, le fond blanc dessinait un rectangle à coins
+          arrondis autour d'un bouton parfaitement ovale, et les deux
+          contours ne se répondaient plus. Chacun porte donc sa propre forme.
+        */
+        <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-0 sm:rounded-full sm:bg-white sm:p-1.5 sm:focus-within:ring-2 sm:focus-within:ring-white/60">
           {/*
             `flex-1` plutôt qu'une largeur fixe : le champ occupe toute la
             place restante et pousse le bouton contre le bord droit de la
@@ -91,12 +98,12 @@ export function FormulaireNewsletter({ variante = 'sombre' }: { variante?: 'somb
             onChange={(e) => setEmail(e.target.value)}
             placeholder={t('placeholder')}
             disabled={etat === 'envoi'}
-            className="w-full min-w-0 bg-transparent px-5 py-2.5 text-[0.95rem] text-ablode-encre placeholder:text-ablode-gris focus:outline-none sm:flex-1"
+            className="w-full min-w-0 rounded-full bg-white px-5 py-3 text-[0.95rem] text-ablode-encre placeholder:text-ablode-gris focus:outline-none focus:ring-2 focus:ring-white/60 sm:flex-1 sm:bg-transparent sm:py-2.5 sm:focus:ring-0"
           />
           <button
             type="submit"
             disabled={etat === 'envoi'}
-            className="shrink-0 rounded-full bg-ablode-nuit px-7 py-2.5 text-[0.9375rem] font-semibold text-white transition-all duration-200 hover:bg-ablode-encre active:scale-[0.98] disabled:opacity-50 motion-reduce:active:scale-100"
+            className="w-full shrink-0 rounded-full bg-ablode-nuit px-7 py-3 text-[0.9375rem] font-semibold text-white transition-all duration-200 hover:bg-ablode-encre active:scale-[0.98] disabled:opacity-50 motion-reduce:active:scale-100 sm:w-auto sm:py-2.5"
           >
             {etat === 'envoi' ? '…' : t('inscrire')}
           </button>

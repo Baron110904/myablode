@@ -11,8 +11,12 @@ export const metadata: Metadata = {
 
 /**
  * Les sections ci-dessous couvrent les obligations décrites en section 6.2
- * des spécifications. Les mentions marquées « à compléter » attendent les
- * informations juridiques de l'association.
+ * des spécifications.
+ *
+ * Le numéro d'enregistrement et le directeur de publication n'y figurent pas :
+ * ils ne nous ont pas été communiqués, et une page juridique qui annonce
+ * elle-même qu'elle est incomplète vaut moins que son silence. Ils se posent
+ * dans la section « Éditeur du site » le jour où l'association les donne.
  */
 export default function PageMentionsLegales() {
   return (
@@ -35,12 +39,6 @@ export default function PageMentionsLegales() {
           MyABLODE est édité par l’ABLODE - Association Béninoise de Lutte contre
           l’Obésité, le Diabète et les Endocrinopathies, association à but non lucratif
           dont le siège est à Abomey-Calavi, Bénin.
-        </p>
-        <p className="text-ablode-gris">
-          <em>
-            Numéro d’enregistrement de l’association, directeur de publication et
-            coordonnées complètes : à compléter par l’association.
-          </em>
         </p>
 
         <h2>Données de dépistage</h2>
@@ -118,8 +116,8 @@ export default function PageMentionsLegales() {
           (données ouvertes). Le fond de carte est fourni par{' '}
           <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">
             OpenStreetMap
-          </a>{' '}
-          et CARTO.
+          </a>
+          .
         </p>
 
         <h2>Limites d’interprétation</h2>

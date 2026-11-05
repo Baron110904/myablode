@@ -114,13 +114,21 @@ export default async function PageActualites({
       {/* Filtres, à cheval sur le bas de la bannière. */}
       <div className="relative z-10 -mt-7">
         <div className="conteneur">
+          {/*
+            Une seule rangée, qui se fait défiler au doigt sur téléphone.
+            Avec `flex-wrap`, les cinq catégories s'empilaient sur trois
+            lignes dans une boîte aux coins entièrement arrondis : le
+            contour ovale enfermait un pavé, et le bloc mordait sur la
+            bannière qu'il chevauche. Au-delà de `sm`, tout tient sur une
+            ligne et la pilule reprend ses droits.
+          */}
           <nav
-            className="inline-flex max-w-full flex-wrap gap-1.5 rounded-full border border-ablode-trait bg-white p-2 shadow-carte"
+            className="-mx-5 flex gap-1.5 overflow-x-auto rounded-carte border border-ablode-trait bg-white p-2 px-5 shadow-carte [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:inline-flex sm:max-w-full sm:flex-wrap sm:overflow-visible sm:rounded-full sm:px-2"
             aria-label="Catégories"
           >
             <Link
               href={construireLien({ categorie: undefined, page: undefined })}
-              className={`puce-filtre !border-transparent ${
+              className={`puce-filtre shrink-0 !border-transparent ${
                 !searchParams.categorie ? 'puce-filtre-active' : ''
               }`}
             >
@@ -130,7 +138,7 @@ export default async function PageActualites({
               <Link
                 key={categorie.categorie}
                 href={construireLien({ categorie: categorie.categorie, page: undefined })}
-                className={`puce-filtre !border-transparent ${
+                className={`puce-filtre shrink-0 !border-transparent ${
                   searchParams.categorie === categorie.categorie
                     ? 'puce-filtre-active'
                     : ''

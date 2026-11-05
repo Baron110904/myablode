@@ -85,7 +85,7 @@
   },
   "newsletter": {
     "titre": "Get the results of every campaign",
-    "chapeau": "A monthly letter: screening figures, newly covered municipalities, prevention advice.",
+    "chapeau": "Screening figures, newly covered districts and prevention advice, straight to your inbox.",
     "placeholder": "your@email.bj",
     "inscrire": "Subscribe",
     "succes": "Your subscription is registered. Thank you!",
@@ -111,7 +111,7 @@
     "message": "Message",
     "envoyer": "Send message",
     "envoi": "Sending…",
-    "succes": "Your message has been sent. We will reply shortly.",
+    "succes": "Your message has reached us. An acknowledgement has just been sent to your inbox.",
     "coordonnees": "Contact details"
   },
   "benevole": {
@@ -131,7 +131,7 @@
     },
     "message": "A few words about you (optional)",
     "envoyer": "Send my application",
-    "succes": "Thank you! Your application is registered, a team member will contact you."
+    "succes": "Your application has been recorded. An acknowledgement has just been sent to your inbox."
   },
   "commun": {
     "chargement": "Loading…",

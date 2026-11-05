@@ -347,10 +347,17 @@ export default async function PageAPropos() {
         </div>
 
         {/*
-          La bande déborde volontairement du conteneur : elle traverse l'écran
-          d'un bord à l'autre, comme sur la maquette.
+          La bande déborde de la colonne de texte sans aller jusqu'aux bords
+          de l'écran. À pleine largeur, le nombre de logos visibles changeait
+          avec la taille du moniteur et la rangée n'était alignée sur rien ;
+          calée sur la colonne, elle en montrait trop peu. À 88rem, six
+          cartes entières et l'amorce d'une septième tiennent la largeur, et
+          la bande garde des marges qui la détachent du bord.
         */}
-        <Reveler delai={120} className="mt-10 pb-4">
+        <Reveler
+          delai={120}
+          className="mx-auto mt-10 w-full max-w-[88rem] px-5 pb-4 sm:px-8"
+        >
           <BandePartenaires />
         </Reveler>
 
