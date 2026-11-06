@@ -18,6 +18,7 @@ import {
   editionNormalisee,
   jourBenin,
   LIBELLES_CATEGORIE,
+  typographieFr,
 } from '@/lib/format';
 import type { Article, Evenement, ResumeStats } from '@/lib/types';
 
@@ -72,7 +73,7 @@ const ACTIONS = [
   },
   {
     numero: '02',
-    titre: 'Marche « Sucre à terre »',
+    titre: typographieFr('Marche « Sucre à terre »'),
     texte:
       "Un événement sportif de 5 km qui remet l'activité physique au cœur de la prévention du diabète de type 2.",
   },

@@ -10,6 +10,8 @@ import {
   nombre,
   paliersPrevalence,
   pourcentage,
+  typographieFr,
+  typographieFrProfonde,
   variation,
 } from './format';
 
@@ -188,5 +190,79 @@ describe('libelle d’edition', () => {
     expect(editionNormalisee('Édition spéciale')).toBe('Édition spéciale');
     expect(editionNormalisee(null)).toBeNull();
     expect(editionNormalisee('   ')).toBeNull();
+  });
+});
+
+/*
+ * Le defaut d'origine : sur l'accueil, la carte « Campagne « Le diabete et
+ * nous » » renvoyait le guillemet fermant seul a la ligne suivante. Rien dans
+ * la mise en page ne pouvait l'empecher — la coupure etait permise par
+ * l'espace ordinaire qui precedait le signe.
+ */
+describe('typographieFr', () => {
+  const INSECABLE = ' ';
+
+  it('soude le guillemet fermant au mot qui le precede', () => {
+    const titre = typographieFr('Campagne « Le diabète et nous »');
+    expect(titre).toBe(`Campagne «${INSECABLE}Le diabète et nous${INSECABLE}»`);
+    // Plus aucune espace ordinaire contre un guillemet : plus aucune coupure
+    // possible a cet endroit.
+    expect(titre).not.toMatch(/ [»]|« /);
+  });
+
+  it('traite de meme les autres signes doubles', () => {
+    expect(typographieFr('Tous concernés, tous dépistés !')).toBe(
+      `Tous concernés, tous dépistés${INSECABLE}!`,
+    );
+    expect(typographieFr('Une question ? Écrivez-nous.')).toBe(
+      `Une question${INSECABLE}? Écrivez-nous.`,
+    );
+    expect(typographieFr('Horaires : 8 h')).toBe(`Horaires${INSECABLE}: 8 h`);
+  });
+
+  /*
+   * La regle ne convertit que des espaces deja ecrites, elle n'en ajoute
+   * jamais. Une regle qui insererait l'espace manquante ecrirait « 14 :30 »
+   * et « https //… ».
+   */
+  it('n’insere pas d’espace la ou il n’y en avait pas', () => {
+    expect(typographieFr('Rendez-vous à 14:30')).toBe('Rendez-vous à 14:30');
+    expect(typographieFr('https://ablode.bj/actualites?page=2')).toBe(
+      'https://ablode.bj/actualites?page=2',
+    );
+  });
+
+  it('laisse l’anglais intact, qui n’espace pas ses signes', () => {
+    expect(typographieFr('Free screening: book your slot!')).toBe(
+      'Free screening: book your slot!',
+    );
+  });
+
+  it('peut etre appliquee deux fois sans degat', () => {
+    const une = typographieFr('Marche « Sucre à terre »');
+    expect(typographieFr(une)).toBe(une);
+  });
+});
+
+describe('typographieFrProfonde', () => {
+  const INSECABLE = ' ';
+
+  it('corrige toutes les chaines d’une reponse imbriquee', () => {
+    const recu = typographieFrProfonde({
+      items: [{ titre: 'Marche « Sucre à terre »', extrait: 'Cinq kilomètres.' }],
+      meta: { total: 1, suivant: null, actif: true },
+    });
+
+    expect(recu.items[0].titre).toBe(`Marche «${INSECABLE}Sucre à terre${INSECABLE}»`);
+    expect(recu.items[0].extrait).toBe('Cinq kilomètres.');
+    // Les valeurs qui ne sont pas du texte traversent sans etre touchees :
+    // un identifiant ou un drapeau transforme en chaine casserait la page.
+    expect(recu.meta).toEqual({ total: 1, suivant: null, actif: true });
+  });
+
+  it('corrige aussi le contenu HTML d’un article', () => {
+    expect(
+      typographieFrProfonde('<p>Le projet <em>« Le diabète et nous »</em> a dix ans.</p>'),
+    ).toBe(`<p>Le projet <em>«${INSECABLE}Le diabète et nous${INSECABLE}»</em> a dix ans.</p>`);
   });
 });

@@ -271,7 +271,6 @@ export class KoboService {
 
         const converti = await this.convertir(
           soumission,
-          koboId,
           mapping,
           mappingReduit,
           communes,
@@ -340,7 +339,6 @@ export class KoboService {
   /** Traduit une soumission Kobo en ligne `depistages`, ou explique le rejet. */
   private async convertir(
     soumission: KoboSubmission,
-    koboId: string,
     mapping: Record<string, string>,
     mappingReduit: Map<string, string>,
     communes: Map<string, number>,

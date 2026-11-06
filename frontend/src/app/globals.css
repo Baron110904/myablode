@@ -83,14 +83,6 @@
    */
   .champ-multiligne {
     @apply w-full rounded-carte border border-ablode-trait bg-white px-5 py-3.5
-           text-[0.95rem] leading-relaxed text-ablode-encre transition-all
-           duration-200 placeholder:text-ablode-gris hover:border-ablode-gris/60
-           focus:border-ablode-vert focus:outline-none focus:ring-1 focus:ring-ablode-vert;
-  }
-
-  /* Zone de texte : la pilule ne convient pas sur plusieurs lignes. */
-  .champ-multiligne {
-    @apply w-full rounded-carte border border-ablode-trait bg-white px-5 py-3.5
            text-[0.95rem] text-ablode-encre transition-all duration-200
            placeholder:text-ablode-gris hover:border-ablode-gris/60
            focus:border-ablode-vert focus:outline-none focus:ring-1 focus:ring-ablode-vert;
@@ -260,10 +252,6 @@
    */
   .entree {
     animation: entree-montee 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-
-  .titre-affiche {
-    @apply text-[2.75rem] font-extrabold leading-[1.06] tracking-[-0.035em] sm:text-[3.5rem];
   }
 
   .titre-section {
@@ -479,8 +467,3 @@
   @apply rounded bg-ablode-voile px-1.5 py-0.5 text-[0.9em];
 }
 
-@media print {
-  .sans-impression {
-    display: none !important;
-  }
-}

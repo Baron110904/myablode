@@ -1,4 +1,5 @@
 import { getRequestConfig } from 'next-intl/server';
+import { typographieFrProfonde } from '@/lib/format';
 import { langueDuSite } from './config';
 
 /**
@@ -8,10 +9,18 @@ import { langueDuSite } from './config';
  */
 export default getRequestConfig(async () => {
   const locale = langueDuSite();
+  const messages = (await import(`../messages/${locale}.json`)).default;
 
   return {
     locale,
-    messages: (await import(`../messages/${locale}.json`)).default,
+    /*
+     * Les traductions suivent la même règle typographique que les textes
+     * venus de l'API : « tous dépistés ! » ne doit pas laisser le point
+     * d'exclamation passer seul à la ligne. La règle est française, donc
+     * appliquée au seul français - l'anglais ne met pas d'espace devant ses
+     * signes doubles.
+     */
+    messages: locale === 'fr' ? typographieFrProfonde(messages) : messages,
     timeZone: 'Africa/Porto-Novo',
     now: new Date(),
   };

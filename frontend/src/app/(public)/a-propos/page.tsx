@@ -7,6 +7,7 @@ import { ReseauxSociaux } from '@/components/public/ReseauxSociaux';
 import { Reveler } from '@/components/public/Reveler';
 import { apiPublicOuDefaut } from '@/lib/api';
 import { PARTENAIRES } from '@/lib/association';
+import { typographieFr } from '@/lib/format';
 import type { ResumeStats } from '@/lib/types';
 
 export const metadata: Metadata = {
@@ -69,7 +70,7 @@ const ACTIVITES = [
     accent: 'vert' as const,
   },
   {
-    titre: 'Marche « Sucre à terre »',
+    titre: typographieFr('Marche « Sucre à terre »'),
     accroche: 'Cinq kilomètres contre la sédentarité',
     texte:
       'Un événement sportif qui remet l’activité physique au cœur de la prévention du ' +
@@ -102,10 +103,11 @@ const AXES = [
   {
     numero: '02',
     titre: 'La présence de professionnels de santé',
-    texte:
+    texte: typographieFr(
       'Conférences, bilans de santé et marche « Sucre à terre » sont encadrés par des ' +
-      'médecins, des infirmiers et des spécialistes en diabétologie ou en endocrinologie ' +
-      'issus des structures de soin locales.',
+        'médecins, des infirmiers et des spécialistes en diabétologie ou en endocrinologie ' +
+        'issus des structures de soin locales.',
+    ),
   },
   {
     numero: '03',
@@ -166,7 +168,7 @@ export default async function PageAPropos() {
               {[
                 { valeur: '2018', libelle: 'Année de création' },
                 { valeur: '77', libelle: 'Communes du Bénin' },
-                { valeur: '5 km', libelle: 'Marche « Sucre à terre »' },
+                { valeur: '5 km', libelle: typographieFr('Marche « Sucre à terre »') },
                 { valeur: '3', libelle: 'Objectifs statutaires' },
               ].map((carte, index) => (
                 <div

@@ -6,11 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
-import {
-  PaginatedResult,
-  PaginationDto,
-  paginate,
-} from 'src/common/dto/pagination.dto';
+import { PaginatedResult, paginate } from 'src/common/dto/pagination.dto';
 import { FormulaireMarche, InscriptionMarche } from 'src/database/entities';
 import { NewsletterService } from 'src/modules/newsletter/newsletter.service';
 import {

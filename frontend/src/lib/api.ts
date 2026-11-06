@@ -1,3 +1,4 @@
+import { typographieFrProfonde } from './format';
 import type { Utilisateur } from './types';
 
 /**
@@ -80,7 +81,18 @@ export async function apiPublic<T>(
   });
 
   if (!reponse.ok) throw await lireErreur(reponse);
-  return reponse.json() as Promise<T>;
+
+  /*
+   * Les textes saisis au back-office partent vers une page de vitrine, où ils
+   * sont composés dans des colonnes étroites. Les espaces qu'exige la
+   * typographie française y sont rendues insécables une fois pour toutes :
+   * autrement, chaque composant devrait y penser, et le premier qui l'oublie
+   * renvoie un guillemet fermant seul à la ligne.
+   *
+   * Seule la lecture publique est concernée. `apiAdmin` ne passe pas par ici :
+   * ce que l'administrateur relit dans ses formulaires reste ce qu'il a tapé.
+   */
+  return typographieFrProfonde((await reponse.json()) as T);
 }
 
 /**
@@ -103,14 +115,6 @@ export async function apiPublicOuDefaut<T>(
 
 let jetonAcces: string | null = null;
 let rafraichissementEnCours: Promise<string | null> | null = null;
-
-function definirJeton(jeton: string | null): void {
-  jetonAcces = jeton;
-}
-
-function obtenirJeton(): string | null {
-  return jetonAcces;
-}
 
 /**
  * Renouvelle le jeton d'accès à partir du cookie HttpOnly.

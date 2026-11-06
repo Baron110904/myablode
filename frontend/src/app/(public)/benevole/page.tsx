@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
+import { typographieFr } from '@/lib/format';
 import { FormulaireBenevole } from './FormulaireBenevole';
 
 export const metadata: Metadata = {
@@ -40,7 +41,7 @@ export default async function PageBenevole() {
                   'Accueillir et orienter les personnes sur les postes de dépistage',
                   'Aider à la saisie des fiches sur tablette',
                   'Distribuer les supports de sensibilisation',
-                  'Participer à l’organisation de la marche « Sucre à terre »',
+                  typographieFr('Participer à l’organisation de la marche « Sucre à terre »'),
                 ].map((tache) => (
                   <li
                     key={tache}

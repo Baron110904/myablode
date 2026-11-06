@@ -4,7 +4,6 @@ import type {
   ResultatDepistage,
   SourceDepistage,
   StatutCampagne,
-  TypeDepistage,
 } from './types';
 
 /** Formatage et libellés — une seule source de vérité pour toute l'interface. */
@@ -412,3 +411,46 @@ export const LIBELLES_ENTITE: Record<string, string> = {
   newsletter: 'Newsletter',
   newsletter_abonne: 'Abonné',
 };
+
+// ─── Typographie française ───────────────────────────────────────────────────
+
+/**
+ * Espaces insécables là où le français en exige.
+ *
+ * Le navigateur a le droit de couper une ligne sur n'importe quelle espace
+ * ordinaire. Dans une carte étroite, « Campagne « Le diabète et nous » »
+ * renvoyait donc le guillemet fermant seul à la ligne suivante : le titre
+ * paraissait cassé, et rien dans la mise en page ne pouvait l'empêcher — la
+ * coupure est permise par le texte lui-même.
+ *
+ * Seules les espaces déjà présentes sont converties ; aucune n'est ajoutée.
+ * « 14:30 » reste donc « 14:30 », là où une règle qui insérerait l'espace
+ * manquante écrirait « 14 :30 ».
+ *
+ * L'espace retenue est U+00A0 et non l'espace fine U+202F de la règle
+ * typographique : Inter rend U+202F sans largeur (voir `nombre`).
+ */
+export function typographieFr(texte: string): string {
+  return texte.replace(/« /g, '« ').replace(/ ([;:!?»])/g, ' $1');
+}
+
+/**
+ * La même règle appliquée à toutes les chaînes d'une réponse JSON.
+ *
+ * Elle est posée aux points d'entrée des textes (le client public et le
+ * chargement des traductions) plutôt qu'à chaque affichage : une correction
+ * typographique que l'on doit penser à rappeler composant par composant finit
+ * par être oubliée au suivant.
+ */
+export function typographieFrProfonde<T>(valeur: T): T {
+  if (typeof valeur === 'string') return typographieFr(valeur) as T;
+  if (Array.isArray(valeur)) {
+    return valeur.map((element) => typographieFrProfonde(element)) as T;
+  }
+  if (valeur !== null && typeof valeur === 'object') {
+    return Object.fromEntries(
+      Object.entries(valeur).map(([cle, v]) => [cle, typographieFrProfonde(v)]),
+    ) as T;
+  }
+  return valeur;
+}
