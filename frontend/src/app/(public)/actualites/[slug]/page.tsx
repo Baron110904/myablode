@@ -7,7 +7,7 @@ import { DonneesArticle } from '@/components/public/DonneesStructurees';
 import { FormulaireNewsletter } from '@/components/public/FormulaireNewsletter';
 import { ImageArticle } from '@/components/public/ImageArticle';
 import { BoutonsPartage } from './BoutonsPartage';
-import { apiPublic, apiPublicOuDefaut } from '@/lib/api';
+import { apiPublic, apiPublicOuDefaut, urlMedia } from '@/lib/api';
 import { date, LIBELLES_CATEGORIE } from '@/lib/format';
 import type { Article, FormulaireMarchePublic } from '@/lib/types';
 
@@ -51,7 +51,7 @@ export async function generateMetadata({
       type: 'article',
       url: chemin,
       publishedTime: article.date_publication ?? undefined,
-      images: article.image_url ? [article.image_url] : undefined,
+      images: article.image_url ? [urlMedia(article.image_url)] : undefined,
     },
   };
 }

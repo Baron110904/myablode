@@ -1,3 +1,4 @@
+import { urlMedia } from '@/lib/api';
 import { ASSOCIATION, RESEAUX_SOCIAUX } from '@/lib/association';
 import type { Article, Evenement } from '@/lib/types';
 
@@ -128,8 +129,8 @@ export function DonneesArticle({ article }: { article: Article }) {
         description: article.extrait ?? undefined,
         image: article.image_url
           ? [
-              article.image_url.startsWith('http')
-                ? article.image_url
+              urlMedia(article.image_url).startsWith('http')
+                ? urlMedia(article.image_url)
                 : `${SITE}${article.image_url}`,
             ]
           : undefined,

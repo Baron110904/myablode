@@ -13,6 +13,9 @@ COPY . .
 # d'exécution.
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+# Même logique pour l'adresse publique du site (plan du site, aperçus de partage).
+ARG NEXT_PUBLIC_SITE_URL
+ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 ENV NEXT_TELEMETRY_DISABLED=1
 # Déclenche `output: 'standalone'` — voir next.config.js.
 ENV BUILD_STANDALONE=true

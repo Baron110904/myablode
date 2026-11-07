@@ -7,7 +7,7 @@ import {
   joursRestants,
 } from '@/components/public/AppelInscription';
 import { FormulaireMarche } from '@/components/public/FormulaireMarche';
-import { apiPublic, apiPublicOuDefaut } from '@/lib/api';
+import { apiPublic, apiPublicOuDefaut, urlMedia } from '@/lib/api';
 import { dateHeure } from '@/lib/format';
 import type { Article, FormulaireMarchePublic } from '@/lib/types';
 
@@ -146,7 +146,7 @@ export default async function PageInscriptionMarche({
             className="absolute inset-y-0 right-0 hidden w-[45%] overflow-hidden lg:block"
           >
             <Image
-              src={article.image_url}
+              src={urlMedia(article.image_url)}
               alt=""
               fill
               priority

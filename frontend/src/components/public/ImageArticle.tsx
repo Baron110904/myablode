@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { urlMedia } from '@/lib/api';
 
 /**
  * Illustration d'article, avec repli sur un motif discret.
@@ -9,7 +10,7 @@ import Image from 'next/image';
  * échappent à cette optimisation et sont servies telles quelles.
  */
 export function ImageArticle({
-  src,
+  src: chemin,
   alt = '',
   hauteur,
   largeur = 640,
@@ -23,6 +24,10 @@ export function ImageArticle({
   priorite?: boolean;
   className?: string;
 }) {
+  // Une image déposée depuis le back-office (`/uploads/…`) est servie par
+  // l'API, pas par le site : sans cette réécriture, elle répond 404.
+  const src = urlMedia(chemin);
+
   if (!src) {
     return (
       <div
