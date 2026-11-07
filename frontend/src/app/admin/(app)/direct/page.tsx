@@ -359,7 +359,7 @@ export default function PageDirect() {
 
             <p className="px-1 text-[0.75rem] leading-relaxed text-admin-gris">
               Source · KoboCollect et imports de fichiers. L’horodatage retenu est
-              l’arrivée de la donnée sur la plateforme, pas la date de l’examen :
+              l’arrivée de la donnée sur la plateforme, pas la date de l’examen:
               un dépistage fait le matin peut n’arriver qu’au soir, quand l’agent
               retrouve du réseau.
             </p>

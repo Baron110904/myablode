@@ -96,7 +96,7 @@ export function EquipeCampagne({
 
       {agents.length === 0 ? (
         <p className="rounded-carte bg-admin-fond px-5 py-4 text-[0.8125rem] leading-relaxed text-admin-gris">
-          Aucun agent enregistré. Créez-en un pour composer l’équipe : la
+          Aucun agent enregistré. Créez-en un pour composer l’équipe: la
           collecte de la campagne lui sera rattachée.
         </p>
       ) : (

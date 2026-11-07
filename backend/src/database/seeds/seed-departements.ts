@@ -40,7 +40,7 @@ export async function seedDepartements(dataSource: DataSource): Promise<{
 
   if (sansPopulation.length > 0) {
     throw new Error(
-      `Communes absentes du fichier de population : ${sansPopulation.join(', ')}. ` +
+      `Communes absentes du fichier de population: ${sansPopulation.join(', ')}. ` +
         `Vérifiez data/benin-population-adm2-2024.csv.`,
     );
   }
@@ -117,7 +117,7 @@ function lireCsv(fichier: string, colonneNom: string): Map<string, number> {
   if (iNom === -1 || iTotal === -1) {
     throw new Error(
       `Colonnes « ${colonneNom} » et « T_TL » attendues dans ${fichier}, ` +
-        `trouvé : ${entetes.slice(0, 8).join(', ')}…`,
+        `trouvé: ${entetes.slice(0, 8).join(', ')}…`,
     );
   }
 

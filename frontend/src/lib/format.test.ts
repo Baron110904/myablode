@@ -220,7 +220,7 @@ describe('typographieFr', () => {
     expect(typographieFr('Une question ? Écrivez-nous.')).toBe(
       `Une question${INSECABLE}? Écrivez-nous.`,
     );
-    expect(typographieFr('Horaires : 8 h')).toBe(`Horaires${INSECABLE}: 8 h`);
+    expect(typographieFr('Horaires : 8 h')).toBe('Horaires: 8 h');
   });
 
   /*

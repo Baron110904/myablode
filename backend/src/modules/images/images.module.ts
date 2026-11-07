@@ -30,7 +30,7 @@ const TAILLE_MAX_MO = 12;
           rappel(
             new BadRequestException(
               `Format « ${fichier.mimetype} » refusé. ` +
-                `Formats acceptés : ${LIBELLE_FORMATS_IMAGE}.`,
+                `Formats acceptés: ${LIBELLE_FORMATS_IMAGE}.`,
             ),
             false,
           );

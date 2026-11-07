@@ -172,7 +172,7 @@ export function OngletKobo() {
               placeholder="https://kf.kobotoolbox.org"
             />
             <p className="mt-1.5 text-[0.75rem] text-admin-gris">
-              Serveur public : <code>https://kf.kobotoolbox.org</code> · Serveur OCHA :{' '}
+              Serveur public: <code>https://kf.kobotoolbox.org</code> · Serveur OCHA:{' '}
               <code>https://kobo.humanitarianresponse.info</code>
             </p>
           </div>
@@ -195,7 +195,7 @@ export function OngletKobo() {
               }
             />
             <p className="mt-1.5 text-[0.75rem] leading-relaxed text-admin-gris">
-              Dans KoboToolbox : <strong>Compte → Paramètres du compte → Jeton API</strong>.
+              Dans KoboToolbox: <strong>Compte → Paramètres du compte → Jeton API</strong>.
               Le jeton n’est jamais réaffiché après enregistrement, ni consigné dans le
               journal d’audit.
             </p>

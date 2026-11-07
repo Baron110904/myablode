@@ -45,7 +45,7 @@ export class DepistagesController {
     description:
       'Un compte en lecture ne voit que ses propres dépistages et ceux des ' +
       'campagnes ou communes auxquelles il est affecté. Le périmètre est ' +
-      'appliqué côté serveur : il ne peut pas être contourné par un paramètre.',
+      'appliqué côté serveur: il ne peut pas être contourné par un paramètre.',
   })
   findAll(
     @Query() query: QueryDepistagesDto,
@@ -62,7 +62,7 @@ export class DepistagesController {
   @ApiOperation({
     summary: 'Détail d’un dépistage',
     description:
-      'Soumis au même périmètre que la liste pour un compte en lecture : ' +
+      'Soumis au même périmètre que la liste pour un compte en lecture: ' +
       'hors périmètre, la fiche est déclarée introuvable.',
   })
   findOne(

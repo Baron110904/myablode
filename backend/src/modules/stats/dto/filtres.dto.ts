@@ -99,7 +99,7 @@ export class FiltresCarteDto extends FiltresStatsDto {
   @ApiPropertyOptional({
     enum: NiveauCarte,
     default: NiveauCarte.COMMUNE,
-    description: 'Découpage affiché : départements (12) ou communes (77)',
+    description: 'Découpage affiché: départements (12) ou communes (77)',
   })
   @IsOptional()
   @IsEnum(NiveauCarte)

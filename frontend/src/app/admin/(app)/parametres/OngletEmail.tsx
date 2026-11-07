@@ -180,7 +180,7 @@ export function OngletEmail() {
       {!config?.configure && (
         <Alerte type="attention">
           Aucun serveur d’envoi n’est configuré. Les réinitialisations de mot de passe,
-          les accusés de réception et la lettre d’information ne partent pas : ils sont
+          les accusés de réception et la lettre d’information ne partent pas: ils sont
           seulement inscrits dans les journaux du serveur.
         </Alerte>
       )}
@@ -285,7 +285,7 @@ export function OngletEmail() {
             />
             <p className="mt-1.5 text-[0.75rem] leading-relaxed text-admin-gris">
               Apparaît comme expéditeur dans la boîte de réception des destinataires.
-              Utilisez une adresse du domaine de l’association : les messages envoyés
+              Utilisez une adresse du domaine de l’association: les messages envoyés
               depuis une adresse étrangère au domaine finissent souvent en indésirables.
             </p>
           </div>
@@ -315,7 +315,7 @@ export function OngletEmail() {
         <div className="max-w-xl space-y-4">
           <p className="text-sm leading-relaxed text-admin-gris">
             Envoie un message réel à l’adresse indiquée. C’est le seul moyen de vérifier
-            toute la chaîne : connexion, authentification, acceptation par le serveur et
+            toute la chaîne: connexion, authentification, acceptation par le serveur et
             arrivée dans la boîte de réception.
           </p>
 
@@ -342,7 +342,7 @@ export function OngletEmail() {
           </div>
 
           <p className="text-[0.75rem] leading-relaxed text-admin-gris">
-            Pensez à regarder le dossier des indésirables : un premier message depuis un
+            Pensez à regarder le dossier des indésirables: un premier message depuis un
             nouveau serveur y atterrit fréquemment.
           </p>
         </div>

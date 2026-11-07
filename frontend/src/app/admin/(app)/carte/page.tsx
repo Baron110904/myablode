@@ -166,7 +166,7 @@ export default function PageCarteAdmin() {
     ctx.font = '13px monospace';
     ctx.fillStyle = '#6b7671';
     ctx.fillText(
-      `Période : ${filtres.periode} · Généré le ${new Date().toLocaleDateString('fr-FR')}`,
+      `Période: ${filtres.periode} · Généré le ${new Date().toLocaleDateString('fr-FR')}`,
       40,
       hauteur - 32,
     );
@@ -248,7 +248,7 @@ export default function PageCarteAdmin() {
                 </ul>
                 <p className="mt-3 text-[0.75rem] leading-relaxed text-admin-gris">
                   Position GPS approximative, limitée aux 3 000 dépistages les plus
-                  récents. Donnée sensible : jamais exposée sur le site public.
+                  récents. Donnée sensible: jamais exposée sur le site public.
                 </p>
               </div>
             )}

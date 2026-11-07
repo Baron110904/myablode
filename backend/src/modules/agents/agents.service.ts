@@ -194,7 +194,7 @@ export class AgentsService {
 
     if (!dto.campagne_id && !dto.commune_id) {
       throw new BadRequestException(
-        'Précisez au moins une campagne ou une commune : une affectation sans ' +
+        'Précisez au moins une campagne ou une commune: une affectation sans ' +
           'périmètre ne dit rien.',
       );
     }
@@ -253,7 +253,7 @@ export class AgentsService {
   ): Promise<AgentFelicitation> {
     if (!dto.agent_id && !dto.commune_id) {
       throw new BadRequestException(
-        'Indiquez un agent ou une commune : on félicite quelqu’un, pas personne.',
+        'Indiquez un agent ou une commune: on félicite quelqu’un, pas personne.',
       );
     }
     if (dto.agent_id) await this.findOne(dto.agent_id);

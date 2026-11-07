@@ -34,7 +34,7 @@ export class NettoyageFichierInterceptor implements NestInterceptor {
         if (fichier?.path) {
           unlink(fichier.path).catch((echec: NodeJS.ErrnoException) => {
             if (echec.code !== 'ENOENT') {
-              this.logger.warn(`Fichier ${fichier.path} non nettoyé : ${echec.code}`);
+              this.logger.warn(`Fichier ${fichier.path} non nettoyé: ${echec.code}`);
             }
           });
         }

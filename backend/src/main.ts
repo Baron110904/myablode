@@ -106,12 +106,12 @@ async function bootstrap(): Promise<void> {
       `(${secondesDepuisLancement()} s depuis le lancement)`,
   );
   if (config.get<string>('env') !== 'production') {
-    logger.log(`Documentation Swagger : http://localhost:${port}/api/docs`);
+    logger.log(`Documentation Swagger: http://localhost:${port}/api/docs`);
   }
 }
 
 bootstrap().catch((error) => {
   // eslint-disable-next-line no-console
-  console.error('Démarrage impossible :', error);
+  console.error('Démarrage impossible:', error);
   process.exit(1);
 });

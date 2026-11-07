@@ -80,7 +80,7 @@ export class ImportsService {
     const lignes = await this.lireFichier(fichier);
     if (lignes.length > MAX_LIGNES) {
       throw new BadRequestException(
-        `Fichier trop volumineux : ${lignes.length} lignes (maximum ${MAX_LIGNES}).`,
+        `Fichier trop volumineux: ${lignes.length} lignes (maximum ${MAX_LIGNES}).`,
       );
     }
 
@@ -196,7 +196,7 @@ export class ImportsService {
       });
     } catch (error) {
       throw new BadRequestException(
-        `Lecture du CSV impossible : ${(error as Error).message}`,
+        `Lecture du CSV impossible: ${(error as Error).message}`,
       );
     }
   }
@@ -223,7 +223,7 @@ export class ImportsService {
       await classeur.xlsx.load(buffer as never);
     } catch (error) {
       throw new BadRequestException(
-        `Lecture du classeur Excel impossible : ${(error as Error).message}`,
+        `Lecture du classeur Excel impossible: ${(error as Error).message}`,
       );
     }
 
@@ -311,7 +311,7 @@ export class ImportsService {
     if (!dateNaissance) return { erreur: 'Date de naissance absente ou illisible.' };
 
     const sexe = normaliserSexe(valeurs.sexe);
-    if (!sexe) return { erreur: 'Sexe absent ou non reconnu (attendu : M ou F).' };
+    if (!sexe) return { erreur: 'Sexe absent ou non reconnu (attendu: M ou F).' };
 
     const dateDepistage = normaliserDate(valeurs.date_depistage);
     if (!dateDepistage) return { erreur: 'Date de dépistage absente ou illisible.' };

@@ -186,7 +186,7 @@ export class ContactsController {
     summary: 'Accepte une candidature',
     description:
       'Crée la fiche agent et le compte de consultation. Les identifiants ' +
-      'sont renvoyés une seule fois, à remettre en main propre : le courriel ' +
+      'sont renvoyés une seule fois, à remettre en main propre: le courriel ' +
       'de bienvenue ne les contient pas.',
   })
   accepterBenevole(

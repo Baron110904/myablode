@@ -41,7 +41,7 @@ export class AuditService {
     } catch (error) {
       // Tracer ne doit jamais faire échouer l'action métier tracée.
       this.logger.error(
-        `Écriture du journal d'audit impossible (${entry.action}/${entry.entity}) : ${(error as Error).message}`,
+        `Écriture du journal d'audit impossible (${entry.action}/${entry.entity}): ${(error as Error).message}`,
       );
     }
   }

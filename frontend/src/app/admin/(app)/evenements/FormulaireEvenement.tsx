@@ -248,7 +248,7 @@ export function FormulaireEvenement({
           <span className="text-sm">
             <span className="font-semibold">Visible sur le site</span>
             <span className="mt-1 block text-[0.8125rem] leading-relaxed text-admin-gris">
-              Le bandeau d’accueil n’affiche que les dates à venir : une date
+              Le bandeau d’accueil n’affiche que les dates à venir: une date
               passée disparaît d’elle-même, sans rien décocher.
             </span>
           </span>

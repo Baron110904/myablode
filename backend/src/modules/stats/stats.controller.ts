@@ -62,7 +62,7 @@ export class StatsController {
   @ApiOperation({
     summary: 'Derniers dépistages enregistrés, pour l’animation de la carte',
     description:
-      'Commune, centroïde et horodatage uniquement : ni résultat ni mesure, ' +
+      'Commune, centroïde et horodatage uniquement: ni résultat ni mesure, ' +
       'que le site public n’a pas à exposer.',
   })
   derniers() {

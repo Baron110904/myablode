@@ -42,7 +42,7 @@ export class MarcheController {
     summary: 'Formulaire publié sur un article',
     description:
       'Renvoie null si aucun formulaire n’est publié sur cet article. Un ' +
-      'formulaire fermé reste visible : il faut annoncer la clôture, pas la ' +
+      'formulaire fermé reste visible: il faut annoncer la clôture, pas la ' +
       'faire disparaître.',
   })
   formulairePublic(@Param('articleId', ParseIntPipe) articleId: number) {

@@ -35,7 +35,7 @@ export function PanneauCampagne({ modifiable }: { modifiable: boolean }) {
     } catch {
       setLectureEchouee(true);
       setErreur(
-        'Impossible de lire l’édition en cours. Rechargez la page avant de modifier : ' +
+        'Impossible de lire l’édition en cours. Rechargez la page avant de modifier: ' +
           'enregistrer maintenant effacerait ce qui est enregistré.',
       );
     } finally {
@@ -142,7 +142,7 @@ export function PanneauCampagne({ modifiable }: { modifiable: boolean }) {
       </div>
 
       <p className="text-[0.75rem] leading-relaxed text-admin-gris">
-        Écrivez-le comme vous voulez : « 6ème », « 6e » ou « 6 ». Le site le
+        Écrivez-le comme vous voulez: « 6ème », « 6e » ou « 6 ». Le site le
         composera en « 6ᵉ ».
       </p>
     </form>

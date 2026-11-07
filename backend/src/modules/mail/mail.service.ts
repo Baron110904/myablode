@@ -46,7 +46,7 @@ export class MailService {
 
     if (!host) {
       this.logger.warn(
-        'SMTP non configuré : les emails seront journalisés au lieu d’être envoyés. ' +
+        'SMTP non configuré: les emails seront journalisés au lieu d’être envoyés. ' +
           'Renseignez le serveur dans Paramètres → Email.',
       );
       return;
@@ -154,7 +154,7 @@ export class MailService {
       return true;
     } catch (error) {
       this.logger.error(
-        `Envoi à ${message.to} échoué : ${(error as Error).message}`,
+        `Envoi à ${message.to} échoué: ${(error as Error).message}`,
       );
       return false;
     }
@@ -176,7 +176,7 @@ export class MailService {
         'Configuration validée',
         `<p>Si vous lisez ce message, l’envoi d’emails depuis la plateforme MyABLODE
           fonctionne correctement.</p>
-         <p>Les notifications suivantes emprunteront ce même canal : réinitialisations
+         <p>Les notifications suivantes emprunteront ce même canal: réinitialisations
           de mot de passe, accusés de réception des formulaires, lettre d’information
           et alertes de synchronisation.</p>`,
       ),
@@ -200,7 +200,7 @@ export class MailService {
   private async resoudre(cle: string): Promise<GabaritResolu> {
     const origine = gabaritParCle(cle);
     if (!origine) {
-      throw new Error(`Gabarit de courriel inconnu : ${cle}`);
+      throw new Error(`Gabarit de courriel inconnu: ${cle}`);
     }
 
     const regle = await this.settings
@@ -384,14 +384,14 @@ function traduireErreurSmtp(erreur: Error): string {
   }
   if (/certificate|self.signed|SSL|wrong version number/i.test(indices)) {
     return (
-      'Échange chiffré refusé. Vérifiez le port : 465 pour un TLS direct, ' +
+      'Échange chiffré refusé. Vérifiez le port: 465 pour un TLS direct, ' +
       '587 pour un chiffrement négocié.'
     );
   }
   if (/ECONNRESET|EPIPE/i.test(indices)) {
     return 'La connexion a été interrompue par le serveur. Vérifiez le port et le mode de chiffrement.';
   }
-  return `Échec de la connexion : ${message}`;
+  return `Échec de la connexion: ${message}`;
 }
 
 function htmlVersTexte(html: string): string {

@@ -58,8 +58,8 @@ export function GraphiqueMensuel({ donnees }: { donnees: PointEvolution[] }) {
                 label: (contexte) => {
                   const point = donnees[contexte.dataIndex];
                   return contexte.datasetIndex === 0
-                    ? `Cas détectés : ${nombre(point.cas)}`
-                    : `Dépistages : ${nombre(point.depistages)}`;
+                    ? `Cas détectés: ${nombre(point.cas)}`
+                    : `Dépistages: ${nombre(point.depistages)}`;
                 },
               },
             },

@@ -172,7 +172,7 @@ export function ModaleImport({
               Glissez votre fichier ici, ou sélectionnez-le
             </p>
             <p className="mt-2 text-[0.8125rem] text-admin-gris">
-              Formats acceptés : .csv, .xlsx, .xls - 20 Mo maximum
+              Formats acceptés: .csv, .xlsx, .xls - 20 Mo maximum
             </p>
 
             <input
@@ -196,7 +196,7 @@ export function ModaleImport({
           </div>
 
           <p className="mt-5 text-[0.8125rem] leading-relaxed text-admin-gris">
-            Le fichier n’est pas encore importé : l’étape suivante affiche un aperçu et
+            Le fichier n’est pas encore importé: l’étape suivante affiche un aperçu et
             vous laisse vérifier la correspondance des colonnes.
           </p>
         </div>
@@ -315,7 +315,7 @@ export function ModaleImport({
           {manquants.length > 0 && (
             <div className="mt-5">
               <Alerte type="attention">
-                Champs obligatoires non associés :{' '}
+                Champs obligatoires non associés:{' '}
                 <strong>{manquants.join(', ')}</strong>. Associez-les pour lancer
                 l’import.
               </Alerte>
@@ -377,7 +377,7 @@ export function ModaleImport({
               </ul>
               <p className="mt-3 text-[0.8125rem] leading-relaxed text-admin-gris">
                 Les lignes rejetées n’ont pas été enregistrées. Corrigez-les dans le
-                fichier source puis relancez un import : les lignes déjà importées seront
+                fichier source puis relancez un import: les lignes déjà importées seront
                 détectées comme doublons et ignorées.
               </p>
             </div>

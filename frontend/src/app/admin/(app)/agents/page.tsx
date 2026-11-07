@@ -740,7 +740,7 @@ function ModaleFiche({
       {stats && stats.depistages === 0 && (
         <p className="mt-4 text-[0.8125rem] leading-relaxed text-admin-gris">
           Aucun dépistage rattaché pour l’instant. Le rattachement se fait par le
-          matricule Kobo : sans matricule renseigné ici, ou sans matricule saisi
+          matricule Kobo: sans matricule renseigné ici, ou sans matricule saisi
           dans le formulaire, la collecte reste anonyme.
         </p>
       )}
@@ -860,7 +860,7 @@ function ModaleFiche({
           </div>
 
           <p className="mt-4 text-[0.8125rem] leading-relaxed text-admin-gris">
-            Laissez un champ sur « toutes » pour affecter largement : une campagne
+            Laissez un champ sur « toutes » pour affecter largement: une campagne
             entière, ou une commune quelle que soit la campagne.
           </p>
 

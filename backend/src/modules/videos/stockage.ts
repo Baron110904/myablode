@@ -57,7 +57,7 @@ export function dossierVideos(config: ConfigService): string {
 export function nomDeFichier(mimetype: string): string {
   const extension = FORMATS_VIDEO[mimetype];
   if (!extension) {
-    throw new BadRequestException(`Format refusé. Formats acceptés : ${LIBELLE_FORMATS}.`);
+    throw new BadRequestException(`Format refusé. Formats acceptés: ${LIBELLE_FORMATS}.`);
   }
   return `${randomUUID()}${extension}`;
 }

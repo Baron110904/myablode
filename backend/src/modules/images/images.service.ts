@@ -65,7 +65,7 @@ export class ImagesService {
     }
     if (!FORMATS_IMAGE.includes(fichier.mimetype)) {
       throw new BadRequestException(
-        `Format « ${fichier.mimetype} » refusé. Formats acceptés : ${LIBELLE_FORMATS_IMAGE}.`,
+        `Format « ${fichier.mimetype} » refusé. Formats acceptés: ${LIBELLE_FORMATS_IMAGE}.`,
       );
     }
 
@@ -85,7 +85,7 @@ export class ImagesService {
         .webp({ quality: 82 })
         .toBuffer({ resolveWithObject: true });
     } catch (erreur) {
-      this.logger.warn(`Image illisible : ${(erreur as Error).message}`);
+      this.logger.warn(`Image illisible: ${(erreur as Error).message}`);
       throw new BadRequestException(
         'Ce fichier n’est pas une image lisible. Déposez un JPEG, un PNG ou un WebP.',
       );

@@ -51,7 +51,7 @@ export class AgentsController {
   @ApiOperation({
     summary: 'Derniers éloges et rappels adressés aux agents',
     description:
-      'Accessible aux comptes en lecture : c’est la page où un agent voit ' +
+      'Accessible aux comptes en lecture: c’est la page où un agent voit ' +
       'ce qui a été adressé à lui et à ses collègues.',
   })
   messages(@Query('type') type?: TypeMessageAgent) {
@@ -118,7 +118,7 @@ export class AgentsController {
   @ApiOperation({
     summary: 'Désactive un agent',
     description:
-      'L’agent sort des listes actives mais garde ses dépistages : les ' +
+      'L’agent sort des listes actives mais garde ses dépistages: les ' +
       'supprimer effacerait qui a collecté quoi.',
   })
   async desactiver(

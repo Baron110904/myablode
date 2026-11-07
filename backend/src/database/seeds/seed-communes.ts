@@ -61,7 +61,7 @@ export async function seedCommunes(dataSource: DataSource): Promise<number> {
 
   if (manquantes.length > 0) {
     throw new Error(
-      `Communes absentes du GeoJSON : ${manquantes.join(', ')}. ` +
+      `Communes absentes du GeoJSON: ${manquantes.join(', ')}. ` +
         `Vérifiez data/benin-communes.geojson.`,
     );
   }

@@ -19,7 +19,7 @@ import type { Paginated, Role, Utilisateur } from '@/lib/types';
 const VIDE: Paginated<Utilisateur> = { items: [], total: 0, page: 1, limit: 20, pages: 1 };
 
 const DESCRIPTIONS_ROLE: Record<Role, string> = {
-  super_admin: 'Accès total : configuration Kobo, utilisateurs, paramètres système.',
+  super_admin: 'Accès total: configuration Kobo, utilisateurs, paramètres système.',
   admin: 'Import, campagnes, articles - sans configuration Kobo ni gestion des comptes.',
   viewer: 'Lecture seule des statistiques et des données, exports anonymisés.',
 };

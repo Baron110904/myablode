@@ -171,8 +171,8 @@ export class ContactsService {
       role_terrain: RoleTerrain.BENEVOLE,
       notes: [
         'Candidature spontanée acceptée.',
-        benevole.ville ? `Ville : ${benevole.ville}` : null,
-        benevole.disponibilite ? `Disponibilité : ${benevole.disponibilite}` : null,
+        benevole.ville ? `Ville: ${benevole.ville}` : null,
+        benevole.disponibilite ? `Disponibilité: ${benevole.disponibilite}` : null,
       ]
         .filter(Boolean)
         .join(' · '),

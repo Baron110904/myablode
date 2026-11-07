@@ -128,7 +128,7 @@ export function PanneauFormulaireMarche({ articleId }: { articleId: number | nul
       setExistant(formulaire);
       setMessage(
         publie
-          ? 'Formulaire publié : il apparaît sur l’article une fois celui-ci publié.'
+          ? 'Formulaire publié: il apparaît sur l’article une fois celui-ci publié.'
           : 'Réglages enregistrés. Le formulaire n’est pas encore visible.',
       );
     } catch (attrapee) {

@@ -224,7 +224,7 @@ export class NewsletterService {
 
     if (reussis === 0 && destinataires.length > 0) {
       this.logger.warn(
-        `Newsletter « ${options.sujet} » : aucun email envoyé. Vérifiez la configuration SMTP.`,
+        `Newsletter « ${options.sujet} »: aucun email envoyé. Vérifiez la configuration SMTP.`,
       );
     }
 

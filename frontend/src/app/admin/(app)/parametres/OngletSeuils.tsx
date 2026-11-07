@@ -15,7 +15,7 @@ const DESCRIPTIONS: Record<string, { libelle: string; unite: string; aide: strin
   seuil_glycemie_diabete: {
     libelle: 'Glycémie - seuil du diabète',
     unite: 'mg/dL',
-    aide: 'À partir de cette valeur, le résultat est classé « Diabète ». Entre les deux seuils : « Pré-diabète ».',
+    aide: 'À partir de cette valeur, le résultat est classé « Diabète ». Entre les deux seuils: « Pré-diabète ».',
   },
   seuil_imc_surpoids: {
     libelle: 'IMC - seuil de surpoids',

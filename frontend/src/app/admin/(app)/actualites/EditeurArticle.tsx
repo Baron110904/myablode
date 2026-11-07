@@ -349,7 +349,7 @@ export function EditeurArticle({
                   />
                   {publicationFuture && (
                     <p className="mt-1.5 text-[0.75rem] text-ablode-ambre">
-                      Date future : l’article deviendra visible automatiquement à cette
+                      Date future: l’article deviendra visible automatiquement à cette
                       date.
                     </p>
                   )}
@@ -368,7 +368,7 @@ export function EditeurArticle({
                   />
                   <p className="mt-1.5 text-[0.75rem] text-admin-gris">
                     {retraitPasse
-                      ? 'Date passée : l’article ne figure plus sur le site. Il reste modifiable ici.'
+                      ? 'Date passée: l’article ne figure plus sur le site. Il reste modifiable ici.'
                       : 'Passée cette date, l’article quitte le site mais reste au back-office. Laissez vide pour qu’il y demeure.'}
                   </p>
                 </div>

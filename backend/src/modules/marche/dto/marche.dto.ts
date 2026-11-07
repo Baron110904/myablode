@@ -134,7 +134,7 @@ export class CreerInscriptionDto {
   age: number;
 
   @ApiProperty({ enum: ['M', 'F'] })
-  @IsIn(['M', 'F'], { message: 'Sexe attendu : M ou F.' })
+  @IsIn(['M', 'F'], { message: 'Sexe attendu: M ou F.' })
   sexe: 'M' | 'F';
 
   @ApiPropertyOptional({ maxLength: 120, description: 'Profession ou rôle déclaré' })

@@ -171,7 +171,7 @@ export class UsersService {
     });
     if (autres <= 1) {
       throw new BadRequestException(
-        'Impossible : ce compte est le dernier super administrateur actif. ' +
+        'Impossible: ce compte est le dernier super administrateur actif. ' +
           'Créez-en un autre avant de modifier celui-ci.',
       );
     }

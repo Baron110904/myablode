@@ -41,7 +41,7 @@ export class MailModule implements OnModuleInit {
       // Une base indisponible au démarrage ne doit pas empêcher l'API de
       // monter : le repli sur les variables d'environnement reste en place.
       this.logger.warn(
-        `Configuration d’envoi non relue : ${(error as Error).message}`,
+        `Configuration d’envoi non relue: ${(error as Error).message}`,
       );
     }
   }

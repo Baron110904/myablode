@@ -10,7 +10,6 @@ connexion*.txt
 .env.*
 !.env.production.exemple
 !.env.example
-.env.production.exemple
 
 # ─── Sauvegardes de la base ────────────────────────────────────────────────
 # Elles contiennent les données nominatives des personnes dépistées. Un dépôt

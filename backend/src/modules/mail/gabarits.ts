@@ -34,7 +34,7 @@ export const GABARITS: Gabarit[] = [
     corps:
       '<p>Vous avez demandé la réinitialisation de votre mot de passe.</p>' +
       '<p>Ce lien est valable {{duree}}. Passé ce délai, il faudra en demander un nouveau.</p>' +
-      '<p>Si vous n’êtes pas à l’origine de cette demande, ignorez ce message : ' +
+      '<p>Si vous n’êtes pas à l’origine de cette demande, ignorez ce message: ' +
       'votre mot de passe reste inchangé.</p>',
   },
   {
@@ -70,7 +70,7 @@ export const GABARITS: Gabarit[] = [
     cle: 'mail_acceptation_benevole',
     libelle: 'Candidature acceptée',
     description:
-      'Envoyé quand une candidature est acceptée. Ne contient aucun identifiant : ' +
+      'Envoyé quand une candidature est acceptée. Ne contient aucun identifiant: ' +
       'ils sont remis en main propre.',
     variables: [{ nom: 'prenom', role: 'Prénom du bénévole' }],
     sujet: 'MyABLODE - Bienvenue parmi les bénévoles de l’ABLODE',
@@ -93,7 +93,7 @@ export const GABARITS: Gabarit[] = [
     sujet: 'MyABLODE - Échec de la synchronisation des données',
     corps:
       '<p>La récupération des données de terrain a échoué {{echecs}} fois de suite.</p>' +
-      '<p>Motif signalé : {{motif}}</p>' +
+      '<p>Motif signalé: {{motif}}</p>' +
       '<p>Vérifiez la configuration de la collecte et la connexion réseau du serveur.</p>',
   },
 ];

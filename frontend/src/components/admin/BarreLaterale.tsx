@@ -476,7 +476,7 @@ function Cloche({
         onClick={onBasculer}
         aria-expanded={ouverte}
         aria-label={
-          total > 0 ? `Notifications : ${total} en attente` : 'Notifications'
+          total > 0 ? `Notifications: ${total} en attente` : 'Notifications'
         }
         className="relative flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white transition-colors hover:border-white/40 hover:bg-white/5"
       >

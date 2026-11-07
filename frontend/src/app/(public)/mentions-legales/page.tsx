@@ -49,7 +49,7 @@ export default function PageMentionsLegales() {
           (glycémie, indice de masse corporelle) et orientation éventuelle vers une
           structure de soin.
         </p>
-        <p>Ces données font l’objet des garanties suivantes{' '}:</p>
+        <p>Ces données font l’objet des garanties suivantes:</p>
         <ul>
           <li>
             <strong>Aucune diffusion publique nominative.</strong> Le site ne publie que

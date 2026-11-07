@@ -78,7 +78,7 @@ export function ModaleFelicitations({
             ? `${nombre(commune.arrivees)} dépistages arrivés de ${commune.nom} sur la période. Merci pour la régularité.`
             : null,
           tauxLisible
-            ? `${commune.nom} tient un taux de détection de ${pourcentage(commune.taux)} sur ${nombre(commune.depistages)} dépistages : le repérage des cas y est solide.`
+            ? `${commune.nom} tient un taux de détection de ${pourcentage(commune.taux)} sur ${nombre(commune.depistages)} dépistages: le repérage des cas y est solide.`
             : null,
           `Bravo à l’équipe de ${commune.nom} pour la couverture de la zone.`,
         ]

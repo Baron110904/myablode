@@ -77,7 +77,7 @@ export class CommunesService {
   ): Promise<{ misesAJour: number; ignorees: string[] }> {
     if (collection?.type !== 'FeatureCollection' || !Array.isArray(collection.features)) {
       throw new BadRequestException(
-        'Fichier invalide : un GeoJSON de type FeatureCollection est attendu.',
+        'Fichier invalide: un GeoJSON de type FeatureCollection est attendu.',
       );
     }
 

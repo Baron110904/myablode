@@ -340,7 +340,7 @@ function ModaleEnvoi({
         },
       });
       onEnvoye(
-        `Newsletter « ${resultat.sujet} » traitée : ${nombre(resultat.nb_destinataires)} destinataire(s).`,
+        `Newsletter « ${resultat.sujet} » traitée: ${nombre(resultat.nb_destinataires)} destinataire(s).`,
       );
     } catch (erreurAttrapee) {
       setErreur(

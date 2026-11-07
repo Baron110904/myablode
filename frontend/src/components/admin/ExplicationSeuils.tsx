@@ -29,7 +29,7 @@ export function ExplicationSeuils({
           Ce que l’import fait de vos mesures
         </p>
         <p className="mt-1.5">
-          Chaque ligne est classée automatiquement : une glycémie de{' '}
+          Chaque ligne est classée automatiquement: une glycémie de{' '}
           {glycemieDiabete} mg/dL ou plus donne « Diabète », entre{' '}
           {glycemieNormale} et {glycemieDiabete - 1} « Pré-diabète », en dessous
           « Normal ». Un IMC de {imcObesite} ou plus donne « Obésité ».
@@ -86,7 +86,7 @@ export function ExplicationSeuils({
 
         <p>
           Le seuil de surpoids ({imcSurpoids}) est affiché à titre indicatif sur
-          les fiches : il n’entre pas dans le classement. Un dépistage
+          les fiches: il n’entre pas dans le classement. Un dépistage
           d’endocrinopathie est toujours classé « Autre » - aucun seuil ne
           remplace l’examen d’un soignant.
         </p>
@@ -102,14 +102,14 @@ export function ExplicationSeuils({
           Le taux affiché sur la carte est le rapport{' '}
           <em>cas détectés ÷ personnes dépistées</em>. Il porte sur les
           personnes venues se faire dépister, et non sur la population de la
-          commune : ce n’est donc pas une prévalence.
+          commune: ce n’est donc pas une prévalence.
         </p>
       </Section>
 
       <Section titre="Quand une mesure devient suspecte">
         <p>
           Une seconde famille de bornes, indépendante des seuils cliniques,
-          repère les valeurs qui ne peuvent pas être vraies :
+          repère les valeurs qui ne peuvent pas être vraies:
         </p>
         <ul className="ml-5 list-disc space-y-1">
           <li>
@@ -140,7 +140,7 @@ export function ExplicationSeuils({
         </p>
         <p>
           La cause la plus fréquente est une unité. Les glucomètres francophones
-          affichent souvent des g/L : une valeur inférieure à 10 est donc
+          affichent souvent des g/L: une valeur inférieure à 10 est donc
           convertie automatiquement, 1,26 g/L devenant 126 mg/dL.
         </p>
       </Section>

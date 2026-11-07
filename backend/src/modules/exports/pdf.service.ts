@@ -121,7 +121,7 @@ export class PdfService {
         texteX = MARGE + 66;
       } catch (erreur) {
         // Un logo illisible ne doit pas empêcher la production du rapport.
-        this.journal.warn(`Logo non intégré au rapport : ${(erreur as Error).message}`);
+        this.journal.warn(`Logo non intégré au rapport: ${(erreur as Error).message}`);
       }
     }
 
@@ -249,7 +249,7 @@ export class PdfService {
 
     if (stats.ageMoyen !== null && stats.ageMoyen !== undefined) {
       doc.fillColor(GRIS).fontSize(8.5).font('Helvetica');
-      doc.text(`Âge moyen : ${virgule(stats.ageMoyen)} ans`, droiteX, basDroite + 10, {
+      doc.text(`Âge moyen: ${virgule(stats.ageMoyen)} ans`, droiteX, basDroite + 10, {
         width: colonne,
       });
       basDroite = doc.y;

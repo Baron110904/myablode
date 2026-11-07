@@ -218,7 +218,7 @@ export function OngletSecurite() {
                   {setup2fa.otpauthUrl}
                 </p>
                 <p className="mt-2 text-[0.75rem] leading-relaxed text-admin-gris">
-                  Saisie manuelle possible avec la clé :{' '}
+                  Saisie manuelle possible avec la clé:{' '}
                   <span className="select-all">{setup2fa.secret}</span>
                 </p>
               </div>

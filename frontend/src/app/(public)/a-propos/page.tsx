@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: 'À propos',
   description:
     'L’ABLODE, Association Béninoise de Lutte contre l’Obésité, le Diabète ' +
-    'et les Endocrinopathies : mission, activités et place dans le système de santé.',
+    'et les Endocrinopathies: mission, activités et place dans le système de santé.',
 };
 
 export const revalidate = 3600;
@@ -440,7 +440,7 @@ export default async function PageAPropos() {
                   Devenir bénévole
                 </h3>
                 <p className="mt-3 text-[0.9375rem] leading-relaxed text-white/80">
-                  Aucune qualification médicale n’est exigée{' '}: nous formons
+                  Aucune qualification médicale n’est exigée: nous formons
                   nos bénévoles.
                 </p>
               </div>

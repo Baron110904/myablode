@@ -14,7 +14,7 @@ import { Reveler } from './Reveler';
 const LECONS = [
   {
     titre: 'Manger sain et équilibré',
-    texte: 'Manger sain et équilibré : pas trop gras, pas trop salé, pas trop sucré.',
+    texte: 'Manger sain et équilibré: pas trop gras, pas trop salé, pas trop sucré.',
   },
   {
     titre: 'Préférer l’eau',
@@ -120,7 +120,7 @@ export function LeconsPrevention() {
             </h2>
             <p className="mt-5 max-w-lg text-[1rem] leading-relaxed text-ablode-gris">
               {typographieFr(
-                'Le diabète de type 2 peut être évité ou retardé en adoptant quelques gestes simples au quotidien :',
+                'Le diabète de type 2 peut être évité ou retardé en adoptant quelques gestes simples au quotidien:',
               )}
             </p>
 

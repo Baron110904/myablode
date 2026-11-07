@@ -120,7 +120,7 @@ export class VideosService {
       const code = (erreur as NodeJS.ErrnoException).code;
       // Fichier déjà absent : le but est atteint, rien à signaler.
       if (code !== 'ENOENT') {
-        this.logger.warn(`Fichier ${video.fichier_nom} non supprimé : ${code}`);
+        this.logger.warn(`Fichier ${video.fichier_nom} non supprimé: ${code}`);
       }
     }
   }

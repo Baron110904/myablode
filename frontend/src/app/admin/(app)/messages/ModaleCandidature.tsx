@@ -177,7 +177,7 @@ export function ModaleCandidature({
         />
         <p className="mt-2 text-[0.75rem] leading-relaxed text-admin-gris">
           Envoyée par courriel et conservée sur la fiche. Facultative si vous
-          acceptez : un courriel de bienvenue part dans tous les cas.
+          acceptez: un courriel de bienvenue part dans tous les cas.
         </p>
       </section>
 

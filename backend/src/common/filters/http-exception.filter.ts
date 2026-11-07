@@ -91,7 +91,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       if (code === '23503') {
         return {
           statusCode: HttpStatus.BAD_REQUEST,
-          message: 'Référence invalide : l’élément lié n’existe pas.',
+          message: 'Référence invalide: l’élément lié n’existe pas.',
         };
       }
       return {

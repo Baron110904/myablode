@@ -62,7 +62,7 @@ const SETTINGS_DEFAUT: Array<{
     key: 'securite_2fa',
     value: 'optionnel',
     groupe: 'securite',
-    description: 'Politique de double authentification : optionnel ou obligatoire',
+    description: 'Politique de double authentification: optionnel ou obligatoire',
   },
   {
     key: 'securite_duree_session',
@@ -135,7 +135,7 @@ async function seedSuperAdmin(): Promise<number> {
      VALUES ($1, $2, 'Anagonou', 'Koffi', 'super_admin', true, now()) RETURNING id`,
     [email, hash],
   );
-  console.log(`✓ Super admin créé : ${email} / ${password}`);
+  console.log(`✓ Super admin créé: ${email} / ${password}`);
   console.log('  ⚠ Changez ce mot de passe avant toute mise en production.');
   return created.id;
 }
@@ -173,6 +173,6 @@ async function seedKoboConfig(): Promise<void> {
 }
 
 main().catch((error) => {
-  console.error('✗ Seed interrompu :', error);
+  console.error('✗ Seed interrompu:', error);
   process.exit(1);
 });

@@ -159,7 +159,7 @@ export function ModaleExport({
 
       {filtresActifs.length > 0 && (
         <p className="mt-6 bg-admin-fond px-4 py-3 text-[0.75rem] text-admin-gris">
-          Filtres appliqués :{' '}
+          Filtres appliqués:{' '}
           {filtresActifs.map(([cle, valeur]) => `${cle}=${valeur}`).join(' · ')}
         </p>
       )}

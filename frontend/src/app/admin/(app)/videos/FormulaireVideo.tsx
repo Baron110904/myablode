@@ -326,7 +326,7 @@ export function FormulaireVideo({
             <span className="font-semibold">Mettre à la une</span>
             <span className="mt-1 block text-[0.8125rem] leading-relaxed text-admin-gris">
               Occupe le grand lecteur de la page Actualités. Une seule vidéo à la
-              fois : celle qui s’y trouvait repasse dans la liste.
+              fois: celle qui s’y trouvait repasse dans la liste.
             </span>
           </span>
         </label>

@@ -194,7 +194,7 @@ export class MailController {
   @ApiOperation({
     summary: 'Modifie un message',
     description:
-      'Un champ vide rétablit le texte d’origine : c’est ainsi qu’on annule ' +
+      'Un champ vide rétablit le texte d’origine: c’est ainsi qu’on annule ' +
       'une personnalisation.',
   })
   async modifierGabarit(

@@ -37,7 +37,7 @@ export class KoboSchedulerService {
 
     try {
       const resultat = await this.kobo.synchroniser('cron');
-      this.logger.log(`Synchronisation automatique : ${resultat.message}`);
+      this.logger.log(`Synchronisation automatique: ${resultat.message}`);
 
       if (resultat.importes > 0) {
         await this.audit.log({
@@ -54,7 +54,7 @@ export class KoboSchedulerService {
       }
     } catch (error) {
       const message = (error as Error).message;
-      this.logger.error(`Synchronisation automatique échouée : ${message}`);
+      this.logger.error(`Synchronisation automatique échouée: ${message}`);
 
       // US-ADM-17 : l'administrateur doit être averti d'un échec de synchro.
       await this.alerterAdministrateurs(message);

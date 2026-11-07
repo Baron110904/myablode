@@ -45,7 +45,7 @@ export function DonneesAssociation() {
           foundingDate: String(ASSOCIATION.anneeCreation),
           description:
             'Association béninoise de lutte contre l’obésité, le diabète et les ' +
-            'endocrinopathies : dépistages gratuits, sensibilisation et orientation ' +
+            'endocrinopathies: dépistages gratuits, sensibilisation et orientation ' +
             'vers les structures de soin.',
           address: {
             '@type': 'PostalAddress',

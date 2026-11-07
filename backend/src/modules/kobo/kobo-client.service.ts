@@ -74,7 +74,7 @@ export class KoboClientService {
       return {
         ok: true,
         message:
-          `Connexion réussie : ${formulaires.length} formulaire(s) accessible(s). ` +
+          `Connexion réussie: ${formulaires.length} formulaire(s) accessible(s). ` +
           `Sélectionnez celui à synchroniser.`,
         formulairesDisponibles: formulaires,
       };
@@ -98,7 +98,7 @@ export class KoboClientService {
         champs = Object.keys(echantillon[0]).filter((cle) => !cle.startsWith('_'));
       }
     } catch (error) {
-      this.logger.warn(`Échantillon indisponible : ${(error as Error).message}`);
+      this.logger.warn(`Échantillon indisponible: ${(error as Error).message}`);
     }
 
     return {

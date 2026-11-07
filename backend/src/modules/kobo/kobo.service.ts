@@ -148,7 +148,7 @@ export class KoboService {
     const config = await this.getConfig();
     if (!config.api_token || !config.form_id) {
       throw new BadRequestException(
-        'Configuration Kobo incomplète : renseignez le jeton API et l’identifiant du formulaire.',
+        'Configuration Kobo incomplète: renseignez le jeton API et l’identifiant du formulaire.',
       );
     }
 
@@ -188,7 +188,7 @@ export class KoboService {
       const rienImporte = resultat.importes === 0 && resultat.erreurs > 0;
       const statut = rienImporte ? SyncLogStatut.ERREUR : SyncLogStatut.SUCCES;
       const message = rienImporte
-        ? `${resultat.message} Aucune donnée enregistrée : vérifiez la correspondance des champs dans Paramètres → KoboToolbox.`
+        ? `${resultat.message} Aucune donnée enregistrée: vérifiez la correspondance des champs dans Paramètres → KoboToolbox.`
         : resultat.message;
 
       await this.configRepo.update(config.id, {
@@ -223,7 +223,7 @@ export class KoboService {
         echantillonErreurs: [],
       });
 
-      this.logger.error(`Synchronisation Kobo échouée : ${message}`);
+      this.logger.error(`Synchronisation Kobo échouée: ${message}`);
       throw error;
     } finally {
       this.syncEnCours = false;

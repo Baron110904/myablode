@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: { url: '/contact' },
   title: 'Contact',
   description:
-    'Contactez l’ABLODE : question, proposition de partenariat ou demande de ' +
+    'Contactez l’ABLODE: question, proposition de partenariat ou demande de ' +
     'campagne de dépistage dans votre commune.',
 };
 

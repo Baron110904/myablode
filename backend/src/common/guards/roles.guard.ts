@@ -35,7 +35,7 @@ export class RolesGuard implements CanActivate {
 
     if (!required.includes(user.role)) {
       throw new ForbiddenException(
-        `Action réservée aux rôles : ${required.join(', ')}.`,
+        `Action réservée aux rôles: ${required.join(', ')}.`,
       );
     }
     return true;

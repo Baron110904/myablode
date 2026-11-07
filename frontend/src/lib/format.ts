@@ -440,7 +440,11 @@ export const LIBELLES_ENTITE: Record<string, string> = {
  * il n'y a pas lieu de toucher à un formatage qui donne satisfaction.
  */
 export function typographieFr(texte: string): string {
-  return texte.replace(/« /g, '« ').replace(/ ([;:!?»])/g, ' $1');
+  return texte
+    .replace(/« /g, '« ')
+    // Le deux-points se colle au mot qui précède: « Horaires: 8 h ».
+    .replace(/[   ]+:/g, ':')
+    .replace(/ ([;!?»])/g, ' $1');
 }
 
 /**

@@ -34,12 +34,12 @@ export class CacheService implements OnModuleDestroy {
       });
       this.client.on('error', (error) => {
         if (this.disponible) {
-          this.logger.warn(`Redis indisponible, repli sur la base : ${error.message}`);
+          this.logger.warn(`Redis indisponible, repli sur la base: ${error.message}`);
         }
         this.disponible = false;
       });
     } catch (error) {
-      this.logger.warn(`Redis non initialisé : ${(error as Error).message}`);
+      this.logger.warn(`Redis non initialisé: ${(error as Error).message}`);
       this.client = null;
     }
   }
