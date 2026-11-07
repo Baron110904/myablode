@@ -16,6 +16,7 @@ const VIDE = {
   parcours: '',
   sur_place: '',
   a_prevoir: '',
+  lien_externe: '',
 };
 
 /**
@@ -41,6 +42,7 @@ export function PanneauFormulaireMarche({ articleId }: { articleId: number | nul
   const [message, setMessage] = useState('');
   const [envoi, setEnvoi] = useState(false);
   const [ouvert, setOuvert] = useState(false);
+  const [mode, setMode] = useState<'bulletin' | 'lien'>('bulletin');
 
   const charger = useCallback(async () => {
     if (articleId === null) return;
@@ -67,7 +69,11 @@ export function PanneauFormulaireMarche({ articleId }: { articleId: number | nul
         parcours: formulaire.parcours ?? '',
         sur_place: formulaire.sur_place ?? '',
         a_prevoir: formulaire.a_prevoir ?? '',
+        lien_externe: formulaire.lien_externe ?? '',
       });
+      // Le mode suit ce qui est déjà enregistré : un formulaire qui porte une
+      // adresse externe s'ouvre sur l'onglet correspondant.
+      setMode(formulaire.lien_externe ? 'lien' : 'bulletin');
     } catch {
       /* Aucun formulaire sur cet article : le panneau reste replié. */
     }
@@ -109,6 +115,12 @@ export function PanneauFormulaireMarche({ articleId }: { articleId: number | nul
             parcours: valeurs.parcours.trim() || null,
             sur_place: valeurs.sur_place.trim() || null,
             a_prevoir: valeurs.a_prevoir.trim() || null,
+            /*
+              Le mode fait autorité : repasser au bulletin efface l'adresse
+              externe, sinon l'article continuerait d'y mener alors que
+              l'administrateur a changé d'avis.
+            */
+            lien_externe: mode === 'lien' ? valeurs.lien_externe.trim() || null : null,
             publie,
           },
         },
@@ -212,6 +224,60 @@ export function PanneauFormulaireMarche({ articleId }: { articleId: number | nul
           />
         </div>
 
+        {/*
+          Le lieu de l'inscription se choisit d'abord, et les champs suivent.
+          Les deux séries étaient auparavant affichées ensemble : on réglait
+          une fiche pratique dont personne ne verrait rien parce qu'un lien
+          externe était renseigné plus haut.
+        */}
+        <div className="rounded-carte border border-admin-trait p-4">
+          <p className="etiquette mb-3">Où s’inscrit-on ?</p>
+          <div className="flex flex-wrap gap-2">
+            {(
+              [
+                ['bulletin', 'Sur le site'],
+                ['lien', 'Sur un autre site'],
+              ] as const
+            ).map(([valeur, libelle]) => (
+              <button
+                key={valeur}
+                type="button"
+                onClick={() => setMode(valeur)}
+                aria-pressed={mode === valeur}
+                className={`rounded-full px-4 py-2 text-[0.8125rem] font-semibold transition-colors ${
+                  mode === valeur
+                    ? 'bg-admin-nuit text-white'
+                    : 'bg-admin-fond text-admin-gris hover:text-admin-encre'
+                }`}
+              >
+                {libelle}
+              </button>
+            ))}
+          </div>
+          <p className="mt-3 text-[0.75rem] leading-relaxed text-admin-gris">
+            {mode === 'lien'
+              ? 'Le bouton de l’article mène à l’adresse ci-dessous. Le bulletin du site n’est pas proposé, et les inscriptions ne sont pas comptées ici.'
+              : 'Les inscriptions se remplissent sur le site et arrivent dans Messages, onglet « Marche ».'}
+          </p>
+        </div>
+
+        {mode === 'lien' ? (
+          <div>
+            <label htmlFor="fm-lien" className="etiquette mb-2 block">
+              Adresse d’inscription
+            </label>
+            <input
+              id="fm-lien"
+              type="url"
+              inputMode="url"
+              value={valeurs.lien_externe}
+              onChange={(e) => maj('lien_externe', e.target.value)}
+              placeholder="https://..."
+              className="admin-champ"
+            />
+          </div>
+        ) : (
+          <>
         <div>
           <label htmlFor="fm-intro" className="etiquette mb-2 block">
             Texte d’accueil
@@ -335,6 +401,8 @@ export function PanneauFormulaireMarche({ articleId }: { articleId: number | nul
             className="admin-champ-multiligne"
           />
         </div>
+          </>
+        )}
 
         <label className="flex cursor-pointer items-start gap-3 rounded-carte bg-admin-fond px-4 py-3">
           <input

@@ -12,6 +12,31 @@ import type { FormulaireMarchePublic } from '@/lib/types';
  * Fermé, le bloc reste : il annonce la clôture plutôt que de laisser croire
  * qu'aucune inscription n'a jamais existé.
  */
+/**
+ * Adresse externe, filtrée avant d'atteindre un attribut `href`.
+ *
+ * Le back-office la valide déjà à la saisie. Ce second filtre est volontaire :
+ * la valeur traverse la base, l'API et le cache avant d'arriver ici, et c'est
+ * ici qu'elle devient cliquable sur une page publique. Un `javascript:` qui
+ * passerait par une voie d'écriture future - import, correctif manuel en base
+ * - s'exécuterait dans le navigateur du visiteur.
+ *
+ * Liste blanche, et non liste noire : `javascript:` s'écrit aussi
+ * « JaVaScRiPt: », avec des espaces ou des caractères de contrôle intercalés.
+ */
+export function adresseExterneSure(valeur: string | null | undefined): string | null {
+  if (!valeur) return null;
+  try {
+    const adresse = new URL(valeur.trim());
+    return adresse.protocol === 'http:' || adresse.protocol === 'https:'
+      ? adresse.href
+      : null;
+  } catch {
+    // Pas une adresse absolue : on n'en fait pas un lien.
+    return null;
+  }
+}
+
 export function AppelInscription({
   formulaire,
   slug,
@@ -20,6 +45,7 @@ export function AppelInscription({
   slug: string;
 }) {
   const echeance = formulaire.dateFermeture;
+  const lienExterne = adresseExterneSure(formulaire.lienExterne);
 
   return (
     <aside className="mx-auto mt-12 max-w-lecture rounded-bloc border border-ablode-trait bg-ablode-voile p-7 sm:p-8">
@@ -38,19 +64,51 @@ export function AppelInscription({
               Clôture le {dateHeure(echeance)} · {joursRestants(echeance)}
             </p>
           )}
-          {formulaire.inscrits > 0 && (
+          {/*
+            Le décompte ne vaut que pour le bulletin du site. Affiché à côté
+            d'un lien externe, il annoncerait « 12 inscrits » alors que les
+            inscriptions se comptent ailleurs - un chiffre faux fait plus de
+            mal qu'un chiffre absent.
+          */}
+          {!lienExterne && formulaire.inscrits > 0 && (
             <p className="mt-1 text-[0.9375rem] text-ablode-gris">
               {formulaire.inscrits} personne{formulaire.inscrits > 1 ? 's' : ''} déjà
               inscrite{formulaire.inscrits > 1 ? 's' : ''}.
             </p>
           )}
 
-          <Link
-            href={`/actualites/${slug}/inscription`}
-            className="bouton-principal mt-6"
-          >
-            Je m’inscris à la marche
-          </Link>
+          {/*
+            Deux portes possibles, jamais les deux à la fois. Quand
+            l'association ouvre les inscriptions ailleurs, l'appel y mène
+            directement : publier en plus le bulletin du site produirait
+            deux listes de participants, et personne ne saurait laquelle
+            fait foi.
+
+            Le lien externe s'ouvre dans un nouvel onglet - l'article reste
+            ouvert derrière - et le dit, parce qu'une fenêtre qui s'ouvre
+            sans prévenir désoriente.
+          */}
+          {lienExterne ? (
+            <a
+              href={lienExterne}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bouton-principal mt-6"
+            >
+              Je m’inscris à la marche
+              <span aria-hidden className="ml-1">
+                ↗
+              </span>
+              <span className="sr-only">(nouvelle fenêtre)</span>
+            </a>
+          ) : (
+            <Link
+              href={`/actualites/${slug}/inscription`}
+              className="bouton-principal mt-6"
+            >
+              Je m’inscris à la marche
+            </Link>
+          )}
         </>
       ) : (
         <>

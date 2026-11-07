@@ -2,6 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Evenement } from 'src/database/entities';
+import { SettingsService } from 'src/modules/settings/settings.service';
 import { EvenementsService, MAX_EVENEMENTS_AFFICHES } from './evenements.service';
 
 /**
@@ -17,11 +18,18 @@ describe('EvenementsService - plafond du programme affiché', () => {
   let affichees: number;
   let aVenir: boolean;
   let sauvegarde: jest.Mock;
+  let reglages: Record<string, unknown>;
+  let enregistrerReglages: jest.Mock;
 
   beforeEach(async () => {
     affichees = 0;
     aVenir = true;
     sauvegarde = jest.fn((entite) => Promise.resolve(entite));
+    reglages = {};
+    enregistrerReglages = jest.fn((cle: string, valeur: unknown) => {
+      reglages[cle] = valeur;
+      return Promise.resolve({});
+    });
 
     const constructeur = {
       where: jest.fn().mockReturnThis(),
@@ -36,12 +44,22 @@ describe('EvenementsService - plafond du programme affiché', () => {
       providers: [
         EvenementsService,
         {
+          provide: SettingsService,
+          useValue: {
+            get: jest.fn((cle: string, defaut: unknown) =>
+              Promise.resolve(reglages[cle] ?? defaut),
+            ),
+            definir: enregistrerReglages,
+          },
+        },
+        {
           provide: getRepositoryToken(Evenement),
           useValue: {
             createQueryBuilder: jest.fn(() => constructeur),
-            // C'est la base qui tranche « passé ou à venir », comme dans
-            // `findPublics` : le test se contente d'en jouer la réponse.
-            query: jest.fn(() => Promise.resolve([{ a_venir: aVenir }])),
+            // C'est la base qui tranche « la date s'affichera-t-elle ? »,
+            // heure de retrait comprise : le test se contente d'en jouer la
+            // réponse.
+            query: jest.fn(() => Promise.resolve([{ visible: aVenir }])),
             create: jest.fn((dto) => dto),
             save: sauvegarde,
             findOne: jest.fn(() =>
@@ -109,5 +127,68 @@ describe('EvenementsService - plafond du programme affiché', () => {
     await expect(service.create(nouvelle)).rejects.toThrow(
       new RegExp(String(MAX_EVENEMENTS_AFFICHES)),
     );
+  });
+});
+
+/**
+ * Le libellé d'édition du bandeau d'accueil.
+ *
+ * Il était tiré de la première date publiée du programme : vidé le
+ * programme, le bandeau perdait son « 6ᵉ ». Il se saisit maintenant, et il
+ * doit survivre a un programme vide - c'est l'etat d'un site qui ouvre.
+ */
+describe('EvenementsService - édition du bandeau', () => {
+  let service: EvenementsService;
+  let reglages: Record<string, unknown>;
+  let ecrites: unknown[];
+
+  beforeEach(async () => {
+    reglages = {};
+    ecrites = [];
+    const module = await Test.createTestingModule({
+      providers: [
+        EvenementsService,
+        {
+          provide: SettingsService,
+          useValue: {
+            get: jest.fn((cle: string, defaut: unknown) =>
+              Promise.resolve(reglages[cle] ?? defaut),
+            ),
+            definir: jest.fn((cle: string, valeur: unknown) => {
+              reglages[cle] = valeur;
+              ecrites.push(valeur);
+              return Promise.resolve({});
+            }),
+          },
+        },
+        { provide: getRepositoryToken(Evenement), useValue: {} },
+      ],
+    }).compile();
+    service = module.get(EvenementsService);
+  });
+
+  it('rend l’édition saisie', async () => {
+    await service.definirCampagne({ edition: '6ème édition' });
+    await expect(service.campagne()).resolves.toEqual({ edition: '6ème édition' });
+  });
+
+  it('ne renvoie rien tant qu’aucune édition n’est saisie', async () => {
+    await expect(service.campagne()).resolves.toEqual({ edition: null });
+  });
+
+  /*
+   * `settings.value` est une colonne jsonb NOT NULL. Y ecrire `null` partait
+   * en erreur 500, au moment precis ou l'administrateur efface le libelle.
+   * Le double de test ne portant pas la contrainte de la base, c'est
+   * l'invariant qu'on verifie : rien de nul ne sort du service.
+   */
+  it('écrit une chaîne vide, jamais null, quand le libellé est effacé', async () => {
+    await service.definirCampagne({ edition: '   ' });
+    expect(ecrites).toEqual(['']);
+    await expect(service.campagne()).resolves.toEqual({ edition: null });
+  });
+
+  it('accepte un libellé absent sans lever', async () => {
+    await expect(service.definirCampagne({})).resolves.toEqual({ edition: null });
   });
 });

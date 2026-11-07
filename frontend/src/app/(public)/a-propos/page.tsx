@@ -372,7 +372,11 @@ export default async function PageAPropos() {
           <ul className="sr-only">
             {PARTENAIRES.map((partenaire) => (
               <li key={partenaire.nom}>
-                {partenaire.nom} : {partenaire.role}
+                {/* Espace fine insécable avant le deux-points, comme partout
+                    ailleurs sur le site. */}
+                {partenaire.nom}
+                {' : '}
+                {partenaire.role}
               </li>
             ))}
           </ul>
@@ -432,7 +436,8 @@ export default async function PageAPropos() {
                   Devenir bénévole
                 </h3>
                 <p className="mt-3 text-[0.9375rem] leading-relaxed text-white/80">
-                  Aucune qualification médicale n’est exigée : nous formons nos bénévoles.
+                  Aucune qualification médicale n’est exigée{' '}: nous formons
+                  nos bénévoles.
                 </p>
               </div>
               <span className="mt-7 text-[0.9375rem] font-semibold text-white">

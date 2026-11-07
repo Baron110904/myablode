@@ -70,6 +70,17 @@ export class FormulaireMarche {
   @Column({ type: 'text', nullable: true })
   a_prevoir: string | null;
 
+  /**
+   * Adresse où s'inscrire, quand l'inscription ne se fait pas ici.
+   *
+   * Renseignée, elle remplace le bulletin : l'appel de l'article y mène et
+   * la page d'inscription du site s'efface. L'un ou l'autre, jamais les deux
+   * - deux portes d'entrée pour une même marche produisent deux listes de
+   * participants, et personne ne sait laquelle fait foi.
+   */
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  lien_externe: string | null;
+
   @Column({ type: 'boolean', default: false })
   publie: boolean;
 

@@ -21,7 +21,7 @@
     "devenirBenevole": "Devenir bénévole",
     "surLeTerrain": "Sur le terrain",
     "toutesActualites": "Toutes les actualités",
-    "aucuneActualite": "Aucune actualité publiée pour le moment.",
+    "aucuneActualite": "Les premiers comptes rendus de terrain seront publiés ici.",
     "missions": "Nos actions",
     "voirResultats": "Voir les résultats détaillés"
   },
@@ -81,7 +81,9 @@
     "publieLe": "Publié le",
     "partager": "Partager",
     "retour": "Retour aux actualités",
-    "aLire": "À lire également"
+    "aLire": "À lire également",
+    "bientotTitre": "Le journal de l’association ouvre bientôt",
+    "bientotTexte": "Comptes rendus de campagne, actions de sensibilisation et résultats de dépistage y seront publiés au fil des opérations."
   },
   "newsletter": {
     "titre": "Recevez les résultats de chaque campagne",

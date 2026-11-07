@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Put,
   Req,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -19,7 +20,11 @@ import {
 } from 'src/common/decorators';
 import { UserRole } from 'src/database/entities';
 import { AuditService } from 'src/modules/audit/audit.service';
-import { CreateEvenementDto, UpdateEvenementDto } from './dto/evenement.dto';
+import {
+  CampagneAccueilDto,
+  CreateEvenementDto,
+  UpdateEvenementDto,
+} from './dto/evenement.dto';
 import { EvenementsService } from './evenements.service';
 import { ThrottleLecture } from 'src/common/throttle-lecture';
 
@@ -37,6 +42,38 @@ export class EvenementsController {
   @ApiOperation({ summary: 'Programme à venir (bandeau et encart de l’accueil)' })
   publics() {
     return this.evenements.findPublics(8);
+  }
+
+  /*
+   * Déclarées avant toute route à paramètre : « campagne » serait sinon lu
+   * comme un identifiant et renverrait une erreur de conversion.
+   */
+  @Public()
+  @Get('campagne')
+  @ApiOperation({ summary: 'Campagne mise en avant sur le bandeau d’accueil' })
+  campagne() {
+    return this.evenements.campagne();
+  }
+
+  @Put('campagne')
+  @ApiBearerAuth()
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN)
+  @ApiOperation({ summary: 'Définit le titre, l’édition et les dates de la campagne' })
+  async definirCampagne(
+    @Body() dto: CampagneAccueilDto,
+    @CurrentUser() user: AuthenticatedUser,
+    @Req() request: Request,
+  ) {
+    const campagne = await this.evenements.definirCampagne(dto);
+    await this.audit.log({
+      userId: user.id,
+      action: 'update',
+      entity: 'settings',
+      entityId: null,
+      metadata: { campagne },
+      request,
+    });
+    return campagne;
   }
 
   @Get()

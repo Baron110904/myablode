@@ -416,7 +416,7 @@ function EtatVide({
         {filtre
           ? 'Les dépistages enregistrés ne couvrent pas la période ou le type ' +
             'retenus. Élargissez la sélection pour voir l’ensemble des données.'
-          : 'Les résultats paraîtront ici dès la première campagne de terrain : ' +
+          : 'Les résultats paraîtront ici dès la première campagne de terrain : ' +
             'dépistages réalisés, cas détectés et couverture commune par commune.'}
       </p>
 

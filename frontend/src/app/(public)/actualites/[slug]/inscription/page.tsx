@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { joursRestants } from '@/components/public/AppelInscription';
+import { notFound, redirect } from 'next/navigation';
+import {
+  adresseExterneSure,
+  joursRestants,
+} from '@/components/public/AppelInscription';
 import { FormulaireMarche } from '@/components/public/FormulaireMarche';
 import { apiPublic, apiPublicOuDefaut } from '@/lib/api';
 import { dateHeure } from '@/lib/format';
@@ -69,6 +72,15 @@ export default async function PageInscriptionMarche({
   if (!donnees) notFound();
 
   const { article, formulaire } = donnees;
+
+  /*
+   * Inscriptions ouvertes ailleurs : cette page n'a plus lieu d'être, et le
+   * bulletin qu'elle porte constituerait une seconde liste de participants.
+   * Les adresses déjà partagées continuent de mener à l'inscription - là où
+   * elle se tient désormais - plutôt que vers une 404.
+   */
+  const lienExterne = adresseExterneSure(formulaire.lienExterne);
+  if (lienExterne) redirect(lienExterne);
   const retour = `/actualites/${article.slug}`;
 
   const jour = formulaire.dateEvenement ? new Date(formulaire.dateEvenement) : null;

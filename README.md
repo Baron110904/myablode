@@ -106,16 +106,17 @@ npm run dev
 Le site est sur <http://localhost:3000>, le back-office sur
 <http://localhost:3000/admin>.
 
-### Données de démonstration
+### Ce que le seed installe
 
-Le seed génère un jeu de démonstration : ~11 700 dépistages, 30 campagnes,
-6 articles, 48 abonnés. **Aucune de ces données ne provient du terrain.** Elles
-servent à valider les agrégations, la carte et les écrans avant le branchement
-de Kobo.
+Le socle, et rien d'autre : les 77 communes et les 12 départements du Bénin,
+les paramètres système par défaut et le compte d'administration. La base de
+dépistages, d'articles et de campagnes reste vide — elle se remplit depuis le
+back-office et depuis Kobo.
 
-Pour une base vide (installation réelle), mettez `SEED_DEMO_DATA=false` dans
-`backend/.env` avant de lancer le seed. Les 77 communes, les paramètres système
-et le compte administrateur sont créés dans tous les cas.
+Le générateur de données de démonstration a été retiré : l'association
+exploite le site avec ses propres données, et un seed capable de réinjecter
+onze mille dépistages fictifs dans une base de production est un accident qui
+n'attend que d'être déclenché.
 
 Pour repartir de zéro :
 
@@ -283,7 +284,6 @@ NODE_ENV=production
 JWT_ACCESS_SECRET=<openssl rand -hex 48>
 JWT_REFRESH_SECRET=<openssl rand -hex 48>
 COOKIE_SECURE=true
-SEED_DEMO_DATA=false
 CORS_ORIGINS=https://votre-domaine.bj
 ```
 

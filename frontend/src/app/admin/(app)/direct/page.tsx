@@ -5,7 +5,6 @@ import { CarteBenin } from '@/components/carte/CarteDynamique';
 import { GrapheFlux, Sparkline } from '@/components/admin/direct/GrapheFlux';
 import { LegendePrevalence } from '@/components/carte/LegendePrevalence';
 import { ModaleFelicitations } from '@/components/admin/direct/ModaleFelicitations';
-import { suiviSimule } from '@/components/admin/direct/simulation';
 import { useAuth } from '@/components/admin/ContexteAuth';
 import { Alerte, EnTetePage } from '@/components/admin/Elements';
 import { apiAdmin } from '@/lib/api';
@@ -82,15 +81,6 @@ export default function PageDirect() {
   const [heure, setHeure] = useState('');
   const [aFeliciter, setAFeliciter] = useState<LigneDirect | null>(null);
 
-  /*
-   * Démonstration. La base de démonstration a tout reçu en un seul import :
-   * le graphe y est plat avec un pic unique, et l'écran ne montre pas à quoi
-   * il ressemble un jour de campagne. Le bandeau l'annonce dès que c'est actif.
-   */
-  const [simulation, setSimulation] = useState(false);
-  const [tic, setTic] = useState(0);
-  /** Dernier état réel reçu, conservé pour reprendre la main à l'arrêt. */
-  const reel = useRef<SuiviDirect | null>(null);
 
   /** Identifiants déjà vus : seule une vraie nouveauté déclenche une onde. */
   const dejaVus = useRef<Set<number>>(new Set());
@@ -101,7 +91,6 @@ export default function PageDirect() {
       const direct = await apiAdmin<SuiviDirect>('/stats/direct', {
         params: { fenetre },
       });
-      reel.current = direct;
       setSuivi(direct);
       setErreur('');
     } catch {
@@ -163,42 +152,13 @@ export default function PageDirect() {
   }, []);
 
   useEffect(() => {
-    if (simulation) return;
     void interrogerGraphe();
     const minuteur = window.setInterval(
       () => void interrogerGraphe(),
       CADENCE[fenetre],
     );
     return () => window.clearInterval(minuteur);
-  }, [interrogerGraphe, fenetre, simulation]);
-
-  /* Avancée de la démonstration : la courbe glisse d'un intervalle par tic. */
-  useEffect(() => {
-    if (!simulation) return;
-    const minuteur = window.setInterval(() => setTic((t) => t + 1), 1_200);
-    return () => window.clearInterval(minuteur);
-  }, [simulation]);
-
-  useEffect(() => {
-    if (!simulation) return;
-    const simule = suiviSimule(
-      fenetre,
-      tic,
-      reel.current?.classement ?? [],
-      reel.current?.totalCommunes ?? 77,
-      Date.now(),
-    );
-    setSuivi(simule);
-
-    /* La carte doit vivre elle aussi pendant la démonstration. */
-    setActivite((courante) => {
-      const suivante = new Map(courante);
-      for (const ligne of simule.classement.slice(0, 6)) {
-        if (ligne.arrivees > 0) suivante.set(ligne.commune_id, 1);
-      }
-      return suivante;
-    });
-  }, [simulation, fenetre, tic]);
+  }, [interrogerGraphe, fenetre]);
 
   useEffect(() => {
     void interrogerFlux();
@@ -303,25 +263,10 @@ export default function PageDirect() {
         }
         actions={
           <span className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => setSimulation((actif) => !actif)}
-              aria-pressed={simulation}
-              className={`puce-filtre ${simulation ? 'puce-filtre-active' : ''}`}
-            >
-              {simulation ? 'Arrêter la démonstration' : 'Démonstration'}
-            </button>
-            {simulation ? (
-              <span className="flex items-center gap-2 text-[0.8125rem] font-semibold text-ablode-ambre">
-                <span className="direct-point !bg-ablode-ambre" aria-hidden />
-                Simulation
-              </span>
-            ) : (
-              <span className="flex items-center gap-2 text-[0.8125rem] font-semibold text-admin-vert">
-                <span className="direct-point !bg-admin-vert" aria-hidden />
-                En direct
-              </span>
-            )}
+            <span className="flex items-center gap-2 text-[0.8125rem] font-semibold text-admin-vert">
+              <span className="direct-point !bg-admin-vert" aria-hidden />
+              En direct
+            </span>
             <span className="text-[0.8125rem] tabular-nums text-admin-gris">
               {heure || '-'}
             </span>
@@ -331,13 +276,6 @@ export default function PageDirect() {
 
       {/* Bandeau défilant : les communes les plus actives, en continu. */}
       <BandeauCommunes classement={suivi?.classement ?? []} />
-
-      {simulation && (
-        <p className="flex flex-wrap items-center gap-2 border-b border-ablode-ambre/25 bg-ablode-ambre-voile px-6 py-3 text-[0.8125rem] font-semibold text-ablode-ambre">
-          Démonstration en cours - les chiffres et la courbe sont générés pour
-          montrer l’écran en activité. Aucune de ces valeurs n’est une mesure.
-        </p>
-      )}
 
       <div className="space-y-4 p-6">
         {erreur && (

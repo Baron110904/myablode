@@ -53,10 +53,27 @@ export class CreateEvenementDto {
   @MaxLength(60)
   edition?: string | null;
 
+  @ApiPropertyOptional({
+    description:
+      'Heure à laquelle la date quitte le site. Sans elle, elle y reste jusqu’au lendemain de sa tenue.',
+  })
+  @IsOptional()
+  @IsDateString({}, { message: 'La date de retrait est invalide.' })
+  date_retrait?: string | null;
+
   @ApiPropertyOptional({ default: true })
   @IsOptional()
   @IsBoolean()
   publie?: boolean;
+}
+
+/** Libellé d'édition annoncé sur le bandeau d'accueil. */
+export class CampagneAccueilDto {
+  @ApiPropertyOptional({ maxLength: 60, example: '6ème édition' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(60)
+  edition?: string | null;
 }
 
 export class UpdateEvenementDto extends PartialType(CreateEvenementDto) {}

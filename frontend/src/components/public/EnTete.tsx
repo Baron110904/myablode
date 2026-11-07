@@ -55,8 +55,14 @@ export function EnTete() {
         defile ? 'shadow-[0_10px_30px_-20px_rgba(0,0,0,0.9)]' : ''
       }`}
     >
-      <div className="conteneur flex h-[76px] items-center justify-between gap-6">
-        <Logo taille={40} />
+      {/*
+        Bandeau plus haut, et logo nettement plus grand : la marque de
+        l'association y était réduite à 40 px, moins haute que la pilule de
+        navigation posée à côté. Le bandeau reste plus bas sur téléphone,
+        où chaque pixel pris en tête est pris au contenu.
+      */}
+      <div className="conteneur flex h-[76px] items-center justify-between gap-6 sm:h-[86px] lg:h-[96px]">
+        <Logo taille={68} className="h-[46px] w-auto sm:h-[56px] lg:h-[68px]" />
 
         <nav
           className="hidden items-center gap-1 rounded-full bg-white/[0.07] p-1.5 lg:flex"

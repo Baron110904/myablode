@@ -13,6 +13,7 @@ interface Valeurs {
   lieu: string;
   description: string;
   edition: string;
+  date_retrait: string;
   publie: boolean;
 }
 
@@ -26,6 +27,8 @@ function valeursInitiales(evenement: Evenement | null): Valeurs {
     lieu: evenement?.lieu ?? '',
     description: evenement?.description ?? '',
     edition: evenement?.edition ?? '',
+    // L'input `datetime-local` attend « AAAA-MM-JJTHH:MM », sans fuseau.
+    date_retrait: evenement?.date_retrait?.slice(0, 16) ?? '',
     publie: evenement?.publie ?? true,
   };
 }
@@ -76,6 +79,9 @@ export function FormulaireEvenement({
       lieu: valeurs.lieu.trim() || null,
       description: valeurs.description.trim() || null,
       edition: valeurs.edition.trim() || null,
+      date_retrait: valeurs.date_retrait
+        ? new Date(valeurs.date_retrait).toISOString()
+        : null,
       publie: valeurs.publie,
     };
 
@@ -164,6 +170,25 @@ export function FormulaireEvenement({
               className="admin-champ"
             />
           </div>
+        </div>
+
+        <div>
+          <label htmlFor="date_retrait" className="etiquette-douce mb-2 block">
+            Retirer du site le{' '}
+            <span className="text-admin-gris">(facultatif)</span>
+          </label>
+          <input
+            id="date_retrait"
+            type="datetime-local"
+            value={valeurs.date_retrait}
+            onChange={(e) => maj('date_retrait', e.target.value)}
+            className="admin-champ"
+          />
+          <p className="mt-2 text-[0.75rem] leading-relaxed text-admin-gris">
+            {valeurs.date_retrait
+              ? 'La date disparaîtra du site à cette heure-là, sans que vous ayez à la dépublier.'
+              : 'Sans cette heure, la date reste affichée jusqu’au lendemain de sa tenue.'}
+          </p>
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2">

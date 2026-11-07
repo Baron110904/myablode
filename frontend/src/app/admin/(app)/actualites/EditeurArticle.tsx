@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { Alerte, EnTetePage } from '@/components/admin/Elements';
 import { PanneauFormulaireMarche } from './PanneauFormulaireMarche';
+import { ChampImage } from '@/components/admin/ChampImage';
 import { apiAdmin, ApiError } from '@/lib/api';
 import type { Article, CategorieArticle, StatutArticle } from '@/lib/types';
 
@@ -35,7 +36,6 @@ export function EditeurArticle({
 
   const [valeurs, setValeurs] = useState({
     titre: article?.titre ?? '',
-    slug: article?.slug ?? '',
     extrait: article?.extrait ?? '',
     contenu: article?.contenu ?? '',
     image_url: article?.image_url ?? '',
@@ -49,8 +49,6 @@ export function EditeurArticle({
     date_retrait: article?.date_retrait
       ? new Date(article.date_retrait).toISOString().slice(0, 16)
       : '',
-    meta_title: article?.meta_title ?? '',
-    meta_description: article?.meta_description ?? '',
   });
 
   const [aLaUne, setALaUne] = useState(article?.a_la_une ?? false);
@@ -94,7 +92,6 @@ export function EditeurArticle({
 
     const corps = {
       titre: valeurs.titre,
-      slug: valeurs.slug || undefined,
       extrait: valeurs.extrait || undefined,
       contenu: valeurs.contenu,
       image_url: valeurs.image_url || undefined,
@@ -115,8 +112,6 @@ export function EditeurArticle({
       date_retrait: valeurs.date_retrait
         ? new Date(valeurs.date_retrait).toISOString()
         : null,
-      meta_title: valeurs.meta_title || undefined,
-      meta_description: valeurs.meta_description || undefined,
     };
 
     try {
@@ -447,72 +442,14 @@ export function EditeurArticle({
             <PanneauFormulaireMarche articleId={idEnregistre} />
 
             <div className="admin-panneau p-5">
-              <h2 className="etiquette mb-4">Image à la une</h2>
-              <label htmlFor="image_url" className="sr-only">
-                URL de l’image
-              </label>
-              <input
-                id="image_url"
-                type="url"
-                value={valeurs.image_url}
-                onChange={(e) => maj('image_url', e.target.value)}
-                placeholder="https://…"
-                className="admin-champ"
+              <ChampImage
+                valeur={valeurs.image_url}
+                onChange={(url) => maj('image_url', url)}
+                libelle="Image à la une"
+                aide="Affichée en tête de l’article et dans la liste des actualités."
               />
-              {valeurs.image_url && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={valeurs.image_url}
-                  alt=""
-                  className="mt-3 h-[120px] w-full object-cover"
-                />
-              )}
             </div>
 
-            <div className="admin-panneau p-5">
-              <h2 className="etiquette mb-4">Référencement</h2>
-              <div className="space-y-4">
-                <div>
-                  <label htmlFor="slug" className="etiquette mb-2 block">
-                    Adresse de la page
-                  </label>
-                  <input
-                    id="slug"
-                    value={valeurs.slug}
-                    onChange={(e) => maj('slug', e.target.value)}
-                    placeholder="générée automatiquement depuis le titre"
-                    className="admin-champ text-[0.8125rem]"
-                  />
-                  <p className="mt-1.5 text-[0.75rem] text-admin-gris">
-                    Fin de l’adresse web de l’article. La modifier après
-                    publication casse les liens déjà partagés.
-                  </p>
-                </div>
-                <div>
-                  <label htmlFor="meta_title" className="etiquette mb-2 block">
-                    Meta title
-                  </label>
-                  <input
-                    id="meta_title"
-                    value={valeurs.meta_title}
-                    onChange={(e) => maj('meta_title', e.target.value)}
-                    className="admin-champ"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="meta_description" className="etiquette mb-2 block">
-                    Meta description
-                  </label>
-                  <textarea
-                    id="meta_description"
-                    rows={3}
-                    value={valeurs.meta_description}
-                    onChange={(e) => maj('meta_description', e.target.value)}
-                    className="admin-champ-multiligne"
-                  />
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

@@ -33,6 +33,11 @@ export interface FormulairePublic {
   surPlace: string | null;
   /** Déjà découpé en lignes : la page n'a plus qu'à les énumérer. */
   aPrevoir: string[];
+  /**
+   * Adresse d'inscription externe, quand l'association ouvre les
+   * inscriptions ailleurs. Renseignée, elle remplace le bulletin du site.
+   */
+  lienExterne: string | null;
 }
 
 @Injectable()
@@ -74,6 +79,7 @@ export class MarcheService {
     formulaire.parcours = dto.parcours?.trim() || null;
     formulaire.sur_place = dto.sur_place?.trim() || null;
     formulaire.a_prevoir = dto.a_prevoir?.trim() || null;
+    formulaire.lien_externe = dto.lien_externe?.trim() || null;
     formulaire.publie = dto.publie ?? false;
 
     return this.formulaires.save(formulaire);
@@ -119,6 +125,7 @@ export class MarcheService {
       lieu: formulaire.lieu,
       parcours: formulaire.parcours,
       surPlace: formulaire.sur_place,
+      lienExterne: formulaire.lien_externe,
       /*
        * Une ligne par élément, les lignes vides écartées : la saisie
        * au back-office est un simple bloc de texte, et une ligne laissée

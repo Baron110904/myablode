@@ -40,7 +40,7 @@ export default function PageMotDePasseOublie() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-white px-6 py-14">
       <div className="w-full max-w-md">
-        <Logo taille={44} href={null} />
+        <Logo variante="complet-clair" taille={124} href={null} className="h-[96px] w-auto sm:h-[124px]" />
 
         <h1 className="mt-10 text-[1.75rem] font-bold leading-tight tracking-[-0.02em]">
           Mot de passe oublié

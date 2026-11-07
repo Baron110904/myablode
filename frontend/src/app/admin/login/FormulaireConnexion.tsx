@@ -65,7 +65,7 @@ export function FormulaireConnexion() {
 
   return (
     <div className="w-full max-w-md">
-      <Logo taille={44} href={null} />
+      <Logo variante="complet-clair" taille={124} href={null} className="h-[96px] w-auto sm:h-[124px]" />
 
       <p className="mt-10 text-[0.9375rem] font-semibold text-admin-vert">
         Accès réservé aux agents

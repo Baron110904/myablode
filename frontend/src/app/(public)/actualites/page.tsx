@@ -153,9 +153,26 @@ export default async function PageActualites({
 
       <div className="conteneur pb-16 pt-10">
         {articles.items.length === 0 ? (
-          <p className="py-16 text-center text-sm text-ablode-gris">
-            {t('aucunResultat')}
-          </p>
+          /*
+            Deux situations que rien ne distinguait : une recherche sans
+            réponse, et un journal qui n'a pas encore publié. « Aucun article
+            ne correspond à votre recherche » s'affichait sur une page où
+            personne n'avait rien cherché.
+          */
+          searchParams.recherche || searchParams.categorie ? (
+            <p className="py-16 text-center text-sm text-ablode-gris">
+              {t('aucunResultat')}
+            </p>
+          ) : (
+            <div className="mx-auto max-w-lecture rounded-bloc border border-ablode-trait bg-ablode-voile px-8 py-16 text-center">
+              <h2 className="text-[1.375rem] font-bold leading-snug tracking-[-0.02em]">
+                {t('bientotTitre')}
+              </h2>
+              <p className="mx-auto mt-4 max-w-md text-[0.9375rem] leading-relaxed text-ablode-gris">
+                {t('bientotTexte')}
+              </p>
+            </div>
+          )
         ) : (
           <>
             {/* ─── Article à la une ────────────────────────────────── */}

@@ -79,9 +79,7 @@ services:
       - key: SMTP_FROM
         value: ABLODE <contact@ablode.bj>
 
-      # ─── Jeu de démonstration ────────────────────────────────────────────
-      - key: SEED_DEMO_DATA
-        value: 'true'
+      # ─── Compte d'administration initial ─────────────────────────────────
       - key: SEED_ADMIN_EMAIL
         value: admin@ablode.bj
       - key: SEED_ADMIN_PASSWORD

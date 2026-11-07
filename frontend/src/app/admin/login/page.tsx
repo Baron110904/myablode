@@ -36,7 +36,7 @@ export default function PageConnexion() {
 
         <blockquote className="absolute inset-x-0 bottom-0 max-w-2xl p-12">
           <p className="text-[1.75rem] font-bold leading-snug tracking-[-0.02em] text-white">
-            « Réduire le nombre de malades du diabète au Bénin. »
+            « Réduire le nombre de malades du diabète au Bénin »
           </p>
           <footer className="mt-4 text-[0.8125rem] font-semibold uppercase tracking-[0.12em] text-white/55">
             Mission de l’ABLODE · Abomey-Calavi

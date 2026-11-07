@@ -46,6 +46,17 @@ export class Evenement {
   @Column({ type: 'varchar', length: 60, nullable: true })
   edition: string | null;
 
+  /**
+   * Heure à laquelle la date quitte le site, si elle doit le quitter avant
+   * d'avoir eu lieu.
+   *
+   * Nulle, la date reste affichée jusqu'au lendemain de sa tenue. Renseignée,
+   * elle disparaît à l'heure dite sans être dépubliée : l'administrateur n'a
+   * pas à y revenir un dimanche soir.
+   */
+  @Column({ type: 'timestamp', nullable: true })
+  date_retrait: Date | null;
+
   @Column({ type: 'boolean', default: true })
   publie: boolean;
 

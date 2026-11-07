@@ -47,8 +47,6 @@ export default async function PageContact() {
                 <div>
                   <dt className="etiquette mb-1.5">Adresse</dt>
                   <dd className="text-[0.9375rem] leading-relaxed">
-                    {ASSOCIATION.adresse}
-                    <br />
                     {ASSOCIATION.ville}, {ASSOCIATION.pays}
                   </dd>
                 </div>

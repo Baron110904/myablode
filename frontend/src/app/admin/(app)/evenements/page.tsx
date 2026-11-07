@@ -10,6 +10,7 @@ import {
 } from '@/components/admin/Elements';
 import { useAuth } from '@/components/admin/ContexteAuth';
 import { FormulaireEvenement } from './FormulaireEvenement';
+import { PanneauCampagne } from './PanneauCampagne';
 import { apiAdmin, ApiError } from '@/lib/api';
 import { date, etatEvenement, nombre, periodeEvenement } from '@/lib/format';
 import type { Evenement } from '@/lib/types';
@@ -57,9 +58,16 @@ export default function PageEvenementsAdmin() {
     }
   }
 
+  /*
+   * Le décompte doit appliquer exactement la règle du site, heure de retrait
+   * comprise : sinon le back-office annonce « 2 sur le site » là où le
+   * visiteur n'en voit qu'une, et l'administrateur cherche l'erreur ailleurs.
+   */
   const visibles = evenements.filter(
     (evenement) =>
-      evenement.publie && etatEvenement(evenement.date_debut, evenement.date_fin).cle !== 'passe',
+      evenement.publie &&
+      etatEvenement(evenement.date_debut, evenement.date_fin).cle !== 'passe' &&
+      (!evenement.date_retrait || new Date(evenement.date_retrait) > new Date()),
   ).length;
 
   return (
@@ -92,9 +100,11 @@ export default function PageEvenementsAdmin() {
           </Alerte>
         )}
 
+        <PanneauCampagne modifiable={modifiable} />
+
         <Alerte type="info">
           Ces dates alimentent le bandeau de la page d’accueil et l’encart
-          «&nbsp;Les grandes dates&nbsp;». Seules les dates à venir y figurent&nbsp;:
+          «&#8239;Les grandes dates&#8239;». Seules les dates à venir y figurent&#8239;:
           une date passée s’efface d’elle-même du site, mais reste modifiable ici.
         </Alerte>
 
@@ -132,7 +142,12 @@ export default function PageEvenementsAdmin() {
                 <tbody className="divide-y divide-admin-trait">
                   {evenements.map((evenement) => {
                     const etat = etatEvenement(evenement.date_debut, evenement.date_fin);
-                    const affiche = evenement.publie && etat.cle !== 'passe';
+                    // Une heure de retrait dépassée sort la date du site aussi
+                    // sûrement qu'une dépublication : la pastille doit le dire.
+                    const retiree = Boolean(
+                      evenement.date_retrait && new Date(evenement.date_retrait) <= new Date(),
+                    );
+                    const affiche = evenement.publie && etat.cle !== 'passe' && !retiree;
 
                     return (
                       <tr
@@ -167,7 +182,11 @@ export default function PageEvenementsAdmin() {
                                   : 'pastille-attention'
                             }`}
                           >
-                            {evenement.publie ? etat.libelle : 'Masquée'}
+                            {!evenement.publie
+                              ? 'Masquée'
+                              : retiree
+                                ? 'Retirée'
+                                : etat.libelle}
                           </span>
                         </td>
                         <td className="admin-td text-right">

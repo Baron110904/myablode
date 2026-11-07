@@ -21,7 +21,7 @@
     "devenirBenevole": "Become a volunteer",
     "surLeTerrain": "From the field",
     "toutesActualites": "All news",
-    "aucuneActualite": "No news published yet.",
+    "aucuneActualite": "The first field reports will be published here.",
     "missions": "What we do",
     "voirResultats": "See detailed results"
   },
@@ -81,7 +81,9 @@
     "publieLe": "Published on",
     "partager": "Share",
     "retour": "Back to news",
-    "aLire": "Also worth reading"
+    "aLire": "Also worth reading",
+    "bientotTitre": "The association’s journal opens soon",
+    "bientotTexte": "Campaign reports, awareness activities and screening results will be published here as operations unfold."
   },
   "newsletter": {
     "titre": "Get the results of every campaign",

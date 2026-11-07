@@ -2,7 +2,6 @@ import * as bcrypt from 'bcryptjs';
 import dataSource from '../data-source';
 import { seedCommunes } from './seed-communes';
 import { seedDepartements } from './seed-departements';
-import { seedDemo } from './seed-demo';
 
 /** Paramètres système par défaut (section 3.2.7 des spécifications). */
 const SETTINGS_DEFAUT: Array<{
@@ -99,26 +98,17 @@ async function main(): Promise<void> {
         `population renseignée sur ${geo.communesRenseignees} communes.`,
     );
 
-    const adminId = await seedSuperAdmin();
+    /*
+     * Le seed n'installe plus que le socle : les référentiels officiels, les
+     * paramètres par défaut et le compte d'administration. Le générateur de
+     * données de démonstration a été retiré — l'association exploite le site
+     * avec ses propres données, et un seed qui réinjecte onze mille
+     * dépistages fictifs dans une base de production remise à neuf est un
+     * accident qui n'attend que d'être déclenché.
+     */
+    await seedSuperAdmin();
     await seedSettings();
     await seedKoboConfig();
-
-    if (process.env.SEED_DEMO_DATA === 'true') {
-      const [{ count: nbDepistages }] = await dataSource.query(
-        `SELECT COUNT(*)::int AS count FROM depistages`,
-      );
-      if (nbDepistages === 0) {
-        console.log('→ Génération du jeu de démonstration…');
-        const result = await seedDemo(dataSource, adminId);
-        console.log(
-          `✓ Démo : ${result.depistages} dépistages, ${result.campagnes} campagnes, ` +
-            `${result.articles} articles, ${result.abonnes} abonnés, ` +
-            `${result.evenements} dates au programme.`,
-        );
-      } else {
-        console.log(`· ${nbDepistages} dépistages déjà présents, démo ignorée.`);
-      }
-    }
 
     console.log('\n✓ Seed terminé.');
   } finally {

@@ -30,6 +30,7 @@ import { NewsletterModule } from './modules/newsletter/newsletter.module';
 import { SettingsModule } from './modules/settings/settings.module';
 import { StatsModule } from './modules/stats/stats.module';
 import { UsersModule } from './modules/users/users.module';
+import { ImagesModule } from './modules/images/images.module';
 import { VideosModule } from './modules/videos/videos.module';
 
 @Module({
@@ -99,6 +100,7 @@ import { VideosModule } from './modules/videos/videos.module';
     StatsModule,
     AgentsModule,
     ArticlesModule,
+    ImagesModule,
     VideosModule,
     EvenementsModule,
     NewsletterModule,

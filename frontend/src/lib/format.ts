@@ -210,10 +210,7 @@ export function periodeEvenement(dateDebut: string, dateFin: string | null): str
   const debut = new Date(`${dateDebut.slice(0, 10)}T12:00:00Z`);
   if (Number.isNaN(debut.getTime())) return '';
 
-  const jour = (d: Date) => {
-    const numero = Number(d.toLocaleDateString('en-CA', { timeZone: 'UTC' }).slice(8));
-    return numero === 1 ? '1ᵉʳ' : String(numero);
-  };
+  const jour = quantieme;
   const mois = (d: Date, abrege: boolean) =>
     d.toLocaleDateString('fr-FR', { month: abrege ? 'short' : 'long', timeZone: 'UTC' });
 
@@ -229,6 +226,12 @@ export function periodeEvenement(dateDebut: string, dateFin: string | null): str
   return memeMois
     ? `${jour(debut)} – ${jour(fin)} ${mois(fin, true)}`
     : `${jour(debut)} ${mois(debut, true)} – ${jour(fin)} ${mois(fin, true)}`;
+}
+
+/** Quantième à la française : le premier du mois s'écrit « 1ᵉʳ ». */
+function quantieme(d: Date): string {
+  const numero = Number(d.toLocaleDateString('en-CA', { timeZone: 'UTC' }).slice(8));
+  return numero === 1 ? '1ᵉʳ' : String(numero);
 }
 
 /*
@@ -427,11 +430,17 @@ export const LIBELLES_ENTITE: Record<string, string> = {
  * « 14:30 » reste donc « 14:30 », là où une règle qui insérerait l'espace
  * manquante écrirait « 14 :30 ».
  *
- * L'espace retenue est U+00A0 et non l'espace fine U+202F de la règle
- * typographique : Inter rend U+202F sans largeur (voir `nombre`).
+ * L'espace retenue est U+202F, l'espace fine insécable de la règle
+ * typographique. Mesurée dans la police du site (Jakarta) : 1,36 px, soit
+ * la moitié d'une espace ordinaire. Une espace insécable pleine, essayée
+ * d'abord, laissait un écart qui se remarquait avant le deux-points.
+ *
+ * `nombre` garde U+00A0 pour les milliers : son commentaire vise Inter,
+ * police d'une version antérieure du site. Les deux usages sont séparés et
+ * il n'y a pas lieu de toucher à un formatage qui donne satisfaction.
  */
 export function typographieFr(texte: string): string {
-  return texte.replace(/« /g, '« ').replace(/ ([;:!?»])/g, ' $1');
+  return texte.replace(/« /g, '« ').replace(/ ([;:!?»])/g, ' $1');
 }
 
 /**

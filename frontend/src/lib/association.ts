@@ -4,7 +4,11 @@ export const ASSOCIATION = {
   nom: 'Association Béninoise de Lutte contre l’Obésité, le Diabète et les Endocrinopathies',
   anneeCreation: 2018,
 
-  adresse: 'Lot 27, Parcelle F Sedegbe - Maison Sessinou Blanche',
+  /*
+   * Pas d'adresse de rue : l'association ne reçoit pas de public à son
+   * siège, et la publier n'apporte rien à un visiteur. La commune suffit à
+   * la situer, ici comme dans les mentions légales.
+   */
   ville: 'Abomey-Calavi',
   pays: 'Bénin',
 

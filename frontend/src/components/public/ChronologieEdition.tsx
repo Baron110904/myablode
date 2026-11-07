@@ -27,23 +27,37 @@ const COLONNES: Record<number, string> = {
 };
 
 /**
- * Filets verticaux de la chronologie, calés sur la grille ci-dessus.
+ * Filets de séparation, calés sur la grille ci-dessus.
  *
- * Ils doivent apparaître aux mêmes paliers, faute de quoi trois dates
- * empilées sur téléphone héritent d’un trait à gauche qui ne sépare rien.
+ * Empilées, les dates se séparent d'un trait horizontal ; côte à côte, d'un
+ * trait vertical. Les deux ne peuvent pas cohabiter : un `border-t` laissé
+ * en place quand les colonnes s'alignent dessine un trait en l'air au-dessus
+ * de chaque cellule. Chaque palier annule donc celui d'avant.
  */
 const SEPARATEURS: Record<number, string> = {
   1: '',
-  2: 'sm:[&:not(:nth-child(2n+1))]:border-l',
-  3: 'lg:[&:not(:first-child)]:border-l',
-  4: 'sm:[&:not(:nth-child(2n+1))]:border-l lg:[&:not(:first-child)]:border-l',
+  2: '[&:not(:first-child)]:border-t sm:[&:not(:first-child)]:border-t-0 sm:[&:not(:first-child)]:border-l',
+  3: '[&:not(:first-child)]:border-t lg:[&:not(:first-child)]:border-t-0 lg:[&:not(:first-child)]:border-l',
+  4: '[&:not(:first-child)]:border-t sm:[&:nth-child(2)]:border-t-0 sm:[&:nth-child(2n)]:border-l lg:[&:not(:first-child)]:border-t-0 lg:[&:not(:first-child)]:border-l',
 };
 
+/** Mois d'une date, abrégé : « nov. ». */
+function moisAbrege(valeur: string): string {
+  const d = new Date(`${valeur.slice(0, 10)}T12:00:00Z`);
+  if (Number.isNaN(d.getTime())) return '';
+  return d.toLocaleDateString('fr-FR', { month: 'short', timeZone: 'UTC' });
+}
+
 /**
- * Bandeau chronologique posé à cheval sur le bas du bandeau d'accueil.
+ * Bandeau des rendez-vous, sous le bandeau de tête et dans sa continuité.
+ *
+ * Il tenait sur une carte blanche posée à cheval sur le vert. La refonte le
+ * fond dans le bandeau : c'est la suite de la campagne annoncée au-dessus,
+ * pas un encadré qui lui passe devant. Le quantième y est composé en très
+ * gros - c'est la seule chose qu'on y cherche.
  *
  * `aujourdhui` est calculé une fois par le composant parent et transmis :
- * les pastilles « Dans 11 jours » doivent toutes être arrêtées au même
+ * les mentions « Dans 11 jours » doivent toutes être arrêtées au même
  * instant, sinon deux colonnes rendues de part et d'autre de minuit se
  * contrediraient.
  */
@@ -58,58 +72,92 @@ export function ChronologieEdition({
 
   const dates = evenements.slice(0, MAX_DATES);
 
+  /*
+   * Le mois n'est rappelé que s'il change d'une date à l'autre. Tant que le
+   * programme tient dans un seul mois - le cas d'une campagne - « 14 » suffit
+   * et le répéter alourdit ; dès qu'il l'enjambe, « 5 » et « 14 » ne se
+   * situent plus l'un par rapport à l'autre.
+   */
+  const moisMultiples =
+    new Set(dates.map((evenement) => evenement.date_debut.slice(0, 7))).size > 1;
+
+  /*
+   * Le rendez-vous mis en avant est le prochain à se tenir - et non la
+   * première cellule. Une date passée que l'on garde à l'affiche jusqu'à son
+   * heure de retrait arrive en tête du programme : la mettre en avant
+   * reviendrait à annoncer comme prochain un rendez-vous déjà terminé.
+   */
+  const rangProchain = dates.findIndex(
+    (evenement) =>
+      etatEvenement(evenement.date_debut, evenement.date_fin, aujourdhui).cle !== 'passe',
+  );
+
   return (
     <Reveler delai={120}>
-      <ol
-        className={`grid overflow-hidden rounded-carte border border-ablode-trait bg-white shadow-relief ${
-          COLONNES[dates.length]
-        }`}
-      >
-        {dates.map((evenement) => {
+      <ol className={`grid ${COLONNES[dates.length]}`}>
+        {dates.map((evenement, rang) => {
           const etat = etatEvenement(evenement.date_debut, evenement.date_fin, aujourdhui);
-          const imminent = etat.cle === 'en_cours' || etat.cle === 'aujourdhui';
+          const imminent = rang === rangProchain;
+          const quantieme = Number(evenement.date_debut.slice(8, 10));
 
           return (
             <li
               key={evenement.id}
-              /*
-                Filet de couleur sur toute la largeur de la cellule, et
-                séparateurs qui suivent la grille : un trait à gauche quand
-                les colonnes s'alignent, au-dessus quand elles s'empilent.
-              */
-              className={`group relative border-ablode-trait border-t-4 p-6 transition-colors duration-300 hover:bg-ablode-voile ${
+              className={`flex items-center gap-4 border-white/10 px-5 py-5 transition-colors duration-300 sm:px-8 ${
                 SEPARATEURS[dates.length]
               } ${
                 /*
-                  Vert quand l'opération est engagée, bleu tant qu'elle est à
-                  venir. La couleur porte l'information : elle se lit d'un
-                  coup d'œil, sans comparer deux nuances de vert.
+                  L'opération engagée se détache sur un fond à peine plus
+                  clair. C'est ce fond, et la couleur de sa mention, qui la
+                  distinguent - pas un quantième éteint.
                 */
-                imminent ? 'border-t-ablode-vert-vif' : 'border-t-ablode-ciel'
+                imminent ? 'bg-white/[0.07]' : ''
               }`}
             >
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                {/* Composée dans la famille de texte, et non en monospace :
-                    la maquette l'écrit en capitales grasses de la charte. */}
-                <p className="text-[0.8125rem] font-bold uppercase tracking-[0.05em] text-ablode-vert-sombre">
-                  {periodeEvenement(evenement.date_debut, evenement.date_fin)}
-                </p>
-                <span
-                  className={`pastille ${imminent ? 'pastille-normal' : 'pastille-ciel'}`}
+              {/*
+                Tous les quantièmes en blanc plein. Atténuer ceux des dates
+                qui ne sont pas les prochaines les rendait illisibles : c'est
+                pourtant le chiffre que l'on vient chercher.
+              */}
+              <p className="shrink-0 text-center font-extrabold leading-[0.85] tracking-[-0.04em] text-white">
+                <span className="block text-[2.5rem] sm:text-[2.75rem]">{quantieme}</span>
+                {moisMultiples && (
+                  <span className="mt-1 block text-[0.6875rem] font-bold uppercase tracking-[0.1em]">
+                    {moisAbrege(evenement.date_debut)}
+                  </span>
+                )}
+              </p>
+
+              <div className="min-w-0">
+                <h3 className="text-[0.9375rem] font-bold leading-snug text-white">
+                  {evenement.titre}
+                </h3>
+
+                {/*
+                  Le lieu et le sous-titre, saisis au back-office. Ils
+                  figurent aussi sur l'encart « Les grandes dates », qui a la
+                  place de les dérouler ; ici ils tiennent sur deux lignes au
+                  plus, le bandeau étant une rangée.
+                */}
+                {(evenement.lieu || evenement.sous_titre) && (
+                  <p className="mt-1 line-clamp-2 text-[0.8125rem] leading-snug text-white/55">
+                    {[evenement.lieu, evenement.sous_titre].filter(Boolean).join(' · ')}
+                  </p>
+                )}
+
+                <p
+                  className={`mt-1 text-[0.8125rem] leading-snug ${
+                    imminent ? 'text-ablode-vert-clair' : 'text-white/45'
+                  }`}
                 >
+                  {/*
+                    « Terminé » pour une date passée que l'on garde à
+                    l'affiche jusqu'à son heure de retrait : elle doit dire
+                    qu'elle a eu lieu, pas se faire passer pour à venir.
+                  */}
                   {etat.libelle}
-                </span>
-              </div>
-
-              <h3 className="mt-3 text-[0.9375rem] font-bold leading-snug">
-                {evenement.titre}
-              </h3>
-
-              {(evenement.sous_titre || evenement.lieu) && (
-                <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-ablode-gris">
-                  {[evenement.lieu, evenement.sous_titre].filter(Boolean).join(' · ')}
                 </p>
-              )}
+              </div>
             </li>
           );
         })}
@@ -166,9 +214,21 @@ export function EncartGrandesDates({
             <p className="text-[0.8125rem] font-bold uppercase leading-snug tracking-[0.03em] text-ablode-vert-clair">
               {periodeEvenement(evenement.date_debut, evenement.date_fin)}
             </p>
-            <p className="mt-2.5 text-[0.875rem] leading-[1.5] text-white/70">
+            <p className="mt-2.5 text-[0.875rem] font-semibold leading-[1.45] text-white">
               {evenement.description ?? evenement.titre}
             </p>
+
+            {/*
+              Le lieu et le sous-titre saisis au back-office se lisent ici,
+              et non plus sur le bandeau de tête : celui-ci n'a qu'une ligne
+              par date, où ils étaient coupés. L'encart, lui, a la place de
+              les montrer en entier.
+            */}
+            {(evenement.lieu || evenement.sous_titre) && (
+              <p className="mt-2 text-[0.8125rem] leading-[1.5] text-white/60">
+                {[evenement.lieu, evenement.sous_titre].filter(Boolean).join(' · ')}
+              </p>
+            )}
           </li>
         ))}
       </ol>

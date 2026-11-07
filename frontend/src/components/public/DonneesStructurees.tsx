@@ -48,7 +48,6 @@ export function DonneesAssociation() {
             'vers les structures de soin.',
           address: {
             '@type': 'PostalAddress',
-            streetAddress: ASSOCIATION.adresse,
             addressLocality: ASSOCIATION.ville,
             addressCountry: 'BJ',
           },

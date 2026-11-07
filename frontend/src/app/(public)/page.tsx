@@ -9,6 +9,7 @@ import {
   EncartGrandesDates,
 } from '@/components/public/ChronologieEdition';
 import { FormulaireNewsletter } from '@/components/public/FormulaireNewsletter';
+import { LeconsPrevention } from '@/components/public/LeconsPrevention';
 import { ImageArticle } from '@/components/public/ImageArticle';
 import { Reveler } from '@/components/public/Reveler';
 import { apiPublicOuDefaut } from '@/lib/api';
@@ -20,7 +21,15 @@ import {
   LIBELLES_CATEGORIE,
   typographieFr,
 } from '@/lib/format';
-import type { Article, Evenement, ResumeStats } from '@/lib/types';
+import type {
+  Article,
+  CampagneAccueil,
+  Evenement,
+  ResumeStats,
+} from '@/lib/types';
+
+/** Aucune édition saisie : le bandeau affiche le titre seul. */
+const CAMPAGNE_VIDE: CampagneAccueil = { edition: null };
 
 /**
  * L'accueil n'avait pas de métadonnées propres : il héritait du titre du
@@ -91,12 +100,13 @@ export default async function PageAccueil() {
 
   // Appels indépendants : les lancer en parallèle évite d'additionner leurs
   // latences dans le temps de rendu de la page.
-  const [resume, articles, evenements] = await Promise.all([
+  const [resume, articles, evenements, campagne] = await Promise.all([
     apiPublicOuDefaut<ResumeStats>('/stats/resume', RESUME_VIDE, {
       params: { periode: 'tout' },
     }),
     apiPublicOuDefaut<Article[]>('/articles/recents', []),
     apiPublicOuDefaut<Evenement[]>('/evenements/publics', []),
+    apiPublicOuDefaut<CampagneAccueil>('/evenements/campagne', CAMPAGNE_VIDE),
   ]);
 
   /*
@@ -105,13 +115,17 @@ export default async function PageAccueil() {
    * même point.
    */
   const aujourdhui = jourBenin();
+
   /*
-   * Le libellé d'édition est saisi au back-office, avec les dates, et sa
-   * graphie varie d'une saisie à l'autre. Il est donc décomposé ici une
-   * fois pour toutes : le chiffre et son exposant pour le bandeau, la
-   * forme suivie pour les titres qui le citent dans une phrase.
+   * Le titre, l'édition et les dates du bandeau viennent du back-office, et
+   * non plus de la plus longue date du programme. Un site qui vient
+   * d'ouvrir n'a pas encore de programme : il doit pouvoir annoncer sa
+   * campagne quand même.
+   *
+   * La graphie de l'édition varie d'une saisie à l'autre - « 6ème »,
+   * « 6e », « 6ᵉ ». Elle est ramenée ici à sa forme composée.
    */
-  const edition = evenements.find((evenement) => evenement.edition)?.edition ?? null;
+  const edition = campagne.edition;
   const editionChiffre = decomposerEdition(edition);
   const editionTexte = editionNormalisee(edition);
 
@@ -156,13 +170,18 @@ export default async function PageAccueil() {
               Titre et mention d'édition alignés par le haut : sur la maquette
               le chiffre et la première ligne du titre partent de la même
               hauteur de capitale.
+
+              L'édition est saisie au back-office. Elle était auparavant tirée
+              de la première date publiée : vidé le programme, le bandeau
+              perdait son « 6ᵉ ».
             */}
             <h1
               className="entree flex flex-wrap items-start gap-x-6 gap-y-2 text-[3rem] font-extrabold leading-[0.95] tracking-[-0.035em] sm:text-[4rem] lg:text-[5rem]"
             >
               {/*
                 Le retour à la ligne est porté par la traduction (« Le
-                diabète\net nous ») et respecté ici par `whitespace-pre-line`.
+                diabète
+et nous ») et respecté ici par `whitespace-pre-line`.
                 Une largeur maximale aurait aussi coupé le titre au bon
                 endroit, mais la boîte serait restée à cette largeur, et le
                 bloc « 6ᵉ » s'en serait trouvé repoussé loin du texte. Là, le
@@ -262,27 +281,50 @@ export default async function PageAccueil() {
         </div>
       </section>
 
-      {/* ─── Programme de l'édition ───────────────────────────────────── */}
+      {/* ─── Rendez-vous de l'édition ─────────────────────────────────── */}
       {evenements.length > 0 && (
-        <section className="relative z-10 -mt-8 lg:-mt-12" aria-labelledby="titre-programme">
+        <section
+          /*
+            Dans la continuité du bandeau de tête, et non plus sur une carte
+            blanche qui lui passait devant : ces dates sont celles de la
+            campagne annoncée au-dessus. Un vert nuit à peine plus clair
+            suffit à les en détacher.
+          */
+          className="relative z-10 bg-ablode-nuit text-white"
+          aria-labelledby="titre-programme"
+        >
           <div className="conteneur">
             {/*
-              Le bandeau enchaîne quatre titres d'événements en `h3` juste
-              après le `h1`. Sans ce `h2`, la hiérarchie sautait un niveau :
-              une personne qui parcourt la page au lecteur d'écran, de titre
-              en titre, tombait sur quatre dates sans savoir ce qu'elles
-              énumèrent. Le titre est masqué visuellement, la maquette ne le
-              montrant pas.
+              Le bandeau enchaîne des titres d'événements en `h3` juste après
+              le `h1`. Sans ce `h2`, la hiérarchie sautait un niveau : une
+              personne qui parcourt la page au lecteur d'écran, de titre en
+              titre, tombait sur des dates sans savoir ce qu'elles énumèrent.
+              Le titre est masqué visuellement, la maquette ne le montrant pas.
             */}
             <h2 id="titre-programme" className="sr-only">
-              Programme{editionTexte ? ` de la ${editionTexte}` : ''}
+              Rendez-vous{editionTexte ? ` de la ${editionTexte}` : ''}
             </h2>
-            <ChronologieEdition evenements={evenements} aujourdhui={aujourdhui} />
+            {/*
+              Les cellules reprennent à leur compte le rembourrage du
+              conteneur, pour que le fond de la date en cours file jusqu'au
+              bord sans décaler le texte vers l'intérieur.
+            */}
+            <div className="-mx-5 sm:-mx-8">
+              <ChronologieEdition evenements={evenements} aujourdhui={aujourdhui} />
+            </div>
           </div>
         </section>
       )}
 
-      {/* ─── Chiffres clés ────────────────────────────────────────────── */}
+      {/*
+        ─── Chiffres clés ──────────────────────────────────────────────
+        La bande n'apparaît qu'une fois les premiers dépistages saisis.
+        Tant qu'il n'y en a aucun, elle annonçait « 0 dépistage réalisé,
+        0 commune couverte, 0,0 % de prévalence » : quatre zéros alignés en
+        gros caractères, qui donnent d'une association qui démarre l'image
+        d'une association qui échoue.
+      */}
+      {resume.totalDepistages > 0 && (
       <section className="conteneur border-b border-ablode-trait py-12">
         <Reveler>
           {/*
@@ -294,6 +336,10 @@ export default async function PageAccueil() {
           </div>
         </Reveler>
       </section>
+      )}
+
+      {/* ─── Les cinq leçons de prévention ────────────────────────────── */}
+      <LeconsPrevention />
 
       {/* ─── Nos actions ──────────────────────────────────────────────── */}
       <section className="bg-ablode-voile">

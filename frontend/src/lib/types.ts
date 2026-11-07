@@ -162,6 +162,8 @@ export interface Evenement {
   lieu: string | null;
   description: string | null;
   edition: string | null;
+  /** Heure à laquelle la date quitte le site, si elle doit partir plus tôt. */
+  date_retrait: string | null;
   publie: boolean;
   created_at: string;
 }
@@ -343,6 +345,11 @@ export interface FormulaireMarchePublic {
   parcours: string | null;
   surPlace: string | null;
   aPrevoir: string[];
+  /**
+   * Adresse d'inscription externe. Renseignée, elle remplace le bulletin du
+   * site : l'appel de l'article y mène et la page d'inscription s'efface.
+   */
+  lienExterne: string | null;
 }
 
 /** Réglages du formulaire, côté back-office. */
@@ -359,6 +366,8 @@ export interface FormulaireMarche {
   sur_place: string | null;
   /** Ce qu'il faut apporter, une ligne par élément. */
   a_prevoir: string | null;
+  /** Adresse d'inscription externe ; renseignée, elle remplace le bulletin. */
+  lien_externe: string | null;
   publie: boolean;
   created_at: string;
 }
@@ -557,4 +566,14 @@ export interface FiltresCarte {
   ageMin?: number;
   ageMax?: number;
   communeId?: number;
+}
+
+/**
+ * Libellé d'édition annoncé sur le bandeau d'accueil.
+ *
+ * Saisi au back-office plutôt que déduit du programme : il était tiré de la
+ * première date publiée, et disparaissait avec elle.
+ */
+export interface CampagneAccueil {
+  edition: string | null;
 }

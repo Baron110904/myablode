@@ -8,9 +8,11 @@ import {
   IsInt,
   IsOptional,
   IsString,
+  IsUrl,
   Length,
   Max,
   Min,
+  ValidateIf,
 } from 'class-validator';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 
@@ -74,6 +76,27 @@ export class ConfigurerFormulaireDto {
   @IsString()
   @Length(0, 1000)
   a_prevoir?: string | null;
+
+  /*
+   * Seuls `http` et `https` sont acceptés. Sans cette restriction, un
+   * `javascript:…` collé ici deviendrait un lien cliquable sur une page
+   * publique, exécuté dans le navigateur du visiteur.
+   */
+  @ApiPropertyOptional({
+    maxLength: 500,
+    nullable: true,
+    description:
+      'Adresse d’inscription externe. Renseignée, elle remplace le bulletin du site.',
+    example: 'https://exemple.org/inscription-marche',
+  })
+  @IsOptional()
+  @ValidateIf((_, valeur) => valeur !== null && valeur !== '')
+  @IsUrl(
+    { protocols: ['http', 'https'], require_protocol: true },
+    { message: 'Le lien doit commencer par http:// ou https://' },
+  )
+  @Length(0, 500)
+  lien_externe?: string | null;
 
   @ApiPropertyOptional({ default: false })
   @IsOptional()

@@ -214,7 +214,7 @@ export function BarreLaterale({ onNavigation }: { onNavigation?: () => void }) {
     <div className="flex h-full flex-col bg-admin-nuit">
       <div className="flex h-[76px] shrink-0 items-center justify-between gap-3 border-b border-white/10 px-5">
         <span className="flex min-w-0 items-center gap-3">
-          <Logo taille={30} href="/admin" />
+          <Logo taille={36} href="/admin" />
           <span className="truncate text-[1.0625rem] font-bold text-white">
             MyABLODE
           </span>

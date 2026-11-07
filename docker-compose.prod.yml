@@ -78,7 +78,6 @@ services:
       # Autorise `db:seed:prod` à créer les 11 732 dépistages de
       # démonstration. À passer à `false` avant une mise en service réelle :
       # le seed refuserait alors de fabriquer de fausses données.
-      SEED_DEMO_DATA: ${SEED_DEMO_DATA:-true}
       SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@ablode.bj}
       SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-Ablode2026!}
     ports:

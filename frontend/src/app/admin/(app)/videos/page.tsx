@@ -109,8 +109,8 @@ export default function PageVideosAdmin() {
         )}
 
         <Alerte type="info">
-          Les vidéos publiées apparaissent dans la section «&nbsp;Nos actions en
-          vidéo&nbsp;» de la page Actualités. Formats acceptés&nbsp;: MP4 (H.264) et
+          Les vidéos publiées apparaissent dans la section «&#8239;Nos actions en
+          vidéo&#8239;» de la page Actualités. Formats acceptés&#8239;: MP4 (H.264) et
           WebM, 200&nbsp;Mo maximum.
         </Alerte>
 

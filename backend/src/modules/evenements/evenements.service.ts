@@ -2,7 +2,12 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Evenement } from 'src/database/entities';
-import { CreateEvenementDto, UpdateEvenementDto } from './dto/evenement.dto';
+import { SettingsService } from 'src/modules/settings/settings.service';
+import {
+  CampagneAccueilDto,
+  CreateEvenementDto,
+  UpdateEvenementDto,
+} from './dto/evenement.dto';
 
 /**
  * Nombre de dates que l'accueil montre de front.
@@ -14,26 +19,76 @@ import { CreateEvenementDto, UpdateEvenementDto } from './dto/evenement.dto';
  */
 export const MAX_EVENEMENTS_AFFICHES = 4;
 
+/*
+ * Le libellé d'édition annoncé sur le bandeau d'accueil.
+ *
+ * Il était auparavant tiré de la première date publiée du programme : vidé le
+ * programme, le bandeau perdait son « 6ᵉ ». Il se saisit donc, et il est
+ * rangé dans `settings`, qui est fait pour cela - un réglage ne justifie ni
+ * une table ni la migration qui va avec.
+ */
+export const CLE_EDITION = 'campagne.edition';
+
 @Injectable()
 export class EvenementsService {
   constructor(
     @InjectRepository(Evenement)
     private readonly repository: Repository<Evenement>,
+    private readonly settings: SettingsService,
   ) {}
 
+  /* ─── Campagne du bandeau d'accueil ─────────────────────────────────── */
+
+  /** Le libellé d'édition affiché sur le bandeau d'accueil. */
+  async campagne(): Promise<{ edition: string | null }> {
+    const edition = await this.settings.get<string>(CLE_EDITION, '');
+    return { edition: edition?.trim() ? edition : null };
+  }
+
+  async definirCampagne(dto: CampagneAccueilDto): Promise<{ edition: string | null }> {
+    /*
+     * `settings.value` est une colonne jsonb NOT NULL : un champ vidé ne peut
+     * pas y être rangé en NULL - l'enregistrement partait en erreur 500 au
+     * moment précis où l'administrateur efface le libellé. Il est donc rangé
+     * en chaîne vide, et relu comme « non renseigné ».
+     *
+     * `definir` et non `set` : ce réglage n'existe pas au seed, il naît à la
+     * première saisie, et `set` refuse une clé inconnue.
+     */
+    await this.settings.definir(
+      CLE_EDITION,
+      dto.edition?.trim() || '',
+      'accueil',
+      'Libellé d’édition affiché sur le bandeau d’accueil',
+    );
+    return this.campagne();
+  }
+
   /**
-   * Programme affiché par le site : les dates publiées qui ne sont pas encore
-   * passées, du plus proche au plus lointain.
+   * Règle d'affichage public, en un seul endroit.
    *
-   * Un événement terminé disparaît de lui-même du bandeau le lendemain. Sans
-   * cette borne, l'accueil annoncerait encore en décembre une conférence de
-   * novembre, et il faudrait une tâche de ménage pour l'en retirer.
+   * Une heure de retrait renseignée fait autorité : la date reste au
+   * programme jusque-là, même si elle s'est déjà tenue - elle y porte alors
+   * la mention « Terminé ». C'est le cas d'une conférence dont on veut
+   * garder trace jusqu'à la fin de la campagne.
+   *
+   * Sans heure de retrait, le comportement d'avant : la date s'efface d'elle
+   * -même le lendemain, sinon l'accueil annoncerait encore en décembre une
+   * conférence de novembre.
    */
+  private static readonly VISIBLE = `(
+    CASE WHEN evenement.date_retrait IS NOT NULL
+         THEN evenement.date_retrait > NOW()
+         ELSE COALESCE(evenement.date_fin, evenement.date_debut) >= CURRENT_DATE
+    END
+  )`;
+
+  /** Programme affiché par le site, du plus proche au plus lointain. */
   async findPublics(limite = MAX_EVENEMENTS_AFFICHES): Promise<Evenement[]> {
     return this.repository
       .createQueryBuilder('evenement')
       .where('evenement.publie = true')
-      .andWhere('COALESCE(evenement.date_fin, evenement.date_debut) >= CURRENT_DATE')
+      .andWhere(EvenementsService.VISIBLE)
       .orderBy('evenement.date_debut', 'ASC')
       .take(limite)
       .getMany();
@@ -58,6 +113,8 @@ export class EvenementsService {
       dto.publie !== false,
       dto.date_debut,
       dto.date_fin,
+      undefined,
+      dto.date_retrait,
     );
     return this.repository.save(this.repository.create(dto));
   }
@@ -73,6 +130,7 @@ export class EvenementsService {
       evenement.date_debut,
       evenement.date_fin,
       id,
+      evenement.date_retrait,
     );
     return this.repository.save(evenement);
   }
@@ -96,28 +154,32 @@ export class EvenementsService {
     dateDebut: string,
     dateFin?: string | null,
     idExclu?: number,
+    dateRetrait?: Date | string | null,
   ): Promise<void> {
     if (!publie) return;
 
     const constructeur = this.repository
       .createQueryBuilder('evenement')
       .where('evenement.publie = true')
-      .andWhere(
-        'COALESCE(evenement.date_fin, evenement.date_debut) >= CURRENT_DATE',
-      );
+      // Le décompte applique la règle d'affichage du site, heure de retrait
+      // comprise : une date passée qu'on garde à l'écran occupe une place.
+      .andWhere(EvenementsService.VISIBLE);
     if (idExclu !== undefined) {
       constructeur.andWhere('evenement.id != :idExclu', { idExclu });
     }
 
-    const [{ a_venir: aVenir }] = await this.repository.query<
-      Array<{ a_venir: boolean }>
-    >('SELECT (COALESCE($2::date, $1::date) >= CURRENT_DATE) AS a_venir', [
-      dateDebut,
-      dateFin ?? null,
-    ]);
+    const [{ visible }] = await this.repository.query<
+      Array<{ visible: boolean }>
+    >(
+      `SELECT (CASE WHEN $3::timestamp IS NOT NULL
+                    THEN $3::timestamp > NOW()
+                    ELSE COALESCE($2::date, $1::date) >= CURRENT_DATE
+               END) AS visible`,
+      [dateDebut, dateFin ?? null, dateRetrait ?? null],
+    );
 
-    // Une date déjà passée ne prend aucune place : elle ne s'affiche pas.
-    if (!aVenir) return;
+    // Une date qui ne s'affichera pas ne prend aucune place.
+    if (!visible) return;
 
     if ((await constructeur.getCount()) >= MAX_EVENEMENTS_AFFICHES) {
       throw new BadRequestException(

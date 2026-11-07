@@ -200,7 +200,7 @@ describe('libelle d’edition', () => {
  * l'espace ordinaire qui precedait le signe.
  */
 describe('typographieFr', () => {
-  const INSECABLE = ' ';
+  const INSECABLE = ' ';
 
   it('soude le guillemet fermant au mot qui le precede', () => {
     const titre = typographieFr('Campagne « Le diabète et nous »');
@@ -208,6 +208,9 @@ describe('typographieFr', () => {
     // Plus aucune espace ordinaire contre un guillemet : plus aucune coupure
     // possible a cet endroit.
     expect(titre).not.toMatch(/ [»]|« /);
+    // Et c'est bien la fine, pas la pleine : l'ecart se remarquait avant le
+    // signe.
+    expect(titre).not.toContain(' ');
   });
 
   it('traite de meme les autres signes doubles', () => {
@@ -245,7 +248,7 @@ describe('typographieFr', () => {
 });
 
 describe('typographieFrProfonde', () => {
-  const INSECABLE = ' ';
+  const INSECABLE = ' ';
 
   it('corrige toutes les chaines d’une reponse imbriquee', () => {
     const recu = typographieFrProfonde({

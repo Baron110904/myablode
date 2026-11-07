@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Alerte, Modale } from '@/components/admin/Elements';
+import { ChampImage } from '@/components/admin/ChampImage';
 import { apiAdmin, ApiError, televerser } from '@/lib/api';
 import { LIBELLES_CATEGORIE_VIDEO, duree, tailleFichier } from '@/lib/format';
 import type { CategorieVideo, StatutVideo, Video } from '@/lib/types';
@@ -305,24 +306,13 @@ export function FormulaireVideo({
           </div>
         </div>
 
-        <div>
-          <label htmlFor="miniature" className="etiquette-douce mb-2 block">
-            Image d’attente <span className="text-admin-gris">(facultatif)</span>
-          </label>
-          <input
-            id="miniature"
-            type="url"
-            value={valeurs.miniature_url}
-            onChange={(e) => maj('miniature_url', e.target.value)}
-            maxLength={255}
-            disabled={envoi}
-            className="admin-champ"
-            placeholder="https://…"
-          />
-          <p className="mt-2 text-[0.8125rem] leading-relaxed text-admin-gris">
-            Sans image, le lecteur affiche la première image de la vidéo.
-          </p>
-        </div>
+        <ChampImage
+          valeur={valeurs.miniature_url}
+          onChange={(url) => maj('miniature_url', url)}
+          libelle="Image d’attente (facultatif)"
+          aide="Sans image, le lecteur affiche la première image de la vidéo."
+          desactive={envoi}
+        />
 
         <label className="flex cursor-pointer items-start gap-3 rounded-carte border border-admin-trait p-4 transition-colors hover:bg-admin-fond">
           <input

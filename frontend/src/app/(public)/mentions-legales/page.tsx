@@ -44,11 +44,12 @@ export default function PageMentionsLegales() {
         <h2>Données de dépistage</h2>
         <p>
           Les campagnes de dépistage collectent des <strong>données de santé
-          nominatives</strong> : identité, date de naissance, commune, mesures cliniques
+          nominatives</strong>{' '}: identité, date de naissance, commune, mesures
+          cliniques
           (glycémie, indice de masse corporelle) et orientation éventuelle vers une
           structure de soin.
         </p>
-        <p>Ces données font l’objet des garanties suivantes :</p>
+        <p>Ces données font l’objet des garanties suivantes{' '}:</p>
         <ul>
           <li>
             <strong>Aucune diffusion publique nominative.</strong> Le site ne publie que

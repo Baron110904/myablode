@@ -84,7 +84,10 @@ export class StatsController {
    * Plafond relevé : la fenêtre de 30 secondes s'interroge toutes les deux
    * secondes, et plusieurs administrateurs peuvent partager une même adresse
    * IP. La limite globale de 100 requêtes par minute les aurait coupés. La
-   * requête reste peu coûteuse — fenêtre courte, index sur `created_at`.
+   * requête reste peu coûteuse : fenêtre courte, et index partiel sur
+   * `created_at` posé par la migration `IndexArriveeDepistages`. Sans lui,
+   * elle durait une seconde sur 120 000 lignes - plus longtemps que
+   * l'intervalle qui la relance.
    */
   @Throttle({ default: { limit: 240, ttl: 60_000 } })
   @ApiOperation({
