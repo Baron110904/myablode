@@ -397,7 +397,13 @@ et nous ») et respecté ici par `whitespace-pre-line`.
         </div>
       </section>
 
-      {/* ─── Sur le terrain ───────────────────────────────────────────── */}
+      {/*
+        ─── Sur le terrain ─────────────────────────────────────────────
+        La section entière ne paraît qu'avec des actualités publiées. Le
+        titre, le lien vers le journal et une phrase d'attente occupaient
+        sinon un écran entier pour annoncer qu'il n'y avait rien à lire.
+      */}
+      {articles.length > 0 && (
       <section className="conteneur py-16">
         <Reveler>
           <div className="mb-10 flex items-end justify-between gap-6">
@@ -417,10 +423,7 @@ et nous ») et respecté ici par `whitespace-pre-line`.
           </div>
         </Reveler>
 
-        {articles.length === 0 ? (
-          <p className="text-sm text-ablode-gris">{t('aucuneActualite')}</p>
-        ) : (
-          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {articles.map((article, index) => (
               <Reveler as="li" key={article.id} delai={index * 90}>
                 <Link
@@ -458,9 +461,9 @@ et nous ») et respecté ici par `whitespace-pre-line`.
                 </Link>
               </Reveler>
             ))}
-          </ul>
-        )}
+        </ul>
       </section>
+      )}
 
       {/* ─── Newsletter ───────────────────────────────────────────────── */}
       <section className="conteneur pb-4">
