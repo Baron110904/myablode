@@ -283,14 +283,18 @@ export default async function PageAPropos() {
       </section>
 
       {/* ─── Chiffres de la plateforme ────────────────────────────────── */}
-      <section className="border-y border-ablode-trait bg-white">
-        <div className="conteneur py-12">
-          <Reveler>
-            <p className="etiquette mb-8">Ce que la plateforme a consolidé à ce jour</p>
-            <ChiffresCles resume={resume} />
-          </Reveler>
-        </div>
-      </section>
+      {/* Masquée tant qu'aucun dépistage n'est enregistré : une rangée de zéros
+          ne dit rien. Elle apparaît d'elle-même au premier dépistage. */}
+      {resume.totalDepistages > 0 && (
+        <section className="border-y border-ablode-trait bg-white">
+          <div className="conteneur py-12">
+            <Reveler>
+              <p className="etiquette mb-8">Ce que la plateforme a consolidé à ce jour</p>
+              <ChiffresCles resume={resume} />
+            </Reveler>
+          </div>
+        </section>
+      )}
 
       {/* ─── Place dans le système de santé ───────────────────────────── */}
       <section className="conteneur py-16">
