@@ -24,8 +24,6 @@ export function ImageArticle({
   priorite?: boolean;
   className?: string;
 }) {
-  // Une image déposée depuis le back-office (`/uploads/…`) est servie par
-  // l'API, pas par le site : sans cette réécriture, elle répond 404.
   const src = urlMedia(chemin);
 
   if (!src) {
@@ -42,9 +40,16 @@ export function ImageArticle({
     );
   }
 
-  const locale = src.startsWith('/');
+  /*
+   * Seules les images du dossier `public` passent par l'optimiseur de Next.
+   * Celles déposées au back-office sont déjà converties en WebP et bornées à
+   * 1600 px au moment de l'envoi : l'optimiseur n'aurait rien à y gagner, et
+   * le faire dépendre d'un aller-retour supplémentaire vers l'API ferait
+   * disparaître l'image chaque fois que celle-ci tarde à répondre.
+   */
+  const optimisable = src.startsWith('/') && !src.startsWith('/uploads/');
 
-  if (!locale) {
+  if (!optimisable) {
     // eslint-disable-next-line @next/next/no-img-element
     return (
       <img

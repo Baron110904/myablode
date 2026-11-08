@@ -235,10 +235,19 @@ et nous ») et respecté ici par `whitespace-pre-line`.
             </p>
 
             <p
-              className="entree mt-6 max-w-md text-[1.0625rem] leading-relaxed text-white/75"
+              className="entree mt-6 max-w-lg text-[1.0625rem] leading-relaxed text-white/75"
               style={{ animationDelay: '170ms' }}
             >
-              {t('chapeau')}
+              {/*
+                Le nom complet de l'association porte la phrase. Sur ce fond
+                sombre, le gras seul ne le détacherait pas d'un texte déjà posé
+                à 75 % d'opacité: il reprend donc le blanc plein.
+              */}
+              {t.rich('chapeau', {
+                nom: (contenu) => (
+                  <strong className="font-semibold text-white">{contenu}</strong>
+                ),
+              })}
             </p>
 
             <div

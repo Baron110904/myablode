@@ -15,16 +15,18 @@ export const API_URL =
   process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
 
 /**
- * Adresse absolue d'un fichier déposé depuis le back-office.
+ * Adresse d'un fichier déposé depuis le back-office.
  *
- * L'API renvoie un chemin relatif (`/uploads/videos/…`) : il est servi par
- * l'API, pas par Next. Seul ce préfixe est réécrit — une adresse comme
- * `/articles/glycemie.jpg` désigne un fichier du site et doit le rester.
+ * Le chemin renvoyé par l'API (`/uploads/videos/…`) est gardé tel quel : le
+ * site relaie ce préfixe vers l'API (voir `rewrites` dans next.config.js).
+ *
+ * Il l'a longtemps préfixé de l'adresse de l'API. Cette adresse se retrouvait
+ * alors dans le HTML, qui est lu depuis d'autres machines que celle qui l'a
+ * produit : l'image s'affichait sur le poste de développement et sur lui
+ * seul. Une adresse relative n'a pas ce défaut.
  */
 export function urlMedia(chemin: string | null | undefined): string {
-  if (!chemin) return '';
-  if (chemin.startsWith('/uploads/')) return `${API_URL}${chemin}`;
-  return chemin;
+  return chemin ?? '';
 }
 
 export class ApiError extends Error {

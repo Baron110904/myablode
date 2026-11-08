@@ -5,104 +5,190 @@ import { PARTENAIRES, type Partenaire } from '@/lib/association';
 import { useAnimationsReduites } from '@/hooks/useAnimationsReduites';
 
 /**
- * Bande de partenaires défilante.
+ * Bandes de partenaires défilantes.
  *
- * Sur grand écran, une seule piste part de la droite vers la gauche. Sur
- * téléphone, deux pistes se croisent : la première moitié des partenaires en
- * haut, la seconde en bas, en sens contraire. Le partage est fait une fois
- * pour toutes, et c'est lui qui garantit qu'un même logo ne peut pas se
- * trouver en haut et en bas au même instant - un simple décalage des
- * animations finirait toujours par les faire coïncider.
+ * Deux pistes sur grand écran, trois sur téléphone, en sens alternés. Le
+ * partage de la liste est fait une fois pour toutes, et c'est lui - non un
+ * décalage des animations - qui garantit qu'un partenaire ne peut jamais
+ * paraître sur deux pistes au même instant: chacun n'appartient qu'à une
+ * seule. Deux pistes décalées finiraient toujours par coïncider.
  *
- * Au survol, le défilement s'arrête : on ne peut pas lire un nom qui fuit.
+ * Le partage respecte l'ordre de la liste, qui va des institutions aux
+ * entreprises: une piste reste ainsi cohérente au lieu de mélanger un
+ * ministère et une salle de sport.
+ *
+ * Au survol, le défilement s'arrête: on ne peut pas lire un nom qui fuit.
  */
+
+/** Largeur d'une case, en pixels, telle que posée plus bas par les classes. */
+const LARGEUR_CARTE = 200;
+const LARGEUR_CARTE_GRANDE = 240;
+const ESPACE = 16;
+
+/** Pixels par seconde. Assez lent pour qu'un logo se lise au passage. */
+const VITESSE = 48;
+
+/**
+ * Les trois gabarits de logo.
+ *
+ * Écrits en entier, jamais composés morceau par morceau: Tailwind ne garde
+ * que les classes qu'il lit littéralement dans le source, et une classe
+ * assemblée à l'exécution ne serait jamais produite.
+ */
+const TAILLES = {
+  commune: 'max-h-[80px] max-w-full',
+  grand: 'max-h-[96px] max-w-full',
+  reduit: 'max-h-[80px] max-w-[70%]',
+} as const;
+
+/**
+ * Largeur des cartes.
+ *
+ * La hauteur, elle, ne varie pas: des cartes inégales dans une même rangée
+ * se verraient bien avant les logos qu'elles portent. Seule la part que le
+ * logo occupe à l'intérieur change, et les quatre marques trop détaillées
+ * reçoivent en plus une carte plus large.
+ */
+const CARTES = {
+  commune: 'w-[200px]',
+  grand: 'w-[240px]',
+  reduit: 'w-[200px]',
+} as const;
+
+const CARTE =
+  'flex h-[128px] shrink-0 items-center justify-center rounded-carte border' +
+  ' border-ablode-trait bg-white px-6 text-center transition-all duration-300' +
+  ' hover:-translate-y-1 hover:border-ablode-vert hover:shadow-carte' +
+  ' motion-reduce:hover:translate-y-0';
+
+/** Découpe la liste en `nombre` tranches contiguës, sans recouvrement. */
+function repartir(partenaires: Partenaire[], nombre: number): Partenaire[][] {
+  const taille = Math.ceil(partenaires.length / nombre);
+  return Array.from({ length: nombre }, (_, rang) =>
+    partenaires.slice(rang * taille, (rang + 1) * taille),
+  ).filter((piste) => piste.length > 0);
+}
+
 export function BandePartenaires() {
   const animationsReduites = useAnimationsReduites();
 
   if (animationsReduites) {
     /*
-     * Mouvement perpétuel refusé par le visiteur : la bande devient une
-     * rangée que l'on fait défiler soi-même. Le contenu reste atteignable,
-     * ce qu'une animation simplement coupée ne garantirait pas - la moitié
-     * des logos serait hors du cadre.
+     * Mouvement perpétuel refusé par le visiteur: les bandes deviennent une
+     * grille que l'on parcourt des yeux. Le contenu reste atteignable, ce
+     * qu'une animation simplement coupée ne garantirait pas - la moitié des
+     * logos resterait hors du cadre.
      */
     return (
-      <div className="flex gap-4 overflow-x-auto px-5 pb-2 sm:px-8" aria-hidden>
+      <ul className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
         {PARTENAIRES.map((partenaire) => (
-          <CartePartenaire key={partenaire.nom} partenaire={partenaire} />
+          <li
+            key={partenaire.nom}
+            title={titre(partenaire)}
+            /* En grille, c'est la colonne qui donne la largeur, pas la carte. */
+            className={`${CARTE} w-auto`}
+          >
+            <Logo partenaire={partenaire} />
+          </li>
         ))}
-      </div>
+      </ul>
     );
   }
 
-  // Partage en deux moitiés, pour les deux pistes du téléphone.
-  const moitie = Math.ceil(PARTENAIRES.length / 2);
-  const dessus = PARTENAIRES.slice(0, moitie);
-  const dessous = PARTENAIRES.slice(moitie);
-
   return (
     <>
-      {/* Téléphone et tablette : deux pistes qui se croisent. */}
+      {/* Téléphone et tablette: trois pistes. */}
       <div className="space-y-4 lg:hidden">
-        <Piste partenaires={dessus} />
-        <Piste partenaires={dessous} sens="droite" />
+        {repartir(PARTENAIRES, 3).map((piste, rang) => (
+          <Piste
+            key={piste[0].nom}
+            partenaires={piste}
+            sens={rang % 2 === 0 ? 'gauche' : 'droite'}
+          />
+        ))}
       </div>
 
-      {/* Grand écran : une seule piste, tous les partenaires. */}
-      <div className="hidden lg:block">
-        <Piste partenaires={PARTENAIRES} />
+      {/* Grand écran: deux pistes, les cases y tiennent plus largement. */}
+      <div className="hidden space-y-5 lg:block">
+        {repartir(PARTENAIRES, 2).map((piste, rang) => (
+          <Piste
+            key={piste[0].nom}
+            partenaires={piste}
+            sens={rang % 2 === 0 ? 'gauche' : 'droite'}
+          />
+        ))}
       </div>
+
+      {/*
+        Version lisible par les lecteurs d'écran et les moteurs: les pistes
+        sont masquées pour eux, la liste des partenaires ne doit pas
+        disparaître avec elles.
+      */}
+      <ul className="sr-only">
+        {PARTENAIRES.map((partenaire) => (
+          <li key={partenaire.nom}>{titre(partenaire)}</li>
+        ))}
+      </ul>
     </>
   );
 }
 
 function Piste({
   partenaires,
-  sens = 'gauche',
+  sens,
 }: {
   partenaires: Partenaire[];
-  sens?: 'gauche' | 'droite';
+  sens: 'gauche' | 'droite';
 }) {
-  if (partenaires.length === 0) return null;
+  /*
+   * La durée se déduit de la largeur réelle de la piste, et n'est pas posée
+   * une fois pour toutes: les pistes n'ont pas le même nombre de cases, et
+   * une durée commune les ferait défiler à des vitesses différentes - ce qui
+   * se voit immédiatement quand elles sont l'une au-dessus de l'autre.
+   */
+  const largeur = partenaires.reduce(
+    (total, p) => total + (p.taille === 'grand' ? LARGEUR_CARTE_GRANDE : LARGEUR_CARTE) + ESPACE,
+    0,
+  );
 
   return (
     <div
       className="group relative overflow-hidden"
       /*
-       * Présentation seulement : les mêmes partenaires sont énumérés juste
-       * après dans une liste réservée aux lecteurs d'écran. Sans ce retrait,
-       * chaque nom serait annoncé deux fois - la piste est dupliquée pour
-       * boucler.
+       * Présentation seulement: les mêmes partenaires sont énumérés dans la
+       * liste réservée aux lecteurs d'écran. Sans ce retrait, chaque nom
+       * serait annoncé deux fois - la piste est dupliquée pour boucler.
        */
       aria-hidden
     >
-      {/*
-        `py-3` n'est pas une respiration décorative : au survol, la carte se
-        soulève de quatre pixels et porte une ombre. Collée au bord du cadre
-        qui la rogne, elle y perdait son filet vert supérieur, et le survol
-        donnait l'impression que la carte passait sous la section du dessus.
-      */}
       <div
         className={`flex w-max gap-4 py-3 group-hover:[animation-play-state:paused] ${
-          sens === 'droite' ? 'animate-bande-inverse' : 'animate-bande'
+          sens === 'droite' ? 'animate-defilement-inverse' : 'animate-defilement'
         }`}
+        style={{ animationDuration: `${Math.round(largeur / VITESSE)}s` }}
       >
         {/*
           La liste est écrite deux fois et la piste se décale de la moitié de
-          sa largeur : au terme du cycle, la seconde copie se trouve
-          exactement là où commençait la première, et la boucle est
-          invisible. Tout autre rapport produit un saut à chaque tour.
+          sa largeur: au terme du cycle, la seconde copie se trouve exactement
+          là où commençait la première, et la boucle est invisible. Tout autre
+          rapport produit un saut à chaque tour.
         */}
         {[0, 1].map((copie) => (
           <div key={copie} className="flex shrink-0 gap-4">
             {partenaires.map((partenaire) => (
-              <CartePartenaire key={partenaire.nom} partenaire={partenaire} />
+              <div
+                key={partenaire.nom}
+                title={titre(partenaire)}
+                className={`${CARTE} ${CARTES[partenaire.taille ?? 'commune']}`}
+              >
+                <Logo partenaire={partenaire} />
+              </div>
             ))}
           </div>
         ))}
       </div>
 
-      {/* Fondus aux deux bords : la bande sort du cadre au lieu d'y être coupée. */}
+      {/* Fondus aux deux bords: la bande sort du cadre au lieu d'y être coupée. */}
       <span
         aria-hidden
         className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-ablode-voile to-transparent sm:w-20"
@@ -115,51 +201,31 @@ function Piste({
   );
 }
 
-function CartePartenaire({ partenaire }: { partenaire: Partenaire }) {
+function Logo({ partenaire }: { partenaire: Partenaire }) {
+  if (!partenaire.logo) {
+    /*
+      Cartouche en attendant le fichier: le nom composé dans la typo de la
+      charte, et non un logo reconstitué.
+    */
+    return (
+      <span className="px-3 text-center text-[0.875rem] font-bold leading-snug tracking-[-0.015em] text-ablode-encre">
+        {partenaire.nom}
+      </span>
+    );
+  }
+
   return (
-    <div
-      /*
-        La carte ne porte plus que le logo : un partenaire se reconnaît à sa
-        marque, et répéter son nom dessous ajoutait une ligne de texte que
-        personne ne lisait dans une bande qui défile. Le rôle reste accessible
-        au survol, et la liste masquée de la page le donne aux lecteurs
-        d'écran.
-      */
-      title={`${partenaire.nom} · ${partenaire.role}`}
-      /*
-        200 px de large, et non 220 : à cette taille, cinq cartes entières et
-        le début d'une sixième tiennent dans la largeur du contenu, ce qui
-        montre que la bande continue au lieu de s'arrêter net.
-      */
-      className="flex h-[128px] w-[200px] shrink-0 items-center justify-center rounded-carte border border-ablode-trait bg-white px-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-ablode-vert hover:shadow-carte motion-reduce:hover:translate-y-0"
-    >
-      {partenaire.logo ? (
-        /*
-          Les logos fournis vont du carré au bandeau très allongé - de 1:1
-          pour Celtiis à 6:1 pour Nasuba. La boîte borne donc les deux
-          dimensions et `object-contain` fait le reste : chacun occupe la
-          place qu'il peut sans être déformé ni déborder de la carte. Avec
-          une seule contrainte de hauteur, les logos larges sortaient du
-          cadre et les carrés restaient minuscules.
-        */
-        <div className="flex h-[80px] w-full items-center justify-center">
-          <Image
-            src={partenaire.logo}
-            alt={partenaire.nom}
-            width={240}
-            height={80}
-            className="max-h-[80px] w-auto max-w-full object-contain"
-          />
-        </div>
-      ) : (
-        /*
-          Cartouche en attendant le fichier : le nom composé dans la typo de
-          la charte, et non un logo reconstitué.
-        */
-        <span className="text-[1.0625rem] font-bold leading-snug tracking-[-0.015em] text-ablode-encre">
-          {partenaire.nom}
-        </span>
-      )}
-    </div>
+    <Image
+      src={partenaire.logo}
+      alt={partenaire.nom}
+      width={260}
+      height={92}
+      className={`w-auto object-contain ${TAILLES[partenaire.taille ?? 'commune']}`}
+    />
   );
+}
+
+/** Nom seul, ou nom et rôle quand celui-ci nous a été confirmé. */
+function titre(partenaire: Partenaire): string {
+  return partenaire.role ? `${partenaire.nom} · ${partenaire.role}` : partenaire.nom;
 }

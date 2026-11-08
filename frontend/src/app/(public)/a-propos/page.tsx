@@ -6,7 +6,6 @@ import { ChiffresCles } from '@/components/public/ChiffresCles';
 import { ReseauxSociaux } from '@/components/public/ReseauxSociaux';
 import { Reveler } from '@/components/public/Reveler';
 import { apiPublicOuDefaut } from '@/lib/api';
-import { PARTENAIRES } from '@/lib/association';
 import { typographieFr } from '@/lib/format';
 import type { ResumeStats } from '@/lib/types';
 
@@ -345,46 +344,25 @@ export default async function PageAPropos() {
                 <h2 className="mt-4 titre-section">{t('partenaires')}</h2>
               </div>
               <p className="text-[0.9375rem] leading-relaxed text-ablode-gris lg:self-end">
-                Institutions, centres de santé publics, hôpitaux de zone, cliniques
-                partenaires et entreprises accompagnent les campagnes sur le terrain.
+                Institutions, structures de santé et entreprises portent les campagnes
+                avec nous. Sans eux, rien de tout cela n’aurait lieu.
               </p>
             </div>
           </Reveler>
         </div>
 
         {/*
-          La bande déborde de la colonne de texte sans aller jusqu'aux bords
-          de l'écran. À pleine largeur, le nombre de logos visibles changeait
-          avec la taille du moniteur et la rangée n'était alignée sur rien ;
-          calée sur la colonne, elle en montrait trop peu. À 88rem, six
-          cartes entières et l'amorce d'une septième tiennent la largeur, et
-          la bande garde des marges qui la détachent du bord.
+          Les bandes débordent de la colonne de texte sans aller jusqu'aux
+          bords de l'écran. À pleine largeur, le nombre de cartes visibles
+          changeait avec la taille du moniteur et la rangée n'était alignée
+          sur rien ; calée sur la colonne, elle en montrait trop peu.
         */}
         <Reveler
           delai={120}
-          className="mx-auto mt-10 w-full max-w-[88rem] px-5 pb-4 sm:px-8"
+          className="mx-auto mb-16 mt-10 w-full max-w-[88rem] px-5 sm:px-8"
         >
           <BandePartenaires />
         </Reveler>
-
-        {/*
-          Version lisible par les lecteurs d'écran et les moteurs : la bande
-          animée est masquée pour eux, la liste des partenaires ne doit pas
-          disparaître avec elle.
-        */}
-        <div className="conteneur pb-16">
-          <ul className="sr-only">
-            {PARTENAIRES.map((partenaire) => (
-              <li key={partenaire.nom}>
-                {/* Espace fine insécable avant le deux-points, comme partout
-                    ailleurs sur le site. */}
-                {partenaire.nom}
-                {' : '}
-                {partenaire.role}
-              </li>
-            ))}
-          </ul>
-        </div>
       </section>
 
       {/* ─── Appels à l'action ────────────────────────────────────────── */}

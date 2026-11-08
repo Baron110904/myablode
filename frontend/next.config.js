@@ -48,6 +48,21 @@ const nextConfig = {
   images: {
     remotePatterns: [{ protocol: 'https', hostname: '**' }],
   },
+  /*
+   * Les fichiers déposés au back-office sont servis par l'API, qui vit sur un
+   * autre hôte que le site. Les adresser directement inscrivait cet hôte dans
+   * le HTML envoyé au navigateur : l'image n'apparaissait que depuis la
+   * machine où tourne l'API, et nulle part ailleurs - un téléphone du même
+   * réseau lisant `localhost` comme étant lui-même. En production, le site
+   * étant servi en HTTPS, le navigateur refusait de surcroît une source en
+   * HTTP. Le site les relaie donc depuis sa propre origine : l'adresse écrite
+   * dans la page devient relative et vaut depuis n'importe quel appareil.
+   */
+  async rewrites() {
+    return [
+      { source: '/uploads/:chemin*', destination: `${api}/uploads/:chemin*` },
+    ];
+  },
   async headers() {
     return [
       {

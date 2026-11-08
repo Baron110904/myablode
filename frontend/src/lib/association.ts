@@ -57,8 +57,26 @@ export interface Partenaire {
    * renseigner le chemin ici suffit à le remplacer.
    */
   logo: string | null;
-  /** Nature de la contribution, affichée sous le logo. */
-  role: string;
+  /**
+   * Nature de la contribution, montrée au survol du logo.
+   *
+   * Facultative: elle n'est renseignée que pour les partenaires dont le rôle
+   * dans les campagnes nous a été confirmé. L'inventer pour les autres
+   * reviendrait à publier un engagement qu'ils n'ont pas pris.
+   */
+  role?: string;
+  /**
+   * Écart de taille voulu pour ce logo, quand la taille commune le dessert.
+   *
+   * `grand`: les marques que la taille commune rend illisibles - un emblème
+   * circulaire chargé de petits caractères, un dessin au trait fin.
+   * `reduit`: les bandeaux si allongés qu'ils prennent toute la largeur de
+   * leur case et écrasent leurs voisins.
+   *
+   * Les régler tous reviendrait à n'en régler aucun: c'est l'écart avec le
+   * voisinage qui fait l'effet.
+   */
+  taille?: 'grand' | 'reduit';
 }
 
 export const PARTENAIRES: Partenaire[] = [
@@ -78,9 +96,35 @@ export const PARTENAIRES: Partenaire[] = [
     role: 'Politiques de santé publique',
   },
   {
+    nom: 'Programme national de lutte contre les maladies non transmissibles',
+    logo: '/partenaires/pnlmnt.png',
+  },
+  {
+    nom: 'LEMACEN',
+    logo: '/partenaires/lemacen.jpg',
+  },
+  {
     nom: 'FSS Cotonou',
     logo: '/partenaires/fss-cotonou.png',
     role: 'Faculté des sciences de la santé',
+  },
+  {
+    nom: 'Clinique Saint Pio',
+    logo: '/partenaires/clinique-saint-pio.jpg',
+    taille: 'grand',
+  },
+  {
+    nom: 'Centre médical Avicenne',
+    logo: '/partenaires/centre-avicenne.jpg',
+  },
+  {
+    nom: 'BioService Santé',
+    logo: '/partenaires/bioservice-sante.jpg',
+    taille: 'reduit',
+  },
+  {
+    nom: 'UbiPharm Bénin',
+    logo: '/partenaires/ubipharm.png',
   },
   {
     nom: 'Celtiis',
@@ -88,25 +132,79 @@ export const PARTENAIRES: Partenaire[] = [
     role: 'Télécommunications',
   },
   {
-    nom: 'Nasuba Infos',
-    logo: '/partenaires/nasuba.png',
-    role: 'Partenaire média',
-  },
-  {
     nom: 'SBEE',
     logo: '/partenaires/sbee.png',
     role: 'Société Béninoise d’Énergie Électrique',
   },
   {
-    // Marque béninoise d'eau minérale, sans lien avec la fédération de football.
+    nom: 'BIIC',
+    logo: '/partenaires/biic.png',
+  },
+  {
+    nom: 'AFG Assurances',
+    logo: '/partenaires/afg-assurances.png',
+  },
+  {
+    nom: 'La Générale des Assurances du Bénin',
+    logo: '/partenaires/gab.jpg',
+  },
+  {
+    nom: 'ABENES',
+    logo: '/partenaires/abenes.jpg',
+  },
+  {
+    nom: 'Golden Tulip Hôtel Le Diplomate',
+    logo: '/partenaires/golden-tulip.png',
+  },
+  {
+    nom: 'La Roche',
+    logo: '/partenaires/la-roche.jpg',
+  },
+  {
+    nom: 'Jawuntaa',
+    logo: '/partenaires/jawuntaa.jpg',
+  },
+  {
+    nom: 'Le Djabi',
+    logo: '/partenaires/le-djabi.jpg',
+  },
+  {
+    nom: 'MoriLand City',
+    logo: '/partenaires/moriland-city.jpg',
+  },
+  {
     nom: 'Fifa',
     logo: '/partenaires/fifa.png',
     role: 'Eau minérale naturelle',
   },
   {
+    nom: 'Fresh Salad',
+    logo: '/partenaires/fresh-salad.png',
+    taille: 'grand',
+  },
+  {
+    nom: 'Fitness Corner',
+    logo: '/partenaires/fitness-corner.png',
+  },
+  {
     nom: 'Let’s Go Gym',
     logo: '/partenaires/lets-go-gym.jpg',
     role: 'Activité physique et remise en forme',
+  },
+  {
+    nom: 'Nasuba Infos',
+    logo: '/partenaires/nasuba.png',
+    role: 'Partenaire média',
+  },
+  {
+    nom: 'Académie de Leadership du Bénin',
+    logo: '/partenaires/academie-leadership.jpg',
+    taille: 'grand',
+  },
+  {
+    nom: 'Rotaract Dakar Millénium',
+    logo: '/partenaires/rotaract.jpg',
+    taille: 'grand',
   },
 ];
 

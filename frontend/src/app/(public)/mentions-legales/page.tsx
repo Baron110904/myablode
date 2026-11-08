@@ -43,48 +43,62 @@ export default function PageMentionsLegales() {
 
         <h2>Données de dépistage</h2>
         <p>
-          Les campagnes de dépistage collectent des <strong>données de santé
-          nominatives</strong>{' '}: identité, date de naissance, commune, mesures
-          cliniques
-          (glycémie, indice de masse corporelle) et orientation éventuelle vers une
-          structure de soin.
+          L’association n’est pas autorisée à ce jour à recueillir des informations
+          permettant d’identifier les personnes rencontrées pendant les campagnes.
+          Elle n’en recueille donc pas.
         </p>
-        <p>Ces données font l’objet des garanties suivantes:</p>
+        <p>
+          Ce que la plateforme enregistre, ce sont les mesures relevées au moment du
+          dépistage: le type d’examen (diabète, obésité, endocrinopathie), la
+          glycémie, le poids, la taille et l’indice de masse corporelle qui s’en
+          déduit, le résultat et l’orientation éventuelle vers une structure de soin.
+          S’y ajoutent la commune et la date, qui seules permettent les cartes et les
+          courbes publiées ici.
+        </p>
+        <p>
+          Le site n’affiche que des totaux par commune. Aucune page ne donne accès au
+          dépistage d’une personne en particulier.
+        </p>
+
+        <h2>Informations que vous nous transmettez</h2>
+        <p>
+          Quatre formulaires recueillent des informations, et uniquement si vous
+          choisissez de les remplir:
+        </p>
         <ul>
           <li>
-            <strong>Aucune diffusion publique nominative.</strong> Le site ne publie que
-            des agrégats par commune. Les pages publiques ne donnent jamais accès à une
-            fiche individuelle.
+            <strong>Contact.</strong> Nom, adresse email et message, pour pouvoir vous
+            répondre.
           </li>
           <li>
-            <strong>Accès restreint.</strong> Seuls les comptes Admin et Super Admin
-            accèdent aux données nominatives. Les comptes en lecture seule (Viewer)
-            obtiennent des exports anonymisés, dépourvus de nom, prénom, téléphone et date
-            de naissance.
+            <strong>Candidature de bénévole.</strong> Nom, prénom, adresse email,
+            téléphone, ville et disponibilités, pour composer les équipes de terrain.
           </li>
           <li>
-            <strong>Traçabilité.</strong> Chaque consultation sensible, modification,
-            import et export est enregistrée dans un journal d’audit non modifiable.
+            <strong>Inscription à une marche.</strong> Nom, prénom, âge, sexe, ville et
+            coordonnées, pour établir la liste des participants.
           </li>
           <li>
-            <strong>Consentement.</strong> Le recueil du consentement des personnes
-            dépistées, sur le terrain, est un prérequis à toute saisie dans la plateforme.
+            <strong>Lettre d’information.</strong> La seule adresse email.
           </li>
         </ul>
+        <p>
+          Ces informations ne sont lues que par l’association. Elles ne sont jamais
+          publiées sur le site, ni revendues, ni transmises à des tiers.
+        </p>
 
         <h2>Finalité du traitement</h2>
         <p>
-          Les données servent au suivi épidémiologique des maladies non transmissibles, au
-          pilotage des campagnes de l’association et à l’orientation des personnes
-          dépistées vers une prise en charge médicale. Elles ne sont ni revendues, ni
-          utilisées à des fins publicitaires.
+          Les mesures de dépistage servent au suivi épidémiologique des maladies non
+          transmissibles et au pilotage des campagnes de l’association. Elles ne sont
+          ni revendues, ni utilisées à des fins publicitaires.
         </p>
 
         <h2>Droits des personnes</h2>
         <p>
-          Toute personne dépistée peut demander l’accès à ses données, leur rectification
-          ou leur suppression, en écrivant à l’association via la page Contact ou lors
-          d’une campagne. La demande est traitée par un administrateur habilité et
+          Vous pouvez demander l’accès aux informations que vous nous avez transmises,
+          leur rectification ou leur suppression, en écrivant à l’association via la
+          page Contact. La demande est traitée par un administrateur habilité et
           consignée au journal d’audit.
         </p>
 
