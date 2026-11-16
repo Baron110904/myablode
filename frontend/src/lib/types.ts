@@ -21,6 +21,8 @@ export type CategorieArticle =
 export type StatutArticle = 'draft' | 'published' | 'archived';
 export type CategorieVideo = 'depistage' | 'evenement' | 'prevention' | 'campagne';
 export type StatutVideo = 'draft' | 'published';
+/** Cadre dans lequel le lecteur public compose la vidéo. */
+export type OrientationVideo = 'paysage' | 'portrait';
 export type Periode = '7j' | '30j' | 'annee' | 'tout' | 'perso';
 
 export interface Paginated<T> {
@@ -146,6 +148,7 @@ export interface Video {
   mime: string | null;
   miniature_url: string | null;
   duree_secondes: number | null;
+  orientation: OrientationVideo;
   statut: StatutVideo;
   a_la_une: boolean;
   date_publication: string | null;
@@ -180,6 +183,14 @@ export interface Article {
   langue: string;
   statut: StatutArticle;
   date_publication: string | null;
+  /**
+   * Jour du rendez-vous annoncé, s'il y en a un.
+   *
+   * Les cartes l'affichent à la place de la date de parution : sans elle, le
+   * visiteur lisait la date à laquelle l'annonce avait paru et croyait y lire
+   * celle de l'événement.
+   */
+  date_evenement: string | null;
   /** Mis en avant sur la page « Actualités », depuis le back-office. */
   a_la_une: boolean;
   /** Passée cette date, l'article quitte le site mais reste au back-office. */

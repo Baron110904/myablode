@@ -62,6 +62,19 @@ export class Article {
   date_publication: Date | null;
 
   /**
+   * Jour du rendez-vous, pour un article qui en annonce un.
+   *
+   * Les cartes d'actualité l'affichent à la place de la date de parution.
+   * Sans elle, le visiteur lisait la date à laquelle l'annonce avait paru et
+   * croyait y lire celle de la marche.
+   *
+   * Facultative: un compte rendu ou un communiqué n'annonce rien, et garde
+   * sa date de publication.
+   */
+  @Column({ type: 'date', nullable: true })
+  date_evenement: string | null;
+
+  /**
    * Article mis en avant sur la page « Actualités ».
    *
    * Plusieurs articles peuvent l'être : les listes publiques les remontent

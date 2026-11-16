@@ -1,4 +1,5 @@
 import type {
+  Article,
   CategorieArticle,
   CategorieVideo,
   ResultatDepistage,
@@ -47,6 +48,23 @@ export function date(valeur: string | Date | null | undefined): string {
     year: 'numeric',
     timeZone: FUSEAU_BENIN,
   });
+}
+
+/**
+ * Date portée par une carte d'actualité.
+ *
+ * Celle du rendez-vous quand l'article en annonce un, celle de la parution
+ * sinon. Les deux se ressemblent trop pour cohabiter: sur l'annonce d'une
+ * marche, le visiteur lisait la date à laquelle l'article avait paru et
+ * croyait y lire celle de la marche.
+ *
+ * La page de l'article, elle, garde « Publié le » - la mention dit alors ce
+ * qu'elle montre, et la confusion n'a pas lieu d'être.
+ */
+export function dateCarte(
+  article: Pick<Article, 'date_evenement' | 'date_publication'>,
+): string {
+  return date(article.date_evenement ?? article.date_publication);
 }
 
 export function dateCourte(valeur: string | Date | null | undefined): string {

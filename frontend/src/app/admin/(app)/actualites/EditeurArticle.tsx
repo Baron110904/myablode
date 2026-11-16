@@ -43,6 +43,7 @@ export function EditeurArticle({
     auteur: article?.auteur ?? '',
     langue: article?.langue ?? 'fr',
     statut: (article?.statut ?? 'draft') as StatutArticle,
+    date_evenement: article?.date_evenement?.slice(0, 10) ?? '',
     date_publication: article?.date_publication
       ? new Date(article.date_publication).toISOString().slice(0, 16)
       : '',
@@ -99,6 +100,7 @@ export function EditeurArticle({
       auteur: valeurs.auteur || undefined,
       langue: valeurs.langue,
       statut: publier ? 'published' : valeurs.statut,
+      date_evenement: valeurs.date_evenement || null,
       date_publication: valeurs.date_publication
         ? new Date(valeurs.date_publication).toISOString()
         : undefined,
@@ -334,6 +336,25 @@ export function EditeurArticle({
                     <option value="published">Publié</option>
                     <option value="archived">Archivé</option>
                   </select>
+                </div>
+
+                <div>
+                  <label htmlFor="date_evenement" className="etiquette mb-2 block">
+                    Date de l’événement (facultatif)
+                  </label>
+                  <input
+                    id="date_evenement"
+                    type="date"
+                    value={valeurs.date_evenement}
+                    onChange={(e) => maj('date_evenement', e.target.value)}
+                    className="admin-champ-multiligne"
+                  />
+                  <p className="mt-1.5 text-[0.75rem] text-admin-gris">
+                    Pour un article qui annonce un rendez-vous. Les cartes du site
+                    l’affichent alors à la place de la date de publication, qu’on
+                    confondait avec celle de l’événement. Laissez vide pour un compte
+                    rendu ou un communiqué.
+                  </p>
                 </div>
 
                 <div>

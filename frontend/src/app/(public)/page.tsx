@@ -14,11 +14,11 @@ import { ImageArticle } from '@/components/public/ImageArticle';
 import { Reveler } from '@/components/public/Reveler';
 import { apiPublicOuDefaut } from '@/lib/api';
 import {
-  date,
+  LIBELLES_CATEGORIE,
+  dateCarte,
   decomposerEdition,
   editionNormalisee,
   jourBenin,
-  LIBELLES_CATEGORIE,
   typographieFr,
 } from '@/lib/format';
 import type {
@@ -454,7 +454,7 @@ et nous ») et respecté ici par `whitespace-pre-line`.
                         {LIBELLES_CATEGORIE[article.categorie]}
                       </span>
                       <span className="text-[0.8125rem] text-ablode-gris">
-                        {date(article.date_publication)}
+                        {dateCarte(article)}
                       </span>
                     </div>
 

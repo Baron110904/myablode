@@ -8,7 +8,11 @@ import { FormulaireNewsletter } from '@/components/public/FormulaireNewsletter';
 import { ImageArticle } from '@/components/public/ImageArticle';
 import { BoutonsPartage } from './BoutonsPartage';
 import { apiPublic, apiPublicOuDefaut, urlMedia } from '@/lib/api';
-import { date, LIBELLES_CATEGORIE } from '@/lib/format';
+import {
+  LIBELLES_CATEGORIE,
+  date,
+  dateCarte,
+} from '@/lib/format';
 import type { Article, FormulaireMarchePublic } from '@/lib/types';
 
 export const revalidate = 300;
@@ -156,7 +160,7 @@ export default async function PageArticle({
                     {autre.titre}
                   </h3>
                   <p className="mt-3 text-[0.6875rem] uppercase tracking-[0.1em] text-ablode-gris">
-                    {date(autre.date_publication)}
+                    {dateCarte(autre)}
                   </p>
                 </Link>
               </li>

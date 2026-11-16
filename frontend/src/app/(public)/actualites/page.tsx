@@ -7,7 +7,10 @@ import { Reveler } from '@/components/public/Reveler';
 import { SectionVideos } from '@/components/public/SectionVideos';
 import { RechercheArticles } from './RechercheArticles';
 import { apiPublicOuDefaut } from '@/lib/api';
-import { date, LIBELLES_CATEGORIE } from '@/lib/format';
+import {
+  LIBELLES_CATEGORIE,
+  dateCarte,
+} from '@/lib/format';
 import type { Article, CategorieArticle, Paginated, Video } from '@/lib/types';
 
 export const metadata: Metadata = {
@@ -197,7 +200,7 @@ export default async function PageActualites({
                         {LIBELLES_CATEGORIE[aLaUne.categorie]}
                       </span>
                       <span className="text-[0.8125rem] text-white/60">
-                        {date(aLaUne.date_publication)}
+                        {dateCarte(aLaUne)}
                       </span>
                       <span className="ml-auto text-[0.6875rem] uppercase tracking-[0.1em] text-white/45">
                         À la une
@@ -250,7 +253,7 @@ export default async function PageActualites({
                           {LIBELLES_CATEGORIE[article.categorie]}
                         </span>
                         <span className="text-[0.8125rem] text-ablode-gris">
-                          {date(article.date_publication)}
+                          {dateCarte(article)}
                         </span>
                       </div>
 

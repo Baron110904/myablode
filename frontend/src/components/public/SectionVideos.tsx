@@ -15,6 +15,41 @@ import type { Video } from '@/lib/types';
  * vidéos complètes à l'ouverture de la page coûterait plusieurs centaines de
  * mégaoctets à un visiteur qui n'en regardera peut-être aucune.
  */
+/**
+ * Cadre du lecteur et de sa vignette, selon l'orientation déclarée au dépôt.
+ *
+ * Une vidéo verticale ne tient pas dans un cadre 16:9 sans deux larges
+ * bandes noires de part et d'autre. Elle reçoit donc son propre cadre, dont
+ * la largeur est bornée: en 9:16 sur toute la colonne, le lecteur ferait
+ * plus de mille pixels de haut et chasserait tout le reste de l'écran.
+ *
+ * Les vignettes, elles, gardent la même hauteur dans les deux cas - c'est
+ * elle qui donne sa hauteur à la ligne de la liste, et des lignes inégales
+ * se verraient bien avant le format des images qu'elles portent.
+ */
+const CADRES = {
+  paysage: {
+    lecteur: 'aspect-video',
+    vignette: 'aspect-video w-[7.5rem]',
+  },
+  portrait: {
+    lecteur: 'mx-auto aspect-[9/16] w-full max-w-[20rem]',
+    vignette: 'aspect-[9/16] h-[4.25rem]',
+  },
+} as const;
+
+/**
+ * Cadre d'une vidéo, avec repli sur le paysage.
+ *
+ * La colonne est obligatoire en base et vaut `paysage` par défaut, mais une
+ * API restée sur une version antérieure ne la renvoie pas du tout. Sans ce
+ * repli, la page entière tombe sur la lecture d'une propriété de `undefined`
+ * - une panne bien plus visible que le cadre qu'on cherchait à corriger.
+ */
+function cadre(video: Video) {
+  return CADRES[video.orientation] ?? CADRES.paysage;
+}
+
 export function SectionVideos({ videos }: { videos: Video[] }) {
   const [selection, setSelection] = useState(0);
   const [lecture, setLecture] = useState(false);
@@ -44,7 +79,11 @@ export function SectionVideos({ videos }: { videos: Video[] }) {
         <div className="grid gap-6 lg:grid-cols-[1.55fr_1fr]">
           {/* ─── Lecteur principal ───────────────────────────────────── */}
           <div>
-            <div className="relative aspect-video overflow-hidden rounded-carte bg-black">
+            <div
+              className={`relative overflow-hidden rounded-carte bg-black ${
+                cadre(principale).lecteur
+              }`}
+            >
               {lecture ? (
                 /*
                   `autoPlay` plutôt qu'un `play()` appelé après le rendu : la
@@ -134,7 +173,11 @@ export function SectionVideos({ videos }: { videos: Video[] }) {
                       onClick={() => choisir(index)}
                       className="group flex w-full items-center gap-4 rounded-carte bg-white/[0.04] p-3 text-left ring-1 ring-inset ring-white/10 transition-colors duration-200 hover:bg-white/[0.09]"
                     >
-                      <span className="relative aspect-video w-[7.5rem] shrink-0 overflow-hidden rounded-lg bg-black">
+                      <span
+                        className={`relative shrink-0 overflow-hidden rounded-lg bg-black ${
+                          cadre(video).vignette
+                        }`}
+                      >
                         <Apercu video={video} />
                         {video.duree_secondes !== null && (
                           <span className="absolute bottom-1 right-1 rounded bg-black/75 px-1.5 py-0.5 text-[0.6875rem] tabular-nums text-white">

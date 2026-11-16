@@ -24,6 +24,11 @@ export enum VideoStatut {
   PUBLISHED = 'published',
 }
 
+export enum VideoOrientation {
+  PAYSAGE = 'paysage',
+  PORTRAIT = 'portrait',
+}
+
 @Entity('videos')
 @Index('idx_videos_statut_date', ['statut', 'date_publication'])
 export class Video {
@@ -76,6 +81,17 @@ export class Video {
    */
   @Column({ type: 'integer', nullable: true })
   duree_secondes: number | null;
+
+  /**
+   * Cadre dans lequel le lecteur public compose la vidéo.
+   *
+   * Déclarée au dépôt plutôt que déduite du fichier: une vidéo filmée à la
+   * verticale est souvent encodée en 16:9 avec une rotation portée par ses
+   * métadonnées, que tous les lecteurs ne respectent pas. Deviner mènerait
+   * donc à se tromper sur celles-là précisément.
+   */
+  @Column({ type: 'varchar', length: 10, default: VideoOrientation.PAYSAGE })
+  orientation: VideoOrientation;
 
   @Column({ type: 'varchar', length: 20, default: VideoStatut.DRAFT })
   statut: VideoStatut;

@@ -11,6 +11,7 @@ import {
   paliersPrevalence,
   pourcentage,
   typographieFr,
+  dateCarte,
   typographieFrProfonde,
   variation,
 } from './format';
@@ -267,5 +268,33 @@ describe('typographieFrProfonde', () => {
     expect(
       typographieFrProfonde('<p>Le projet <em>« Le diabète et nous »</em> a dix ans.</p>'),
     ).toBe(`<p>Le projet <em>«${INSECABLE}Le diabète et nous${INSECABLE}»</em> a dix ans.</p>`);
+  });
+});
+
+describe('dateCarte', () => {
+  it('affiche la date de l’événement quand l’article en annonce un', () => {
+    expect(
+      dateCarte({ date_evenement: '2026-12-20', date_publication: '2026-11-16T09:00:00Z' }),
+    ).toBe('20 décembre 2026');
+  });
+
+  it('retombe sur la date de parution sans événement', () => {
+    expect(
+      dateCarte({ date_evenement: null, date_publication: '2026-11-16T09:00:00Z' }),
+    ).toBe('16 novembre 2026');
+  });
+
+  /*
+   * La colonne est de type `date` : PostgreSQL la renvoie sans heure. Lue en
+   * UTC puis affichée au fuseau du Bénin, elle ne doit pas glisser d'un jour.
+   */
+  it('ne décale pas le jour d’une date sans heure', () => {
+    expect(dateCarte({ date_evenement: '2026-01-01', date_publication: null })).toBe(
+      '1 janvier 2026',
+    );
+  });
+
+  it('rend un tiret quand les deux dates manquent', () => {
+    expect(dateCarte({ date_evenement: null, date_publication: null })).toBe('-');
   });
 });

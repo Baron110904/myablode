@@ -14,7 +14,7 @@ import {
   Min,
 } from 'class-validator';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { VideoCategorie, VideoStatut } from 'src/database/entities';
+import { VideoCategorie, VideoOrientation, VideoStatut } from 'src/database/entities';
 
 /**
  * Le formulaire part en `multipart/form-data` : tous les champs arrivent en
@@ -85,6 +85,15 @@ export class CreateVideoDto {
   // 6 heures : au-delà, c'est une valeur aberrante, pas une vidéo d'association.
   @Max(21600)
   duree_secondes?: number;
+
+  @ApiPropertyOptional({
+    enum: VideoOrientation,
+    default: VideoOrientation.PAYSAGE,
+    description: 'Cadre du lecteur public',
+  })
+  @IsOptional()
+  @IsEnum(VideoOrientation, { message: 'Orientation invalide.' })
+  orientation?: VideoOrientation;
 
   @ApiPropertyOptional({ enum: VideoStatut, default: VideoStatut.DRAFT })
   @IsOptional()

@@ -71,6 +71,15 @@ export class CreateArticleDto {
   date_publication?: string | null;
 
   @ApiPropertyOptional({
+    description:
+      'Jour du rendez-vous annoncé ; les cartes l’affichent à la place de la ' +
+      'date de parution',
+  })
+  @IsOptional()
+  @IsDateString()
+  date_evenement?: string | null;
+
+  @ApiPropertyOptional({
     default: false,
     description: 'Remonte l’article en tête des listes publiques',
   })

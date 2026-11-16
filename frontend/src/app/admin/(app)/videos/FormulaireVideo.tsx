@@ -5,7 +5,7 @@ import { Alerte, Modale } from '@/components/admin/Elements';
 import { ChampImage } from '@/components/admin/ChampImage';
 import { apiAdmin, ApiError, televerser } from '@/lib/api';
 import { LIBELLES_CATEGORIE_VIDEO, duree, tailleFichier } from '@/lib/format';
-import type { CategorieVideo, StatutVideo, Video } from '@/lib/types';
+import type { CategorieVideo, OrientationVideo, StatutVideo, Video } from '@/lib/types';
 
 /** Doit rester aligné sur FORMATS_VIDEO côté API. */
 const TYPES_ACCEPTES = ['video/mp4', 'video/webm'];
@@ -19,6 +19,7 @@ interface Valeurs {
   titre: string;
   description: string;
   categorie: CategorieVideo;
+  orientation: OrientationVideo;
   miniature_url: string;
   statut: StatutVideo;
   a_la_une: boolean;
@@ -29,6 +30,7 @@ function valeursInitiales(video: Video | null): Valeurs {
     titre: video?.titre ?? '',
     description: video?.description ?? '',
     categorie: video?.categorie ?? 'depistage',
+    orientation: video?.orientation ?? 'paysage',
     miniature_url: video?.miniature_url ?? '',
     statut: video?.statut ?? 'draft',
     a_la_une: video?.a_la_une ?? false,
@@ -134,6 +136,7 @@ export function FormulaireVideo({
            */
           description: valeurs.description.trim() || null,
           categorie: valeurs.categorie,
+          orientation: valeurs.orientation,
           miniature_url: valeurs.miniature_url.trim() || null,
           statut: valeurs.statut,
           a_la_une: valeurs.a_la_une,
@@ -166,6 +169,7 @@ export function FormulaireVideo({
     corps.append('file', fichier);
     corps.append('titre', valeurs.titre.trim());
     corps.append('categorie', valeurs.categorie);
+    corps.append('orientation', valeurs.orientation);
     corps.append('statut', valeurs.statut);
     corps.append('a_la_une', String(valeurs.a_la_une));
     if (valeurs.description.trim()) corps.append('description', valeurs.description.trim());
@@ -286,6 +290,22 @@ export function FormulaireVideo({
                   {libelle}
                 </option>
               ))}
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="orientation" className="etiquette-douce mb-2 block">
+              Format de l’image
+            </label>
+            <select
+              id="orientation"
+              value={valeurs.orientation}
+              onChange={(e) => maj('orientation', e.target.value as OrientationVideo)}
+              disabled={envoi}
+              className="admin-champ"
+            >
+              <option value="paysage">Paysage (filmé à l’horizontale)</option>
+              <option value="portrait">Portrait (filmé au téléphone, à la verticale)</option>
             </select>
           </div>
 
