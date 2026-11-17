@@ -103,7 +103,7 @@ export default async function PageActualites({
             <h1 className="mt-4 text-[2.5rem] font-bold leading-[1.08] tracking-[-0.03em] sm:text-[3rem]">
               {t('titre')}
             </h1>
-            <p className="mt-4 max-w-lg text-[1.0625rem] leading-relaxed text-white/70">
+            <p className="texte-justifie mt-4 max-w-lg text-[1.0625rem] leading-relaxed text-white/70">
               {t('chapeau')}
             </p>
           </div>
@@ -211,7 +211,7 @@ export default async function PageActualites({
                       {aLaUne.titre}
                     </h2>
                     {aLaUne.extrait && (
-                      <p className="mt-4 text-[0.9375rem] leading-relaxed text-white/70">
+                      <p className="texte-justifie mt-4 text-[0.9375rem] leading-relaxed text-white/70">
                         {aLaUne.extrait}
                       </p>
                     )}
@@ -261,7 +261,7 @@ export default async function PageActualites({
                         {article.titre}
                       </h2>
                       {article.extrait && (
-                        <p className="mt-2.5 line-clamp-3 text-[0.9375rem] leading-relaxed text-ablode-gris">
+                        <p className="texte-justifie mt-2.5 line-clamp-3 text-[0.9375rem] leading-relaxed text-ablode-gris">
                           {article.extrait}
                         </p>
                       )}
@@ -327,7 +327,7 @@ export default async function PageActualites({
             <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
               <div className="max-w-xl">
                 <h2 className="text-2xl font-bold text-white">{tNews('titre')}</h2>
-                <p className="mt-2.5 text-[0.95rem] leading-relaxed text-white/80">
+                <p className="texte-justifie mt-2.5 text-[0.95rem] leading-relaxed text-white/80">
                   {tNews('chapeau')}
                 </p>
               </div>

@@ -1,19 +1,24 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Alerte, EnTetePage } from '@/components/admin/Elements';
 import { PanneauFormulaireMarche } from './PanneauFormulaireMarche';
 import { ChampImage } from '@/components/admin/ChampImage';
+import { EditeurContenu } from '@/components/admin/EditeurContenu';
 import { apiAdmin, ApiError } from '@/lib/api';
+import { memeContenu } from '@/lib/html';
 import type { Article, CategorieArticle, StatutArticle } from '@/lib/types';
 
 /**
  * Éditeur d'article.
  *
- * L'édition se fait en HTML assisté plutôt qu'avec un WYSIWYG complet : la
- * barre d'outils insère les balises autorisées par l'assainisseur du backend,
- * et l'aperçu montre le rendu final. Cela évite d'embarquer TipTap et ses
- * ~200 Ko, et garantit que l'auteur ne produit que du HTML acceptable.
+ * La mise en forme se fait dans un éditeur visuel : écrire une actualité ne
+ * demande plus de connaître le HTML, qui n'est plus qu'un format de stockage.
+ * Le poids de l'éditeur ne pèse que sur le back-office, derrière
+ * l'authentification ; le visiteur du site ne le charge jamais.
+ *
+ * L'aperçu a disparu avec la saisie de balises : on compose directement dans
+ * la typographie de la page publique.
  */
 export function EditeurArticle({
   article,
@@ -24,8 +29,6 @@ export function EditeurArticle({
   onFermer: () => void;
   onEnregistre: (message: string) => void;
 }) {
-  const zoneTexte = useRef<HTMLTextAreaElement>(null);
-
   /*
    * Identifiant de l'article en base. Il passe de null à une valeur dès la
    * première création réussie : sans cela, un second enregistrement depuis le
@@ -53,7 +56,6 @@ export function EditeurArticle({
   });
 
   const [aLaUne, setALaUne] = useState(article?.a_la_une ?? false);
-  const [apercu, setApercu] = useState(false);
   const [erreur, setErreur] = useState('');
   const [erreurs, setErreurs] = useState<string[]>([]);
   const [balisesRetirees, setBalisesRetirees] = useState('');
@@ -61,29 +63,6 @@ export function EditeurArticle({
 
   const maj = (champ: keyof typeof valeurs, valeur: string) =>
     setValeurs((courant) => ({ ...courant, [champ]: valeur }));
-
-  /** Entoure la sélection courante d'une balise, ou l'insère au curseur. */
-  function inserer(ouverture: string, fermeture: string) {
-    const zone = zoneTexte.current;
-    if (!zone) return;
-
-    const debut = zone.selectionStart;
-    const fin = zone.selectionEnd;
-    const selection = valeurs.contenu.slice(debut, fin);
-    const nouveau =
-      valeurs.contenu.slice(0, debut) +
-      ouverture +
-      selection +
-      fermeture +
-      valeurs.contenu.slice(fin);
-
-    maj('contenu', nouveau);
-
-    requestAnimationFrame(() => {
-      zone.focus();
-      zone.setSelectionRange(debut + ouverture.length, fin + ouverture.length);
-    });
-  }
 
   async function soumettre(publier: boolean) {
     setEnvoi(true);
@@ -134,9 +113,8 @@ export function EditeurArticle({
        * texte réellement enregistré : sinon la mise en forme disparaissait
        * sans que l'auteur en soit averti.
        */
-      if (enregistre.contenu !== valeurs.contenu) {
+      if (!memeContenu(enregistre.contenu, valeurs.contenu)) {
         maj('contenu', enregistre.contenu);
-        setApercu(false);
         setBalisesRetirees(
           `L’article est ${creation ? 'créé' : 'enregistré'}, mais certaines balises ou ` +
             'propriétés de style n’étaient pas autorisées et ont été retirées. Le contenu ' +
@@ -251,69 +229,12 @@ export function EditeurArticle({
               </div>
 
               <div>
-                <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
-                  <span className="etiquette">Contenu *</span>
-                  <button
-                    type="button"
-                    onClick={() => setApercu((courant) => !courant)}
-                    className="text-[0.8125rem] font-semibold text-admin-vert hover:underline"
-                  >
-                    {apercu ? 'Éditer' : 'Aperçu'}
-                  </button>
-                </div>
-
-                {apercu ? (
-                  <div
-                    className="article-contenu min-h-[420px] rounded-carte border border-admin-trait bg-white p-6"
-                    dangerouslySetInnerHTML={{ __html: valeurs.contenu }}
-                  />
-                ) : (
-                  <>
-                    {/*
-                      Barre d'outils et zone de saisie dans un seul cadre
-                      arrondi : elles se touchent, et deux bordures voisines
-                      laissaient une couture visible dès que le cadre a cessé
-                      d'être à angles droits.
-                    */}
-                    <div className="overflow-hidden rounded-carte border border-admin-trait bg-white transition-colors duration-150 focus-within:border-admin-vert focus-within:ring-1 focus-within:ring-admin-vert">
-                      <div className="flex flex-wrap gap-1.5 border-b border-admin-trait bg-admin-fond px-3 py-2.5">
-                        {[
-                          ['Paragraphe', '<p>', '</p>'],
-                          ['Titre 2', '<h2>', '</h2>'],
-                          ['Titre 3', '<h3>', '</h3>'],
-                          ['Gras', '<strong>', '</strong>'],
-                          ['Italique', '<em>', '</em>'],
-                          ['Liste', '<ul>\n<li>', '</li>\n</ul>'],
-                          ['Lien', '<a href="https://">', '</a>'],
-                          ['Citation', '<blockquote>', '</blockquote>'],
-                          ['Image', '<img src="" alt="" />', ''],
-                        ].map(([libelle, ouverture, fermeture]) => (
-                          <button
-                            key={libelle}
-                            type="button"
-                            onClick={() => inserer(ouverture, fermeture)}
-                            className="rounded-full border border-admin-trait bg-white px-3.5 py-1.5 text-[0.8125rem] font-medium transition-colors duration-150 hover:border-admin-encre hover:bg-admin-fond"
-                          >
-                            {libelle}
-                          </button>
-                        ))}
-                      </div>
-                      <textarea
-                        ref={zoneTexte}
-                        id="contenu"
-                        rows={20}
-                        value={valeurs.contenu}
-                        onChange={(e) => maj('contenu', e.target.value)}
-                        className="block w-full resize-y bg-white px-4 py-3.5 text-[0.8125rem] leading-relaxed text-admin-encre placeholder:text-admin-gris focus:outline-none"
-                        placeholder="<p>Votre texte…</p>"
-                      />
-                    </div>
-                    <p className="mt-2 text-[0.75rem] leading-relaxed text-admin-gris">
-                      Seules les balises de mise en forme sont conservées. Les scripts et
-                      les liens dangereux sont retirés à l’enregistrement.
-                    </p>
-                  </>
-                )}
+                <span className="etiquette mb-2 block">Contenu *</span>
+                <EditeurContenu
+                  valeur={valeurs.contenu}
+                  onChange={(html) => maj('contenu', html)}
+                  desactive={envoi}
+                />
               </div>
             </div>
           </div>

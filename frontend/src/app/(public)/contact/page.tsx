@@ -27,7 +27,7 @@ export default async function PageContact() {
           <h1 className="mt-4 text-[2.25rem] font-bold leading-tight tracking-[-0.02em] sm:text-[2.75rem]">
             {t('titre')}
           </h1>
-          <p className="mt-4 max-w-lecture text-[1.0625rem] leading-relaxed text-white/70">
+          <p className="texte-justifie mt-4 max-w-lecture text-[1.0625rem] leading-relaxed text-white/70">
             {t('chapeau')}
           </p>
         </div>

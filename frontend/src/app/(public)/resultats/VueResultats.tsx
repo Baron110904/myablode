@@ -344,7 +344,7 @@ export function VueResultats() {
           </div>
         </section>
 
-        <p className="mt-6 max-w-2xl text-sm leading-relaxed text-ablode-gris">
+        <p className="texte-justifie mt-6 max-w-2xl text-sm leading-relaxed text-ablode-gris">
           {t('methodologie')}
         </p>
         </>

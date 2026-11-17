@@ -112,7 +112,7 @@ export function AppelInscription({
         </>
       ) : (
         <>
-          <p className="mt-3 text-[0.9375rem] leading-relaxed text-ablode-gris">
+          <p className="texte-justifie mt-3 text-[0.9375rem] leading-relaxed text-ablode-gris">
             {formulaire.messageFerme?.trim() ||
               'Les inscriptions à la marche sont terminées.'}
           </p>

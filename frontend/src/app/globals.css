@@ -47,6 +47,26 @@
     @apply mx-auto w-full max-w-contenu px-5 sm:px-8;
   }
 
+  /*
+   * Texte courant au fer : les deux marges sont droites.
+   *
+   * La césure est indissociable de la justification, elle n'est pas un
+   * raffinement qu'on pourrait retirer. Sans elle, le navigateur n'a que les
+   * espaces pour combler une ligne, et une colonne étroite - l'extrait d'une
+   * carte fait 250 px - finit par ouvrir des lézardes blanches entre les
+   * mots, plus voyantes que la marge irrégulière qu'on voulait corriger.
+   * La langue vient de l'attribut lang du document, d'où le découpage
+   * français.
+   *
+   * Réservé aux blocs de plusieurs lignes. Les intitulés, les adresses et
+   * les messages d'une ligne gardent le fer à gauche : justifier trois mots
+   * ne fait que les écarter jusqu'aux bords.
+   */
+  .texte-justifie {
+    text-align: justify;
+    hyphens: auto;
+  }
+
   /* ─── Site vitrine ──────────────────────────────────────────────────── */
 
   /*
@@ -419,6 +439,18 @@
 
 .article-contenu > * + * {
   @apply mt-5;
+}
+
+/*
+ * Le corps d'article suit la même règle, sans avoir à marquer chaque
+ * paragraphe : son HTML vient de l'éditeur du back-office, où personne ne
+ * pose de classe. Les titres restent au fer à gauche.
+ */
+.article-contenu p,
+.article-contenu li,
+.article-contenu blockquote {
+  text-align: justify;
+  hyphens: auto;
 }
 
 .article-contenu h2,

@@ -231,7 +231,7 @@ export default async function PageInscriptionMarche({
             )}
 
             {formulaire.introduction && (
-              <p className="mt-6 whitespace-pre-line text-[0.9375rem] leading-relaxed text-ablode-gris">
+              <p className="texte-justifie mt-6 whitespace-pre-line text-[0.9375rem] leading-relaxed text-ablode-gris">
                 {formulaire.introduction}
               </p>
             )}

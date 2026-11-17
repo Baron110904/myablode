@@ -143,7 +143,7 @@ export default async function PageAPropos() {
           </Reveler>
 
           <Reveler delai={120} className="flex items-end">
-            <div className="space-y-5 text-[1.0625rem] leading-relaxed text-white/75">
+            <div className="texte-justifie space-y-5 text-[1.0625rem] leading-relaxed text-white/75">
               <p>
                 L’ABLODE - Association Béninoise de Lutte contre l’Obésité, le Diabète et
                 les Endocrinopathies, est née en 2018 de l’initiative de médecins
@@ -214,7 +214,7 @@ export default async function PageAPropos() {
                     {objectif.numero}
                   </p>
                   <h3 className="mt-5 text-lg font-bold leading-snug">{objectif.titre}</h3>
-                  <p className="mt-3 text-[0.9375rem] leading-relaxed text-ablode-gris">
+                  <p className="texte-justifie mt-3 text-[0.9375rem] leading-relaxed text-ablode-gris">
                     {objectif.texte}
                   </p>
                 </div>
@@ -270,7 +270,7 @@ export default async function PageAPropos() {
                         {activite.titre}
                       </h3>
                     </div>
-                    <p className={`text-[1.0625rem] leading-relaxed ${secondaire}`}>
+                    <p className={`texte-justifie text-[1.0625rem] leading-relaxed ${secondaire}`}>
                       {activite.texte}
                     </p>
                   </article>
@@ -303,7 +303,7 @@ export default async function PageAPropos() {
               Nous ne travaillons pas seuls
             </p>
             <h2 className="mt-4 titre-section">{t('articulation')}</h2>
-            <p className="mt-5 text-[1.0625rem] leading-relaxed text-ablode-gris">
+            <p className="texte-justifie mt-5 text-[1.0625rem] leading-relaxed text-ablode-gris">
               Étant une association axée sur la santé publique, l’ABLODE collabore
               régulièrement avec les centres de santé et les structures médicales du
               Bénin, autour de trois axes.
@@ -323,7 +323,7 @@ export default async function PageAPropos() {
                   Axe {axe.numero}
                 </p>
                 <h3 className="mt-3 text-lg font-bold leading-snug">{axe.titre}</h3>
-                <p className="mt-4 text-[0.9375rem] leading-relaxed text-ablode-gris">
+                <p className="texte-justifie mt-4 text-[0.9375rem] leading-relaxed text-ablode-gris">
                   {axe.texte}
                 </p>
               </div>
@@ -343,7 +343,7 @@ export default async function PageAPropos() {
                 </p>
                 <h2 className="mt-4 titre-section">{t('partenaires')}</h2>
               </div>
-              <p className="text-[0.9375rem] leading-relaxed text-ablode-gris lg:self-end">
+              <p className="texte-justifie text-[0.9375rem] leading-relaxed text-ablode-gris lg:self-end">
                 Institutions, structures de santé et entreprises portent les campagnes
                 avec nous. Sans eux, rien de tout cela n’aurait lieu.
               </p>
@@ -389,7 +389,7 @@ export default async function PageAPropos() {
                 <h3 className="mt-3 text-[1.375rem] font-bold leading-snug tracking-[-0.02em]">
                   Contacter l’association
                 </h3>
-                <p className="mt-3 text-[0.9375rem] leading-relaxed text-ablode-gris">
+                <p className="texte-justifie mt-3 text-[0.9375rem] leading-relaxed text-ablode-gris">
                   Une question, un partenariat, une demande de campagne dans votre commune.
                 </p>
               </div>
@@ -417,7 +417,7 @@ export default async function PageAPropos() {
                 <h3 className="mt-3 text-[1.375rem] font-bold leading-snug tracking-[-0.02em]">
                   Devenir bénévole
                 </h3>
-                <p className="mt-3 text-[0.9375rem] leading-relaxed text-white/80">
+                <p className="texte-justifie mt-3 text-[0.9375rem] leading-relaxed text-white/80">
                   Aucune qualification médicale n’est exigée: nous formons
                   nos bénévoles.
                 </p>
@@ -443,7 +443,7 @@ export default async function PageAPropos() {
                 <h3 className="mt-3 text-[1.375rem] font-bold leading-snug tracking-[-0.02em]">
                   Sur les réseaux
                 </h3>
-                <p className="mt-3 text-[0.9375rem] leading-relaxed text-white/70">
+                <p className="texte-justifie mt-3 text-[0.9375rem] leading-relaxed text-white/70">
                   Photos des campagnes et annonces des prochaines sorties, au jour le
                   jour.
                 </p>

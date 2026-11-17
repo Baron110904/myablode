@@ -118,7 +118,7 @@ export function LeconsPrevention() {
             >
               Les 5 leçons pour éviter le diabète
             </h2>
-            <p className="mt-5 max-w-lg text-[1rem] leading-relaxed text-ablode-gris">
+            <p className="texte-justifie mt-5 max-w-lg text-[1rem] leading-relaxed text-ablode-gris">
               {typographieFr(
                 'Le diabète de type 2 peut être évité ou retardé en adoptant quelques gestes simples au quotidien:',
               )}

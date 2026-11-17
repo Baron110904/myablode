@@ -155,7 +155,7 @@ export function SectionVideos({ videos }: { videos: Video[] }) {
             </div>
 
             {principale.description && (
-              <p className="mt-5 max-w-2xl text-[0.9375rem] leading-relaxed text-white/65">
+              <p className="texte-justifie mt-5 max-w-2xl text-[0.9375rem] leading-relaxed text-white/65">
                 {principale.description}
               </p>
             )}

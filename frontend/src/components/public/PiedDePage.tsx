@@ -7,11 +7,10 @@ import { ASSOCIATION, lienTelephone } from '@/lib/association';
 /**
  * Pied de page du site vitrine.
  *
- * Quatre colonnes : l'identité à gauche, puis le contact et les deux séries
- * de liens. L'adresse reste sous la présentation de l'association, dont elle
- * fait partie : la détacher en colonne la mettait au même rang que les
- * sections du site, ce qu'une adresse postale n'est pas. Les téléphones, eux,
- * gardent la leur - on les cherche, on ne les lit pas.
+ * Quatre colonnes : le logo seul à gauche, puis le contact et les deux
+ * séries de liens. L'adresse tient dans la colonne du contact, sous les
+ * téléphones : ce sont deux manières de joindre l'association, et les
+ * séparer obligeait à la chercher dans l'autre coin du pied de page.
  *
  * Les réseaux sociaux ferment la barre du bas, à l'opposé du copyright.
  */
@@ -43,15 +42,6 @@ export function PiedDePage() {
               taille={148}
               className="h-[112px] w-auto sm:h-[132px] lg:h-[148px]"
             />
-
-            <div className="mt-6">
-              <p className="etiquette mb-3 !text-white/60">{t('adresseTitre')}</p>
-              <address className="space-y-1 text-sm not-italic leading-relaxed text-white/70">
-                <p>
-                  {ASSOCIATION.ville}, {ASSOCIATION.pays}
-                </p>
-              </address>
-            </div>
           </div>
 
           <div>
@@ -68,6 +58,11 @@ export function PiedDePage() {
                 </li>
               ))}
             </ul>
+
+            <p className="etiquette mb-3 mt-7 !text-white/60">{t('adresseTitre')}</p>
+            <address className="text-sm not-italic leading-relaxed text-white/70">
+              {ASSOCIATION.ville}, {ASSOCIATION.pays}
+            </address>
           </div>
 
           <nav aria-label={t('navigation')}>

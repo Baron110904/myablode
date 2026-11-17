@@ -11,6 +11,11 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@tiptap/extension-image": "^3.34.0",
+    "@tiptap/extension-text-align": "^3.34.0",
+    "@tiptap/pm": "^3.34.0",
+    "@tiptap/react": "^3.34.0",
+    "@tiptap/starter-kit": "^3.34.0",
     "chart.js": "^4.6.1",
     "leaflet": "^1.9.4",
     "next": "^16.4.5",

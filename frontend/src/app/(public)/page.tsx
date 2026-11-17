@@ -235,7 +235,7 @@ et nous ») et respecté ici par `whitespace-pre-line`.
             </p>
 
             <p
-              className="entree mt-6 max-w-lg text-[1.0625rem] leading-relaxed text-white/75"
+              className="entree texte-justifie mt-6 max-w-lg text-[1.0625rem] leading-relaxed text-white/75"
               style={{ animationDelay: '170ms' }}
             >
               {/*
@@ -392,7 +392,7 @@ et nous ») et respecté ici par `whitespace-pre-line`.
                     {action.numero}
                   </span>
                   <h3 className="mt-6 text-base font-bold leading-snug">{action.titre}</h3>
-                  <p className="mt-3 text-[0.9375rem] leading-relaxed text-ablode-gris">
+                  <p className="texte-justifie mt-3 text-[0.9375rem] leading-relaxed text-ablode-gris">
                     {action.texte}
                   </p>
                 </div>
@@ -462,7 +462,7 @@ et nous ») et respecté ici par `whitespace-pre-line`.
                       {article.titre}
                     </h3>
                     {article.extrait && (
-                      <p className="mt-3 text-[0.9375rem] leading-relaxed text-ablode-gris">
+                      <p className="texte-justifie mt-3 text-[0.9375rem] leading-relaxed text-ablode-gris">
                         {article.extrait}
                       </p>
                     )}
@@ -481,7 +481,7 @@ et nous ») et respecté ici par `whitespace-pre-line`.
             <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
               <div className="max-w-xl">
                 <h2 className="text-2xl font-bold text-white">{tNews('titre')}</h2>
-                <p className="mt-2.5 text-[0.95rem] leading-relaxed text-white/80">
+                <p className="texte-justifie mt-2.5 text-[0.95rem] leading-relaxed text-white/80">
                   {tNews('chapeau')}
                 </p>
               </div>
