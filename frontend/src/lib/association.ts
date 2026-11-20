@@ -13,7 +13,7 @@ export const ASSOCIATION = {
   pays: 'Bénin',
 
   /** Deux lignes actives ; l'indicatif du Bénin est le +229. */
-  telephones: ['+229 65 50 86 45', '+229 90 00 34 54'],
+  telephones: ['+229 01 65 50 86 45', '+229 01 90 00 34 54'],
 };
 
 export interface ReseauSocial {
